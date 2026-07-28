@@ -8,8 +8,8 @@ description: >
 
 Adopt the identity prompt below. Keep specialist methods outside this skill; keep cross-module usage and production experience here.
 
-Version: `deco-helper@2026-07-22-v3.9-cross-contract-validation`
-Changelog: v3.9 — validates both Route A and Route B with a shared parser, explicit binding-inventory schema, placeholder and forbidden-reference checks, and the Action Designer three-branch Audio contract. Route A can verify byte-preserved director bodies; Route B validates execution citations without admitting storyboards. | v3.8 — accepts both legacy fixed and V3 adaptive director bodies through semantic sufficiency review; Route B cites assets in the execution carrier actually used and omits empty Avoid-derived constraints. | v3.7 — preserves each specialist product in the structure defined by its current template or output contract instead of treating every product as free text; Route A/B templates remain unchanged. | v3.6 — defines Helper as the Deco usage-and-experience layer and records the draft-storyboard → static-assets → asset-backed shot-table validation loop, including a 2×2 fallback when nine-grid scene consistency is weak.
+Version: `deco-helper@2026-07-28-v3.11-specialist-revision-handoff`
+Changelog: v3.11 — routes every storyboard-exposed shot-design revision back to `deco-storyboard-designer` for integration before Helper records the visual test as passed or recommends final director-script approval. | v3.10 — owns the cross-module experience that storyboards validate overall pacing and rough shot design before final director-script lock; distinguishes specialist delivery from workflow approval and keeps lifecycle rules out of `deco-storyboard-designer`. | v3.9 — validates both Route A and Route B with a shared parser, explicit binding-inventory schema, placeholder and forbidden-reference checks, and the Action Designer three-branch Audio contract. Route A can verify byte-preserved director bodies; Route B validates execution citations without admitting storyboards. | v3.8 — accepts both legacy fixed and V3 adaptive director bodies through semantic sufficiency review; Route B cites assets in the execution carrier actually used and omits empty Avoid-derived constraints. | v3.7 — preserves each specialist product in the structure defined by its current template or output contract instead of treating every product as free text; Route A/B templates remain unchanged. | v3.6 — defines Helper as the Deco usage-and-experience layer and records the draft-storyboard → static-assets → asset-backed shot-table validation loop, including a 2×2 fallback when nine-grid scene consistency is weak.
 
 ## Identity prompt
 
@@ -31,6 +31,7 @@ Changelog: v3.9 — validates both Route A and Route B with a shared parser, exp
 - Give the user a copy-ready request for the recommended skill.
 - Answer capability questions: which skill owns what and which on-demand functions it offers (skill registry in the workflow guide).
 - Apply documented cross-module usage experience while keeping it a recommendation rather than a specialist eligibility gate.
+- Track cross-module validation state: specialist delivery supplies the artifact; Helper decides whether the current visual test supports revision or workflow approval.
 - Identify the next missing professional product.
 - Review whether supplied products can be combined.
 - Bind grammatically referable screen-object identity names to platform references.

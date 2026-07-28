@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-07-28
+
+- Helper V3.11、Screenplay V1.7 与 Storyboard V1.19 完成跨模块合同修复；Static Asset V2.6、Action V3.8 与 Visual Style V1.6 保持不变。
+- Helper 保存故事板对整体节奏和粗镜头设计的验证状态，并把板测暴露的镜头修改明确交回 `deco-storyboard-designer`，再根据返回的更新版导演脚本推进最终批准。
+- Screenplay 新增作品定义与 1–3 分钟叙事超短片路线；叙事超短片使用可见选择、让步或关系变化，不强制完整 Want / Need / Arc，3–10 分钟叙事短片继续完成完整 A→B 弧光。
+- Storyboard 保持按需专业功能，继承上游作品定义，不持有跨模块 full-chain 生命周期或批准 Gate；canonical storyboard style、固定故事板模板与固定分镜表模板逐字节不变。
+- 公共健康检查和匿名合同测试覆盖 specialist handoff、叙事超短片缩放、作品定义继承、Storyboard 生命周期边界和既有冻结面。
+
 ## 2026-07-22
 
 - 六项 skill 完成协调健康修复：Helper V3.9、Screenplay V1.5、Storyboard V1.16、Static Asset V2.6、Action V3.8 与 Visual Style V1.6。

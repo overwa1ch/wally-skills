@@ -1,6 +1,6 @@
 # Continuity Validation Rules
 
-Use after drafting the final `processed director script`, before asking for approval.
+Use after drafting a `processed director script`, before delivery.
 
 ## Goal
 
@@ -9,7 +9,7 @@ Focus on camera movement, character blocking, eyeline, screen direction, prop / 
 Validation may track off-frame facts. Keep those facts in the checklist or continuity baseline until a shot can show them.
 
 Continuity validation is mandatory, but it is internal by default.
-The final artifact should include a full validation table only when the user asks for validation evidence.
+The artifact should include a full validation table only when the user asks for validation evidence.
 If evidence is requested, give a compact summary or a short table outside the director script body.
 
 ## Internal Checklist
@@ -46,7 +46,7 @@ Use this checklist in reasoning, validation records, or requested evidence:
 
 ## Blocking Problems
 
-Revise the director script before approval when any of these appear:
+Revise the director script before delivery when any of these appear:
 
 - A character jumps position, facing direction, or side of frame without visible movement or transition.
 - A shot lacks a readable action, object state, sound state, or task.
@@ -72,4 +72,4 @@ Preserve the source story and selected `SEG` structure.
 Adjust shot order, shot size, camera movement, blocking, transition, duration, or visible action wording only as needed.
 Move off-frame continuity facts into validation instead of repeating them in shot blocks.
 
-Apply revisions directly in the director script before final output. Keep editing-history language out of the final artifact. Put validation notes in validation records, logs, or chat summaries.
+Apply revisions directly in the director script before delivery. Keep editing-history language out of the artifact. Put validation notes in validation records, logs, or chat summaries.

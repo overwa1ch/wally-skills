@@ -6,11 +6,9 @@ Use whenever the user requests spatial planning from supplied material with enou
 
 Create one simple top-down spatial check per supplied scene or continuity space.
 
-## Routing
+## Input Behavior
 
-- For a direct one-product SVG request, create one SVG per supplied scene immediately. Do not ask whether the user wants SVGs, do not require an upstream product, and do not emit a named workflow gate. Stop after delivering the SVGs and a compact review request.
-- Inside an explicitly requested full-chain run that includes spatial planning, create the SVGs and stop at `WAITING_FOR_SCENE_LAYOUT_SVG_REVIEW`. Continue only after the user approves the SVGs or explicitly skips the review.
-- Inside a full-chain run that does not include spatial planning, skip this stage without asking and without opening a gate.
+- Create one SVG per supplied scene immediately. Do not ask whether the user wants SVGs and do not require another storyboard-domain product first.
 - If the supplied material lacks the spatial facts needed for the requested SVG, name only the missing facts and stop. Do not produce a screenplay, `SEG`, or other upstream product uninvited.
 
 ## Output
@@ -66,14 +64,8 @@ Before delivery, check:
 
 ## Review Prompt
 
-For a direct one-product request, tell the user:
+Tell the user:
 
 ```text
 场景俯视布局 SVG 已画完，请审查空间和人物位置是否对。
-```
-
-For an explicitly requested full-chain run, tell the user:
-
-```text
-场景俯视布局 SVG 已画完，请先审查空间和人物位置是否对。通过后我再继续转 processed director script。
 ```

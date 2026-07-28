@@ -13,18 +13,18 @@ import xml.etree.ElementTree as ET
 
 
 SKILLS = {
-    "deco-helper": "deco-helper@2026-07-22-v3.9-cross-contract-validation",
-    "deco-screenplay-writer": "deco-screenplay-writer@2026-07-22-v1.5-dialogue-trigger-workflow-alignment",
-    "deco-storyboard-designer": "deco-storyboard-designer@2026-07-22-v1.16-routing-contract-closure",
+    "deco-helper": "deco-helper@2026-07-28-v3.11-specialist-revision-handoff",
+    "deco-screenplay-writer": "deco-screenplay-writer@2026-07-28-v1.7-narrative-ultrashort-arc-closure",
+    "deco-storyboard-designer": "deco-storyboard-designer@2026-07-28-v1.19-work-definition-inheritance",
     "deco-static-asset-designer": "deco-static-asset-designer@2026-07-22-v2.6-prop-state-four-grid",
     "deco-action-designer": "deco-action-designer@2026-07-22-v3.8-dialogue-execution-boundary",
     "deco-visual-style-extractor": "deco-visual-style-extractor@2026-07-22-v1.6-boundary-evidence-ownership",
 }
 
 README_VERSIONS = {
-    "deco-helper": "V3.9",
-    "deco-screenplay-writer": "V1.5",
-    "deco-storyboard-designer": "V1.16",
+    "deco-helper": "V3.11",
+    "deco-screenplay-writer": "V1.7",
+    "deco-storyboard-designer": "V1.19",
     "deco-static-asset-designer": "V2.6",
     "deco-action-designer": "V3.8",
     "deco-visual-style-extractor": "V1.6",
@@ -182,6 +182,7 @@ def check_frozen(skills: Path, errors: list[str]) -> None:
 def check_module_contracts(skills: Path, errors: list[str]) -> None:
     helper = (skills / "deco-helper/SKILL.md").read_text(encoding="utf-8")
     helper_contract = (skills / "deco-helper/references/artifact-compatibility.md").read_text(encoding="utf-8")
+    helper_workflow = (skills / "deco-helper/references/workflow-guide.md").read_text(encoding="utf-8")
     for relative in (
         "deco-helper/scripts/prompt_validation_common.py",
         "deco-helper/scripts/validate_route_a_prompt.py",
@@ -193,6 +194,14 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fail(errors, "Helper does not declare all three Audio modes")
     if "Confirm that `Audio: 无BGM。` exists" in helper_contract:
         fail(errors, "Helper retains unconditional no-BGM compatibility rule")
+    if "hand those revisions to `deco-storyboard-designer` for integration" not in helper_workflow:
+        fail(errors, "Helper does not hand storyboard-exposed shot revisions to Storyboard Designer")
+    if "When the updated director script returns" not in helper_workflow:
+        fail(errors, "Helper can approve before the specialist returns an updated director script")
+    if "Do not author or revise any specialist product." not in helper:
+        fail(errors, "Helper specialist-product boundary is missing")
+    if "integrate every named shot-design revision" in helper_workflow:
+        fail(errors, "Helper still claims specialist shot-design revision work")
 
     screenplay_root = skills / "deco-screenplay-writer"
     screenplay = (screenplay_root / "SKILL.md").read_text(encoding="utf-8")
@@ -235,6 +244,16 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
     )
     if "请选择：回复" in screenplay_references or "通过并锁定" in screenplay_references:
         fail(errors, "Screenplay format reference retains a local approval-menu variant")
+    short_format = (screenplay_root / "references/format-short.md").read_text(encoding="utf-8")
+    for phrase in (
+        "叙事超短片聚焦1-2个中心人物，不强制完整Want/Need/Arc",
+        "叙事超短片至少呈现一次可见的选择、让步或关系变化",
+        "叙事短片完成一次A→B变化",
+    ):
+        if phrase not in short_format:
+            fail(errors, f"Screenplay narrative-ultrashort scaling contract is missing: {phrase}")
+    if "## 作品定义" not in screenplay or "Define the work" not in screenplay:
+        fail(errors, "Screenplay work-definition contract is missing")
 
     action = (skills / "deco-action-designer/SKILL.md").read_text(encoding="utf-8")
     action_craft = (skills / "deco-action-designer/references/craft.md").read_text(encoding="utf-8")
@@ -260,13 +279,30 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fail(errors, "Storyboard SEG route still implies completed or locked input")
     svg_rules = (storyboard_root / "references/scene-layout-svg-rules.md").read_text(encoding="utf-8")
     for phrase in (
-        "direct one-product SVG request",
-        "full-chain run that includes spatial planning",
-        "full-chain run that does not include spatial planning",
+        "Create one SVG per supplied scene immediately",
+        "do not require another storyboard-domain product first",
         "name only the missing facts and stop",
     ):
         if phrase not in svg_rules:
             fail(errors, f"Storyboard Scene SVG route is missing: {phrase}")
+    if re.search(r"(?i)full[- ]chain|WAITING_FOR_|## Output gates", storyboard_tree):
+        fail(errors, "Storyboard retains a cross-module lifecycle or approval gate")
+    for phrase in (
+        "Provide on-demand storyboard-domain functions",
+        "Preserve the latest explicit or approved `作品定义`",
+        "Copy the source screenplay's `## 作品定义` block verbatim",
+        "Keep the fixed storyboard and shot-table prompt templates verbatim",
+    ):
+        if phrase not in storyboard:
+            fail(errors, f"Storyboard work-definition inheritance is missing: {phrase}")
+    director_contract = (storyboard_root / "references/director-script-output-contract.md").read_text(encoding="utf-8")
+    storyboard_design = (storyboard_root / "references/storyboard-design.md").read_text(encoding="utf-8")
+    for phrase in ("状态：DIRECTOR_SCRIPT_READY", "## 作品定义"):
+        if phrase not in director_contract:
+            fail(errors, f"Storyboard director-script contract is missing: {phrase}")
+    for phrase in ("## Carry the work definition", "Begin every complete storyboard or shot-sequence design"):
+        if phrase not in storyboard_design:
+            fail(errors, f"Storyboard design work-definition carrier is missing: {phrase}")
     for phrase in (
         "Leave `SEGXX` unchanged for a generic reusable prompt",
         "exact current SEG identifier",
@@ -373,6 +409,8 @@ def check_repository_metadata(root: Path, errors: list[str]) -> None:
             fail(errors, f"README version table is inconsistent for {name} {version}")
     if "六项 skill 完成协调健康修复" not in changelog:
         fail(errors, "CHANGELOG lacks the coordinated 2026-07-22 release entry")
+    if "Helper V3.11、Screenplay V1.7 与 Storyboard V1.19" not in changelog:
+        fail(errors, "CHANGELOG lacks the coordinated 2026-07-28 contract repair entry")
     if not workflow_path.is_file() or "validate-deco-skills:" not in workflow_path.read_text(encoding="utf-8"):
         fail(errors, "validate-deco-skills GitHub Actions job is missing")
     if not test_path.is_file():

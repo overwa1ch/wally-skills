@@ -2,6 +2,13 @@
 
 Use this guide to create or revise storyboard directions, shot sequences, and boards from the materials the user supplies.
 
+## Carry the work definition
+
+- Begin every complete storyboard or shot-sequence design with the latest explicit or approved `## 作品定义` block from the source screenplay or user brief.
+- Copy the definition without reclassifying the work. Keep `作品形态` separate from `视听定位`; for example, a narrative short may use a cinematic visual position without becoming a feature film.
+- Use the definition to control coverage, rhythm, emphasis, and shot language. Do not convert definition metadata into visible panel content.
+- If the source does not decide whether the work is an advertisement, narrative film, documentary, MV/visual piece, or episodic content and that choice would materially change the design, report the missing definition instead of guessing.
+
 ## Establish story authority
 
 - Treat explicit facts, actions, spatial relationships, and constraints in the supplied materials as authoritative.
@@ -11,7 +18,7 @@ Use this guide to create or revise storyboard directions, shot sequences, and bo
 
 ## Choose the useful resolution
 
-Select the design depth from the user's objective rather than from workflow labels:
+Select the design depth from the user's objective rather than from preset labels:
 
 - **Direction pass:** test visual coverage, rhythm, and expression. Offer distinct alternatives when comparison helps the decision.
 - **Locked sequence:** define stable shot order, shot size, composition, movement, blocking, and visible action.
@@ -91,3 +98,4 @@ Before delivery, verify:
 8. Every written visual detail is visible inside its panel crop; off-frame continuity remains outside the panel description.
 9. Every panel note states a complete movement path with start, direction, subject relation, and landing; an undecided move defaults to a slow push-in.
 10. `运镜：固定` appears only when the user locks it or stillness has a stated narrative purpose.
+11. The delivered document carries the source work definition, and its coverage and shot language fit that definition.

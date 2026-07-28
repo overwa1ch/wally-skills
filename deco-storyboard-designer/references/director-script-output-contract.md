@@ -1,6 +1,6 @@
 # Director Script Output Contract
 
-Use when writing the final `processed director script`.
+Use when writing a `processed director script`.
 
 ## Document Structure
 
@@ -10,7 +10,10 @@ Use when writing the final `processed director script`.
 版本：
 模式：source-preserving / visual-optimized
 来源：
-状态：WAITING_FOR_DIRECTOR_SCRIPT_APPROVAL
+状态：DIRECTOR_SCRIPT_READY
+
+## 作品定义
+Copy the latest explicit or approved work-definition block from the source screenplay or user brief.
 
 ## 完整剧本 / 来源
 ...
@@ -31,7 +34,9 @@ SEG02｜地点 / 时间
 ...
 ```
 
-Use provided source as authority. For locked briefs, test prompts, or excerpts, cite them directly and keep `SEG` plus director script complete. Run continuity validation internally before approval; show a compact PASS line or table only when requested. When the user asks to enter storyboard work, return to the storyboard design/review or fixed-prompt route in the skill entry; do not build a separate handoff package.
+Use provided source as authority. For locked briefs, test prompts, or excerpts, cite them directly and keep `SEG` plus director script complete. Run continuity validation internally before delivery; show a compact PASS line or table only when requested.
+
+The work definition is required metadata for a complete director script. Copy it without reinterpretation and keep it outside the pure `SEG` text and individual shot blocks. If the distinction between advertisement, narrative film, documentary, MV/visual piece, or episodic content would materially change the shot design and the source does not decide it, report the missing definition instead of guessing.
 
 Core principle: if unsure, write less. Use only visible, shootable anchors that control the frame, action, timing, sound, continuity, or handoff. Do not fill uncertainty with invented props, extra blocking, mood words, or explanatory coverage.
 
@@ -157,4 +162,5 @@ SEG01｜地点 / 时间
 - In `拍摄手法`, keep only anchors that control the shot. Default spatial description is foreground only; do not add `中景是...` or `背景是...` unless requested.
 - When camera movement is present, it should answer five checks compactly: why it moves, where it starts, how it travels, how the subject relates to the lens, and where it lands.
 - `SEG 拆解` remains pure segmented source text; analysis belongs in reasoning or `导演脚本`.
+- The document carries the latest source `作品定义`; work type and audiovisual style are not collapsed into one label.
 - Keep `画面变化`, standalone `构图 / 空间层次` fields, separate wardrobe/prop/mood fields, storyboard panels, `Bxx`, asset IDs, and final video prompts out unless explicitly requested.

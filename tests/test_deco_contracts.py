@@ -307,6 +307,25 @@ class SkillContractTests(unittest.TestCase):
         )
         self.assertNotIn("请选择：回复", references)
         self.assertNotIn("通过并锁定", references)
+        self.assertIn("## Define the work", skill)
+        self.assertIn("## 作品定义", skill)
+        self.assertIn(
+            "叙事超短片聚焦1-2个中心人物，不强制完整Want/Need/Arc",
+            short,
+        )
+        self.assertIn(
+            "叙事超短片至少呈现一次可见的选择、让步或关系变化",
+            short,
+        )
+        self.assertIn(
+            "叙事超短片采用“建立处境—形成压力—做出选择—落到可见结果”",
+            short,
+        )
+        self.assertIn(
+            "叙事短片使用1-2个主角和完整Want/Need/Arc",
+            short,
+        )
+        self.assertIn("叙事短片完成一次A→B变化", short)
 
     def test_storyboard_open_input_svg_and_fixed_prompt_routes(self) -> None:
         skill = self.read("deco-storyboard-designer/SKILL.md")
@@ -318,15 +337,60 @@ class SkillContractTests(unittest.TestCase):
         for phrase in ("prose", "tables", "images", "partial", "conflicting"):
             self.assertIn(phrase, skill)
         for phrase in (
-            "direct one-product SVG request",
-            "full-chain run that includes spatial planning",
-            "full-chain run that does not include spatial planning",
+            "Create one SVG per supplied scene immediately",
+            "do not require another storyboard-domain product first",
         ):
             self.assertIn(phrase, svg)
         self.assertIn("Leave `SEGXX` unchanged for a generic reusable prompt", skill)
         self.assertIn("exact current SEG identifier", skill)
         self.assertNotIn("READY_FOR_FIXED_STORYBOARD_PROMPT", tree)
         self.assertNotIn("handoff-to-storyboard.md", tree)
+        self.assertIsNone(
+            re.search(r"(?i)full[- ]chain|WAITING_FOR_|## Output gates", tree)
+        )
+        self.assertIn("Provide on-demand storyboard-domain functions", skill)
+        self.assertIn(
+            "Copy the source screenplay's `## 作品定义` block verbatim",
+            skill,
+        )
+        self.assertIn(
+            "Keep the fixed storyboard and shot-table prompt templates verbatim",
+            skill,
+        )
+        director_contract = self.read(
+            "deco-storyboard-designer/references/director-script-output-contract.md"
+        )
+        self.assertIn("状态：DIRECTOR_SCRIPT_READY", director_contract)
+        self.assertIn("## 作品定义", director_contract)
+        design = self.read(
+            "deco-storyboard-designer/references/storyboard-design.md"
+        )
+        self.assertIn("## Carry the work definition", design)
+        self.assertIn(
+            "Begin every complete storyboard or shot-sequence design",
+            design,
+        )
+
+    def test_helper_routes_storyboard_revisions_to_the_storyboard_specialist(self) -> None:
+        helper = self.read("deco-helper/SKILL.md")
+        workflow = self.read("deco-helper/references/workflow-guide.md")
+        self.assertIn(
+            "deco-helper@2026-07-28-v3.11-specialist-revision-handoff",
+            helper,
+        )
+        self.assertIn(
+            "hand those revisions to `deco-storyboard-designer` for integration",
+            workflow,
+        )
+        self.assertIn(
+            "When the updated director script returns",
+            workflow,
+        )
+        self.assertIn(
+            "Do not author or revise any specialist product.",
+            helper,
+        )
+        self.assertNotIn("integrate every named shot-design revision", workflow)
 
     def test_static_four_grid_and_prop_state_contracts(self) -> None:
         four = self.read("deco-static-asset-designer/types/multi-angle-2x2.md")
