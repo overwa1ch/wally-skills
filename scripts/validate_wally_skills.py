@@ -17,7 +17,7 @@ SKILLS = {
     "wally-screenplay-writer": "wally-screenplay-writer@2026-07-28-v1.7-narrative-ultrashort-arc-closure",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-07-28-v1.19-work-definition-inheritance",
     "wally-static-asset-designer": "wally-static-asset-designer@2026-07-22-v2.6-prop-state-four-grid",
-    "wally-action-designer": "wally-action-designer@2026-07-22-v3.8-dialogue-execution-boundary",
+    "wally-action-designer": "wally-action-designer@2026-07-29-v3.9-adaptive-camera-shot-grammar",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-07-22-v1.6-boundary-evidence-ownership",
 }
 
@@ -26,7 +26,7 @@ README_VERSIONS = {
     "wally-screenplay-writer": "V1.7",
     "wally-storyboard-designer": "V1.19",
     "wally-static-asset-designer": "V2.6",
-    "wally-action-designer": "V3.8",
+    "wally-action-designer": "V3.9",
     "wally-visual-style-extractor": "V1.6",
 }
 
@@ -261,6 +261,13 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fail(errors, "Action frontmatter/body does not limit dialogue to approved wording")
     if "Propose new wording" in action_craft:
         fail(errors, "Action still proposes original dialogue wording")
+    for phrase in (
+        "compose Camera and each Shot from only the conditional controls the task needs",
+        "Capture physics",
+        "Fit the action, camera response, contact, settling, dialogue, and listener registration",
+    ):
+        if phrase not in f"{action}\n{action_craft}":
+            fail(errors, f"Action V3.9 adaptive camera/Shot contract is missing: {phrase}")
 
     storyboard_root = skills / "wally-storyboard-designer"
     storyboard = (storyboard_root / "SKILL.md").read_text(encoding="utf-8")

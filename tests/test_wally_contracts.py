@@ -444,6 +444,9 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn("Music unspecified: start with `无BGM。`", contract)
         self.assertIn("Music explicitly supplied or requested", contract)
         self.assertIn("Absolute silence explicitly required", contract)
+        self.assertIn("compose Camera and each Shot from only the conditional controls", skill)
+        self.assertIn("Capture physics", craft)
+        self.assertIn("Budget duration for action preparation", contract)
 
 
 if __name__ == "__main__":

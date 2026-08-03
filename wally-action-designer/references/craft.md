@@ -32,13 +32,27 @@ Keep the chain continuous across the whole requested scope. Each unit needs only
 - For a 4-second clip, limit the action to one or two beats. For other durations, use the fewest source-supported beats that make the sequence executable; continuous background state does not create another beat.
 - Describe actions as counts or steps when possible and supported by the supplied material or exact synchronization. Never invent a count to make ordinary movement sound more precise.
 - Keep every multi-Shot block distinct. Give each Shot one camera setup, one action, and one lighting recipe only when lighting is materially controlled. Treat each Shot as a creative unit that can later be edited or stitched.
+- Build each Shot setup from only the controls that materially disambiguate frame zero. Select them in this order when needed: viewpoint and axis relationship; shot size, lens, angle, and camera position; foreground framing or occlusion; focus owner and plausible depth of field; foreground-subject-background layers and initial positions. Describe the axis through visible subject relationships rather than inventing compass directions or opaque position labels.
+- Let the local timeline own every change after frame zero. Order the useful controls as trigger, camera response, subject path or contact, relationship landing, and exact dialogue or sound. Omit any stage that does not change execution.
+- Fit the action, camera response, contact, settling, dialogue, and listener registration inside the Shot duration. When they cannot fit sequentially, simplify an unlocked camera response or report the locked-duration conflict; do not compress everything into simultaneous motion.
 
 ## 4. Specify Style, Camera, Light, And Continuity Visibly
 
 - Name the visible subject, relevant materials, setting, time of day, and atmosphere only when supplied or materially controlled. Replace vague praise with renderable nouns and verbs: `湿沥青、斑马线、霓虹倒映在积水中` carries more control than `漂亮的夜街`.
 - Put a decisive style cue in the early `Style/format` field. Express it as visible medium, capture texture, period treatment, filter character, or grade instead of abstract prestige language.
-- Use one dominant camera move per execution unit: locked-off, dolly, orbit, lateral slide, pan, tilt, track, or a restrained handheld drift. Describe its start, path, subject relation, and landing when those facts matter.
-- Use lens and depth-of-field language only when the task actually controls them. As conditional defaults when shot authority is open, longer-lens close-ups such as 85mm+ favor isolation; 24–35mm wide views favor context; shallow depth of field isolates the subject, while deep depth of field preserves environment and spatial evidence.
+
+### Build Camera From Conditional Control Dimensions
+
+Compose camera direction from only the dimensions that add independent control:
+
+- **Capture physics**: frame cadence and shutter-motion rendering. For explicitly filmic live action with open capture settings, `24fps，180°快门运动模糊` is an available baseline, not a universal requirement. Omit or replace it for source-matched footage, phone-native UGC, tutorials, sports, high-speed action, slow motion, animation, UI capture, or any locked setting.
+- **Optical behavior**: lens character, focus falloff, and depth of field. `自然光学景深` means physically plausible, shot-appropriate focus behavior; it never means every Shot must be shallow. Longer-lens close-ups such as 85mm+ can favor isolation, 24–35mm wide views can preserve context, and group or spatial-establishing Shots may need deeper focus.
+- **Stability and capture texture**: distinguish a truly locked-off camera from stabilized or handheld capture. `稳定手持` keeps composition controlled while allowing subtle irregular breathing drift or micro-correction; it is not rhythmic shaking. Use looser handheld motion only when the supplied style requires it.
+- **Movement motivation**: use one dominant move per execution unit—locked-off, dolly, orbit, lateral slide, pan, tilt, track, or restrained handheld drift. Start camera movement because of a performer, prop, gaze, sound, or spatial reveal; describe its start, path, subject relation, and landing when those facts matter.
+- **Edit grammar**: when narrative edit authority is open, let cuts follow changes in relationship, tactic, pressure, information, or focal ownership rather than cutting mechanically on every line. In shot-reverse-shot, let framing distance, emphasis, or reaction value progress with the beat instead of repeating equal-status reaction coverage. Preserve every approved cut and camera decision when shot authority is locked.
+
+For example, when all five dimensions genuinely apply: `Camera: 真实电影摄影，24fps，180°快门运动模糊，自然光学景深；稳定手持，只有轻微不规则呼吸漂移。镜头运动由人物动作、视线与声音触发，正反打随关系压力递进景别。` Shorten or omit any clause that the current task does not control.
+
 - Prefer straight-on, stable framing for UI or exact on-screen text when shot authority leaves the camera open. Never replace a locked camera decision merely to follow this heuristic.
 - When lighting matters, state its quality, motivated source, and direction. When color is independently controlled, name three to five palette anchors. Reuse the same lighting logic across visibly continuous Shots.
 - For a strict filmic look or continuity-critical task, add only the independently controlled detail among format/look, lens or filter, grade or palette, lighting direction, texture, and sound. More detail is not automatically more control.

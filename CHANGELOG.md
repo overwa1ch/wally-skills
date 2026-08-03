@@ -6,6 +6,7 @@
 - Helper 升级为 V3.12，显式身份触发词从 `deco` 切换为 `wally`，并继续维持 specialist 必须由用户明确调用的边界。
 - 默认安装方式从全局 user skills 调整为 repository 内的 `.agents/skills`，避免无关项目加载整套 Wally metadata。
 - 为六个 skill 补齐 `agents/openai.yaml` UI metadata，并保留原有合同、冻结模板和专业职责。
+- 合并全局安装中尚未发布的 Action V3.9：Camera 按 capture physics、光学、稳定性、运动动机与剪辑语法自适应组装；Shot 按视点、轴线、前景、焦点、空间层次、动作落点和时长预算选择必要控制，且不覆盖已批准镜头权威。
 
 ## 2026-07-28
 

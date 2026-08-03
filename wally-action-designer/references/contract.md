@@ -112,11 +112,15 @@ Use Sora's meaning: `<3-5 color anchors>`. Specify stable color anchors, saturat
 
 ### Camera
 
-Use Sora's meaning: `<shot type, angle, motion>`. State shared framing or capture behavior: shot size, angle, lens character, depth of field, stability, one dominant movement, edit logic, or aspect ratio, but only the controls that matter. Use lens, depth of field, and straight-on text-framing heuristics from `craft.md` only when the task or material actually leaves those decisions open. In Shot mode, keep shot-specific position, path, subject relation, and landing inside each Shot.
+Use Sora's meaning: `<shot type, angle, motion>`. Compose shared framing or capture behavior from only the relevant dimensions: capture physics, optical behavior, stability or capture texture, movement motivation, and edit grammar. Useful controls can include shot size, angle, lens character, physically plausible depth of field, stability, one dominant movement, edit logic, or aspect ratio. In Shot mode, keep shot-specific position, path, subject relation, and landing inside each Shot.
+
+Use `24fps，180°快门运动模糊` only as a conditional baseline for explicitly filmic live action when capture settings are open. Do not force it onto source-matched footage, phone-native UGC, tutorials, sports, high-speed or slow-motion work, animation, UI capture, or locked settings. Treat `自然光学景深` as shot-appropriate focus falloff, not a command for universal shallow focus. Use `稳定手持` only for controlled composition with subtle irregular breathing drift or micro-correction; use `固定机位` only when the camera has no translation or rotation.
+
+When narrative edit decisions are materially controlled and authority leaves them open, state the positive grammar that motivates movement or cuts: performer action, prop movement, gaze, sound, spatial reveal, relationship change, tactic, pressure, information, or focal ownership. For shot-reverse-shot, specify progression only when the beat requires a change in framing distance, emphasis, or reaction value. Never use this heuristic to rewrite approved coverage.
 
 When Shots use different valid camera states, express only their common capture logic globally and keep each exact state in its Shot. Do not say `每镜`, `全程`, `始终`, or `只有` for a movement or stability rule that any Shot violates.
 
-Use `固定机位` only when the camera has no translation or rotation; never pair it with push, pull, pan, tilt, track, or orbit.
+Never pair `固定机位` with push, pull, pan, tilt, track, or orbit.
 
 ### Acting
 
@@ -144,7 +148,11 @@ Use Sora's meaning: `<counts or beats>`. Use this top-level field only with the 
 
 ### Shot blocks
 
-For each Shot, include only useful visible controls: global time range, framing, frame-zero camera position or camera behavior already active at frame zero, spatial relationship, initial visible scene and subject state, direct Shot-local timecode lines, locked dialogue, visible text, and decisive sound trigger. Every setup sentence before the local timeline describes only facts or an already-active camera behavior true at that Shot's `0.0s`; every action, camera, or state change after frame zero belongs to a direct local timecode line. Use one full-duration line when no meaningful stage change exists; use multiple lines when order or timing matters. One Shot has one main story job, one primary action, and one dominant camera behavior unless the shot authority explicitly locks more.
+For each Shot, include only useful visible controls. Build the frame-zero setup adaptively from: viewpoint and axis relationship; shot size, lens, angle, and camera position; foreground framing or occlusion; focus owner and depth of field; foreground-subject-background layers and initial positions; initial visible scene and subject state; and camera behavior already active at frame zero. Use visible subject relationships for axis and position instead of invented compass directions or opaque table-side labels. Do not mechanically populate every slot.
+
+Every setup sentence before the local timeline describes only facts or an already-active camera behavior true at that Shot's `0.0s`. Every action, camera response, path, contact, state change, landing, locked dialogue, visible text change, or decisive sound trigger after frame zero belongs to a direct Shot-local timecode line. When useful, order those changes as trigger, camera response, subject path or contact, relationship landing, and exact dialogue or sound. Use one full-duration line when no meaningful stage change exists; use multiple lines when order or timing matters. One Shot has one main story job, one primary action, and one dominant camera behavior unless the shot authority explicitly locks more.
+
+Budget duration for action preparation, camera response, contact, settling, spoken delivery, and listener registration. Keep them sequential. If approved action, camera, and dialogue cannot fit, simplify only an unlocked camera response or report the locked-duration conflict. Compress background extras into one low-weight shared state unless an individual changes the story.
 
 For cleaning, restoration, organization, damage-removal, before/after, or product-efficacy work, every affected Shot must establish a renderable frame-zero condition before its first action: name the visible dirt, debris, damage, or disorder; quantify its amount or density in practical visual terms; describe its distribution pattern; and locate it on the relevant surface, edge, seam, groove, corner, container, or background zone. A display or storage Shot must instead state that its presentation surface is clean, empty, or orderly and identify the objects intentionally present. Do not use a bare adjective such as `脏乱` as the whole setup. When source or locked material controls the condition, preserve it; when the condition is open, choose the smallest visible setup that makes the intended effect readable without inventing a product claim.
 
@@ -263,6 +271,11 @@ The example intentionally has no `Use case`, because no concrete destination for
 - If exact time ranges are used, do they fit the approved duration?
 - For cleaning, restoration, organization, damage-removal, before/after, or product-efficacy work, does every affected Shot establish the frame-zero condition with visible type, amount or density, distribution, and location; and does every display or storage Shot establish its clean or ordered baseline?
 - Does every global field hold for every Shot it claims to cover, with valid local differences expressed as specializations rather than contradictions?
+- Is `Camera` composed from only the relevant control dimensions, with capture physics appropriate to the medium and authority rather than applied as a universal film template?
+- Does depth-of-field language define plausible shot-specific focus behavior instead of forcing shallow focus globally, and does stability language distinguish locked-off, stabilized, and handheld capture correctly?
+- When narrative camera or edit decisions are open and materially controlled, are movement and cuts positively motivated by action, gaze, sound, space, or relationship change without overriding approved coverage?
+- Does each Shot setup include only the needed viewpoint, axis, foreground, focus, spatial-layer, and frame-zero controls, using visible relationships rather than opaque position labels?
+- Can the action, camera response, contact, settling, dialogue, and listener registration fit sequentially inside the approved Shot duration?
 - Do `Audio` or `Constraints` assign, freeze, or prohibit anything that a Shot must change, move, reveal, sound, display, or preserve?
 - Have absolute terms such as `每镜`, `全程`, `始终`, `只有`, `不`, and `保持不变` been checked against every Shot and beat in their stated scope?
 - Are cause, action, response, and landing executable and source-preserving?
