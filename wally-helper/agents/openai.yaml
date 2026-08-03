@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wally Helper"
+  short_description: "Guide Wally AI-video workflows and assemble prompts"
+  default_prompt: "Use $wally-helper to organize my current AI-video materials and identify the next professional step."

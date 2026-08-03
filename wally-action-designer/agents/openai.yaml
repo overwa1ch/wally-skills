@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wally Action Designer"
+  short_description: "Design executable AI-video direction and review results"
+  default_prompt: "Use $wally-action-designer to design or review an executable director body for this video scope."

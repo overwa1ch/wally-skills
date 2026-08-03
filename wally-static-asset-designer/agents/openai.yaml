@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wally Static Asset Designer"
+  short_description: "Plan and review reusable production image assets"
+  default_prompt: "Use $wally-static-asset-designer to plan, prompt, or review the requested reusable visual asset."

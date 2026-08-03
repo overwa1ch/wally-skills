@@ -1,5 +1,5 @@
 {
-  "schema_version": "deco-reference-bindings/v1",
+  "schema_version": "wally-reference-bindings/v1",
   "bindings": [
     {
       "segment": "SEG01",
