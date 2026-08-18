@@ -268,61 +268,220 @@ class SkillContractTests(unittest.TestCase):
     def read(self, relative: str) -> str:
         return (REPO / relative).read_text(encoding="utf-8")
 
-    def test_screenplay_dialogue_triggers_eight_steps_and_single_menu_owner(self) -> None:
+    def test_screenplay_v2_four_format_routes_and_dialogue_triggers(self) -> None:
         skill = self.read("wally-screenplay-writer/SKILL.md")
         frontmatter = re.match(r"\A---\n(.*?)\n---\n", skill, re.DOTALL)
         self.assertIsNotNone(frontmatter)
+        self.assertIn(
+            "wally-screenplay-writer@2026-08-18-v2.0-four-format-workflow-unification",
+            skill,
+        )
         for phrase in ("原创对白", "台词写作", "对白改写", "对白诊断"):
             self.assertIn(phrase, frontmatter.group(1))
-        expected = (
-            "1. 破题与核心动作\n2. 梗概草稿\n3. 人物深度与弧光\n"
-            "4. 前史与世界观\n5. 结构大纲\n6. 场景拆解\n"
-            "7. 场景写作\n8. 剧本医生"
+        self.assertTrue(any(label in skill for label in ("四格式", "四种格式")))
+        for pattern in (
+            r"(?:概念超短片.{0,40}1\s*[-–]\s*3\s*分钟|1\s*[-–]\s*3\s*分钟.{0,40}概念超短片)",
+            r"(?:叙事短片.{0,40}5\s*[-–]\s*10\s*分钟|5\s*[-–]\s*10\s*分钟.{0,40}叙事短片)",
+            r"(?:长片.{0,20}90\s*分钟|90\s*分钟.{0,20}长片)",
+            r"(?:剧集.{0,40}(?:连续剧|多集内容)|多集剧集)",
+        ):
+            self.assertRegex(skill, pattern)
+        for phrase in (
+            "四种格式是创作方法路由",
+            "实际体量偏离默认值",
+            "已有材料的定向对白",
+        ):
+            self.assertIn(phrase, skill)
+
+        tree = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in sorted((REPO / "wally-screenplay-writer").rglob("*.md"))
         )
-        self.assertIn(expected, skill)
-        for label in ("[通过]", "[修改]", "[自检]", "[通过并锁定]"):
-            self.assertIn(label, skill)
+        self.assertNotIn("叙事超短片", tree)
+
+        clarification_contexts = [
+            skill[max(0, match.start() - 100):match.end() + 320]
+            for match in re.finditer("完整叙事", skill)
+        ]
+        self.assertTrue(
+            any(
+                re.search(r"1\s*[-–]\s*3\s*分钟", context)
+                and re.search(r"3\s*[-–]\s*5\s*分钟", context)
+                and "概念超短片" in context
+                and re.search(r"5\s*[-–]\s*10\s*分钟", context)
+                and any(word in context for word in ("确认", "澄清", "选择", "询问", "问"))
+                for context in clarification_contexts
+            )
+        )
+
+    def test_screenplay_narrative_eight_steps_and_concept_three_step_exception(self) -> None:
+        skill = self.read("wally-screenplay-writer/SKILL.md")
         canonical = re.search(
-            r"## Workflow\n\n((?:[1-8]\. .+\n){8})", skill
+            r"(?ms)^#{2,3} (?:(?:叙事类)?通用八步流程|Workflow)\s*\n(?P<body>.*?)(?=^#{2,3} |^---\s*$|\Z)",
+            skill,
         )
         self.assertIsNotNone(canonical)
-        canonical_names = [
-            line.split(". ", 1)[1]
-            for line in canonical.group(1).strip().splitlines()
-        ]
-        short = self.read("wally-screenplay-writer/references/format-short.md")
-        short_names = re.findall(
-            r"(?m)^### 第[一二三四五六七八]步：(.+)$", short
+        parsed_names = []
+        for raw_name in re.findall(r"(?m)^[1-8]\.\s+(.+)$", canonical.group("body")):
+            bold_name = re.match(r"\*\*(.+?)\*\*", raw_name)
+            parsed_names.append(
+                bold_name.group(1) if bold_name else raw_name.split(" —", 1)[0].strip()
+            )
+        canonical_names = tuple(parsed_names)
+        expected = (
+            "破题与核心动作",
+            "梗概草稿",
+            "人物深度与弧光",
+            "前史与世界观",
+            "结构大纲",
+            "场景拆解",
+            "场景写作",
+            "剧本医生",
         )
-        short_names = [
-            re.sub(r"（短片精简版）$", "", name) for name in short_names
-        ]
-        self.assertEqual(short_names, canonical_names)
+        self.assertEqual(canonical_names, expected)
+        for phrase in (
+            "### 八步基础交付合同",
+            "目标 → 阻碍 → 结果或失败代价",
+            "用户要求改写时同时给可直接替换的改写稿",
+        ):
+            self.assertIn(phrase, skill)
+
+        short = self.read("wally-screenplay-writer/references/format-short.md")
+        short_names = tuple(
+            re.findall(r"(?m)^### 第[一二三四五六七八]步：(.+)$", short)
+        )
+        self.assertEqual(short_names, expected)
+        for phrase in (
+            "用户要求改写时",
+            "可直接替换的改写稿",
+            "不回滚范围外已通过的决定",
+            "只保留用户本轮范围内的适用项",
+            "该步未全部完成时",
+        ):
+            self.assertIn(phrase, short)
+
+        series = self.read("wally-screenplay-writer/references/format-series.md")
+        for heading in (
+            "### 阶段 A：季度规划",
+            "### 阶段 B：分集大纲",
+            "### 阶段 C：逐集剧本（通用八步流程）",
+        ):
+            self.assertIn(heading, series)
+        self.assertIn("配置不是独立审批阶段", series)
+        self.assertIn("以下内容只增加剧集单集要求，不替换基础交付", series)
+        for phrase in (
+            "第二步的单集梗概来自阶段 B",
+            "第四步的前史与世界观来自阶段 A",
+            "引用并确认对应既有产物即满足八步基础交付",
+            "不扩成整集或全季审计",
+            "整集场景全部通过后才进入第八步",
+        ):
+            self.assertIn(phrase, series)
+
+        feature = self.read("wally-screenplay-writer/references/format-feature.md")
+        self.assertIn("不要求读取短片格式来补全输出", feature)
+        self.assertIn("不扩成全片审计", feature)
+        self.assertIn("全部 Sequence 通过后才进入第八步", feature)
+
+        concept = self.read("wally-screenplay-writer/references/format-ultrashort.md")
+        what_if_workflow = concept.split("## What-If工作流", 1)[-1].split("# Part B", 1)[0]
+        concept_steps = tuple(
+            re.findall(r"(?m)^### 第[一二三]步：(.+)$", what_if_workflow)
+        )
+        self.assertEqual(concept_steps, ("概念锻造", "结构与视听设计", "全片剧本"))
+        how_to_workflow = concept.split("## How-to-Tell工作流", 1)[-1].split("# Part C", 1)[0]
+        how_to_steps = tuple(
+            re.findall(r"(?m)^### 第[一二三]步：(.+)$", how_to_workflow)
+        )
+        self.assertEqual(how_to_steps, ("形式发现", "结构与视听设计", "全片剧本"))
+        self.assertIn("不套用 What-If 的 A-E 结构", how_to_workflow)
+        self.assertIn("不强制设置 What-If 式翻转", how_to_workflow)
+        self.assertIn(
+            "所有“3分钟”与“1-3分钟”检查均改用作品定义中的真实目标时长",
+            concept,
+        )
+        self.assertIn("按作品定义中的真实目标时长等比调整", short)
+        self.assertIsNotNone(
+            re.search(r"概念超短片.{0,100}三步|三步.{0,100}概念超短片", skill, re.DOTALL)
+        )
+
+        tree = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in sorted((REPO / "wally-screenplay-writer").rglob("*.md"))
+        )
+        for phrase in (
+            "结构大纲（第三步）",
+            "剧本写作（第五步）",
+            "场景拆解（第四步）",
+            "短片第二步（人物深度）",
+            "长片第四步（场景拆解）",
+            "长片第三步（结构大纲）",
+            "逐集进入六步工作流",
+            "完整六步工作流",
+        ):
+            self.assertNotIn(phrase, tree)
+
+    def test_screenplay_current_stage_work_definition_dialogue_owner_and_single_menu(self) -> None:
+        skill = self.read("wally-screenplay-writer/SKILL.md")
+        self.assertIn("已有材料", skill)
+        self.assertTrue(
+            any(
+                phrase in skill
+                for phrase in ("最新可用", "当前可用", "匹配步骤", "当前阶段")
+            )
+        )
+        for phrase in (
+            "自检只覆盖当前步骤、用户本轮范围及其必要上下文",
+            "该步尚未完成时",
+            "锁定只作用于本轮明确交付的范围",
+            "无需完整格式路由的独立定向对白",
+        ):
+            self.assertIn(phrase, skill)
+        core = self.read("wally-screenplay-writer/references/core-methodology.md")
+        self.assertIn("这不是内容审批或正式锁定", core)
+
+        self.assertIn("## 作品定义", skill)
+        for field in (
+            "作品形态：",
+            "目标体量：",
+            "题材类型：",
+            "商业属性 / 内容功能：",
+            "叙事方式：",
+            "视听定位：",
+        ):
+            self.assertIn(field, skill)
+        self.assertIn("题材类别自动当成视听定位", skill)
+
+        self.assertIn("wally-action-designer", skill)
+        self.assertIn("已批准", skill)
+
+        intermediate_menu = (
+            "[通过]：接受当前交付并继续\n"
+            "[修改]：留在当前步骤修改\n"
+            "[自检]：查看当前步骤检查结果"
+        )
+        final_menu = (
+            "[通过并锁定]：完成并锁定当前交付范围\n"
+            "[修改]：继续精修当前交付范围\n"
+            "[自检]：查看当前步骤检查结果"
+        )
+        self.assertEqual(skill.count(intermediate_menu), 1)
+        self.assertEqual(skill.count(final_menu), 1)
+        self.assertNotIn("[通过]：进入下一步", skill)
+        self.assertNotIn("[通过并锁定]：完成并锁定当前剧本", skill)
+
         references = "\n".join(
             path.read_text(encoding="utf-8")
             for path in sorted((REPO / "wally-screenplay-writer/references").glob("*.md"))
         )
-        self.assertNotIn("请选择：回复", references)
-        self.assertNotIn("通过并锁定", references)
-        self.assertIn("## Define the work", skill)
-        self.assertIn("## 作品定义", skill)
-        self.assertIn(
-            "叙事超短片聚焦1-2个中心人物，不强制完整Want/Need/Arc",
-            short,
-        )
-        self.assertIn(
-            "叙事超短片至少呈现一次可见的选择、让步或关系变化",
-            short,
-        )
-        self.assertIn(
-            "叙事超短片采用“建立处境—形成压力—做出选择—落到可见结果”",
-            short,
-        )
-        self.assertIn(
-            "叙事短片使用1-2个主角和完整Want/Need/Arc",
-            short,
-        )
-        self.assertIn("叙事短片完成一次A→B变化", short)
+        for phrase in (
+            "请选择：回复",
+            '请回复"通过"',
+            "请回复“通过”",
+            "进入[自检环节]",
+            "[通过并锁定]",
+        ):
+            self.assertNotIn(phrase, references)
 
     def test_storyboard_open_input_svg_and_fixed_prompt_routes(self) -> None:
         skill = self.read("wally-storyboard-designer/SKILL.md")

@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 
 SKILLS = {
     "wally-helper": "wally-helper@2026-08-18-v4.0-single-scope-bindings-v2",
-    "wally-screenplay-writer": "wally-screenplay-writer@2026-07-28-v1.7-narrative-ultrashort-arc-closure",
+    "wally-screenplay-writer": "wally-screenplay-writer@2026-08-18-v2.0-four-format-workflow-unification",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-08-18-v2.1-adversarial-main-shot",
     "wally-static-asset-designer": "wally-static-asset-designer@2026-07-22-v2.6-prop-state-four-grid",
     "wally-action-designer": "wally-action-designer@2026-07-29-v3.9-adaptive-camera-shot-grammar",
@@ -23,7 +23,7 @@ SKILLS = {
 
 README_VERSIONS = {
     "wally-helper": "V4.0",
-    "wally-screenplay-writer": "V1.7",
+    "wally-screenplay-writer": "V2.0",
     "wally-storyboard-designer": "V2.1",
     "wally-static-asset-designer": "V2.6",
     "wally-action-designer": "V3.9",
@@ -260,30 +260,124 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
     for trigger in ("原创对白", "台词写作", "对白改写", "对白诊断"):
         if trigger not in frontmatter_text:
             fail(errors, f"Screenplay frontmatter is missing dialogue trigger {trigger}")
-    workflow_match = re.search(r"## Workflow\n\n(.*?)\n\n", screenplay, re.DOTALL)
-    expected_workflow = "\n".join(
+
+    four_format_patterns = {
+        "1-3 minute concept ultrashort": (
+            r"(?:概念超短片.{0,40}1\s*[-–]\s*3\s*分钟|"
+            r"1\s*[-–]\s*3\s*分钟.{0,40}概念超短片)"
+        ),
+        "5-10 minute narrative short": (
+            r"(?:叙事短片.{0,40}5\s*[-–]\s*10\s*分钟|"
+            r"5\s*[-–]\s*10\s*分钟.{0,40}叙事短片)"
+        ),
+        "feature": r"(?:长片.{0,20}90\s*分钟|90\s*分钟.{0,20}长片)",
+        "series": r"(?:剧集.{0,40}(?:连续剧|多集内容)|多集剧集)",
+    }
+    if not any(label in screenplay for label in ("四格式", "四种格式")):
+        fail(errors, "Screenplay does not declare the four-format contract")
+    for label, pattern in four_format_patterns.items():
+        if not re.search(pattern, screenplay, re.DOTALL):
+            fail(errors, f"Screenplay four-format route is missing: {label}")
+    for phrase in (
+        "四种格式是创作方法路由",
+        "实际体量偏离默认值",
+        "已有材料的定向对白",
+    ):
+        if phrase not in screenplay:
+            fail(errors, f"Screenplay four-format scaling or scoped-task rule is missing: {phrase}")
+
+    screenplay_markdown = [
+        path.read_text(encoding="utf-8")
+        for path in iter_files(screenplay_root)
+        if path.suffix == ".md"
+    ]
+    all_screenplay = "\n".join(screenplay_markdown)
+    if "叙事超短片" in all_screenplay:
+        fail(errors, "Screenplay active tree retains the retired narrative-ultrashort route")
+
+    workflow_match = re.search(
+        r"(?ms)^#{2,3} (?:(?:叙事类)?通用八步流程|Workflow)\s*\n(?P<body>.*?)(?=^#{2,3} |^---\s*$|\Z)",
+        screenplay,
+    )
+    expected_workflow = (
+        "破题与核心动作",
+        "梗概草稿",
+        "人物深度与弧光",
+        "前史与世界观",
+        "结构大纲",
+        "场景拆解",
+        "场景写作",
+        "剧本医生",
+    )
+    workflow_names: tuple[str, ...] = ()
+    if workflow_match:
+        parsed_names: list[str] = []
+        for raw_name in re.findall(r"(?m)^[1-8]\.\s+(.+)$", workflow_match.group("body")):
+            bold_name = re.match(r"\*\*(.+?)\*\*", raw_name)
+            parsed_names.append(
+                bold_name.group(1) if bold_name else raw_name.split(" —", 1)[0].strip()
+            )
+        workflow_names = tuple(parsed_names)
+    if workflow_names != expected_workflow:
+        fail(errors, "Screenplay narrative eight-step source of truth is missing or reordered")
+    for phrase in (
+        "### 八步基础交付合同",
+        "目标 → 阻碍 → 结果或失败代价",
+        "用户要求改写时同时给可直接替换的改写稿",
+    ):
+        if phrase not in screenplay:
+            fail(errors, f"Screenplay narrative base deliverable contract is missing: {phrase}")
+
+    concept_format = (screenplay_root / "references/format-ultrashort.md").read_text(encoding="utf-8")
+    concept_workflow = concept_format.split("## What-If工作流", 1)[-1].split("# Part B", 1)[0]
+    concept_steps = tuple(
+        re.findall(r"(?m)^### 第[一二三]步：(.+)$", concept_workflow)
+    )
+    if concept_steps != ("概念锻造", "结构与视听设计", "全片剧本"):
+        fail(errors, "Screenplay concept-ultrashort three-step workflow is missing or reordered")
+    how_to_workflow = concept_format.split("## How-to-Tell工作流", 1)[-1].split("# Part C", 1)[0]
+    how_to_steps = tuple(
+        re.findall(r"(?m)^### 第[一二三]步：(.+)$", how_to_workflow)
+    )
+    if how_to_steps != ("形式发现", "结构与视听设计", "全片剧本"):
+        fail(errors, "Screenplay How-to-Tell three-step workflow is missing or reordered")
+    for phrase in (
+        "不套用 What-If 的 A-E 结构",
+        "不强制设置 What-If 式翻转",
+    ):
+        if phrase not in how_to_workflow:
+            fail(errors, f"Screenplay How-to-Tell retains a What-If conflict: {phrase}")
+    if "所有“3分钟”与“1-3分钟”检查均改用作品定义中的真实目标时长" not in concept_format:
+        fail(errors, "Screenplay concept route declares scaling but its reference retains hard duration checks")
+    if not re.search(r"概念超短片.{0,100}三步|三步.{0,100}概念超短片", screenplay, re.DOTALL):
+        fail(errors, "Screenplay entry does not declare the concept-ultrashort three-step exception")
+
+    intermediate_menu = "\n".join(
         (
-            "1. 破题与核心动作",
-            "2. 梗概草稿",
-            "3. 人物深度与弧光",
-            "4. 前史与世界观",
-            "5. 结构大纲",
-            "6. 场景拆解",
-            "7. 场景写作",
-            "8. 剧本医生",
+            "[通过]：接受当前交付并继续",
+            "[修改]：留在当前步骤修改",
+            "[自检]：查看当前步骤检查结果",
         )
     )
-    if not workflow_match or workflow_match.group(1).strip() != expected_workflow:
-        fail(errors, "Screenplay eight-step source of truth is missing or reordered")
-    for menu_label in ("[通过]", "[修改]", "[自检]", "[通过并锁定]"):
-        if menu_label not in screenplay:
-            fail(errors, f"Screenplay unified approval menu is missing {menu_label}")
+    final_menu = "\n".join(
+        (
+            "[通过并锁定]：完成并锁定当前交付范围",
+            "[修改]：继续精修当前交付范围",
+            "[自检]：查看当前步骤检查结果",
+        )
+    )
+    if screenplay.count(intermediate_menu) != 1:
+        fail(errors, "Screenplay must define the exact intermediate approval menu once")
+    if screenplay.count(final_menu) != 1:
+        fail(errors, "Screenplay must define the exact final approval menu once")
+
     stale_phrases = (
         "结构大纲（第三步）", "剧本写作（第五步）", "场景拆解（第四步）",
         "短片第二步（人物深度）", "长片第四步（场景拆解）",
         "长片第三步（结构大纲）", "逐集进入六步工作流",
+        "完整六步工作流", "[通过]：进入下一步",
+        "[通过并锁定]：完成并锁定当前剧本",
     )
-    all_screenplay = "\n".join(path.read_text(encoding="utf-8") for path in iter_files(screenplay_root) if path.suffix == ".md")
     for phrase in stale_phrases:
         if phrase in all_screenplay:
             fail(errors, f"Screenplay stale workflow phrase: {phrase}")
@@ -292,18 +386,116 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         for path in iter_files(screenplay_root / "references")
         if path.suffix == ".md"
     )
-    if "请选择：回复" in screenplay_references or "通过并锁定" in screenplay_references:
-        fail(errors, "Screenplay format reference retains a local approval-menu variant")
-    short_format = (screenplay_root / "references/format-short.md").read_text(encoding="utf-8")
     for phrase in (
-        "叙事超短片聚焦1-2个中心人物，不强制完整Want/Need/Arc",
-        "叙事超短片至少呈现一次可见的选择、让步或关系变化",
-        "叙事短片完成一次A→B变化",
+        "请选择：回复",
+        '请回复"通过"',
+        "请回复“通过”",
+        "进入[自检环节]",
+        "[通过并锁定]",
     ):
-        if phrase not in short_format:
-            fail(errors, f"Screenplay narrative-ultrashort scaling contract is missing: {phrase}")
-    if "## 作品定义" not in screenplay or "Define the work" not in screenplay:
-        fail(errors, "Screenplay work-definition contract is missing")
+        if phrase in screenplay_references:
+            fail(errors, f"Screenplay format reference retains a local approval-menu variant: {phrase}")
+
+    short_format = (screenplay_root / "references/format-short.md").read_text(encoding="utf-8")
+    short_steps = tuple(
+        re.findall(r"(?m)^### 第[一二三四五六七八]步：(.+)$", short_format)
+    )
+    if short_steps != expected_workflow:
+        fail(errors, "Screenplay short-format headings do not match the narrative eight-step source")
+    if not all(
+        phrase in short_format
+        for phrase in (
+            "用户要求改写时",
+            "可直接替换的改写稿",
+            "不回滚范围外已通过的决定",
+            "只保留用户本轮范围内的适用项",
+            "该步未全部完成时",
+        )
+    ):
+        fail(errors, "Screenplay doctor does not deliver scoped, directly usable rewrites")
+    if "按作品定义中的真实目标时长等比调整" not in short_format:
+        fail(errors, "Screenplay short route declares scaling but its reference lacks the scale rule")
+
+    series_format = (screenplay_root / "references/format-series.md").read_text(encoding="utf-8")
+    for heading in (
+        "### 阶段 A：季度规划",
+        "### 阶段 B：分集大纲",
+        "### 阶段 C：逐集剧本（通用八步流程）",
+    ):
+        if heading not in series_format:
+            fail(errors, f"Screenplay series workflow is missing: {heading}")
+    if "配置不是独立审批阶段" not in series_format:
+        fail(errors, "Screenplay series configuration creates an ambiguous extra gate")
+    feature_format = (screenplay_root / "references/format-feature.md").read_text(encoding="utf-8")
+    if "不要求读取短片格式来补全输出" not in feature_format:
+        fail(errors, "Screenplay feature workflow has an implicit short-format dependency")
+    if "以下内容只增加剧集单集要求，不替换基础交付" not in series_format:
+        fail(errors, "Screenplay series episode workflow does not inherit the base deliverables")
+    for phrase in (
+        "第二步的单集梗概来自阶段 B",
+        "第四步的前史与世界观来自阶段 A",
+        "引用并确认对应既有产物即满足八步基础交付",
+        "不扩成整集或全季审计",
+        "整集场景全部通过后才进入第八步",
+    ):
+        if phrase not in series_format:
+            fail(errors, f"Screenplay series overlay conflict remains: {phrase}")
+    for phrase in (
+        "不扩成全片审计",
+        "全部 Sequence 通过后才进入第八步",
+    ):
+        if phrase not in feature_format:
+            fail(errors, f"Screenplay feature overlay conflict remains: {phrase}")
+
+    if "已有材料" not in screenplay or not any(
+        phrase in screenplay for phrase in ("最新可用", "当前可用", "匹配步骤", "当前阶段")
+    ):
+        fail(errors, "Screenplay does not resume supplied material from its current usable stage")
+    for phrase in (
+        "自检只覆盖当前步骤、用户本轮范围及其必要上下文",
+        "该步尚未完成时",
+        "锁定只作用于本轮明确交付的范围",
+        "无需完整格式路由的独立定向对白",
+    ):
+        if phrase not in screenplay:
+            fail(errors, f"Screenplay scoped continuation contract is missing: {phrase}")
+    if "这不是内容审批或正式锁定" not in (
+        screenplay_root / "references/core-methodology.md"
+    ).read_text(encoding="utf-8"):
+        fail(errors, "Screenplay memory checkpoint is ambiguous with approval locking")
+
+    work_definition_fields = (
+        "作品形态：",
+        "目标体量：",
+        "题材类型：",
+        "商业属性 / 内容功能：",
+        "叙事方式：",
+        "视听定位：",
+    )
+    if "## 作品定义" not in screenplay:
+        fail(errors, "Screenplay work-definition block is missing")
+    for field in work_definition_fields:
+        if field not in screenplay:
+            fail(errors, f"Screenplay work-definition field is missing: {field}")
+    if "题材类别自动当成视听定位" not in screenplay:
+        fail(errors, "Screenplay work definition permits unsupported visual-style inference")
+
+    if not all(token in screenplay for token in ("wally-action-designer", "已批准")):
+        fail(errors, "Screenplay dialogue ownership boundary with Action Designer is missing")
+
+    clarification_contexts = [
+        screenplay[max(0, match.start() - 100):match.end() + 320]
+        for match in re.finditer("完整叙事", screenplay)
+    ]
+    if not any(
+        re.search(r"1\s*[-–]\s*3\s*分钟", context)
+        and re.search(r"3\s*[-–]\s*5\s*分钟", context)
+        and "概念超短片" in context
+        and re.search(r"5\s*[-–]\s*10\s*分钟", context)
+        and any(word in context for word in ("确认", "澄清", "选择", "询问", "问"))
+        for context in clarification_contexts
+    ):
+        fail(errors, "Screenplay lacks the 1-3 / 3-5 minute narrative clarification rule")
 
     action = (skills / "wally-action-designer/SKILL.md").read_text(encoding="utf-8")
     action_craft = (skills / "wally-action-designer/references/craft.md").read_text(encoding="utf-8")
@@ -470,6 +662,8 @@ def check_repository_metadata(root: Path, errors: list[str]) -> None:
         fail(errors, "CHANGELOG lacks the 2026-08-03 Wally project-scope cutover entry")
     if "Helper 升级为 V4.0" not in changelog or "Storyboard 升级为 V2.1" not in changelog:
         fail(errors, "CHANGELOG lacks the 2026-08-18 source-scene migration entry")
+    if "Screenplay 升级为 V2.0" not in changelog or "正式收敛为四种格式" not in changelog:
+        fail(errors, "CHANGELOG lacks the 2026-08-18 Screenplay V2.0 entry")
     if not workflow_path.is_file() or "validate-wally-skills:" not in workflow_path.read_text(encoding="utf-8"):
         fail(errors, "validate-wally-skills GitHub Actions job is missing")
     if not test_path.is_file():

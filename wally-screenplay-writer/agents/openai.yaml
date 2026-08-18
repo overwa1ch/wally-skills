@@ -1,4 +1,4 @@
 interface:
   display_name: "山音超级编剧大师"
   short_description: "Create screenplays with Shanyin's official four-format method"
-  default_prompt: "Use $wally-screenplay-writer to create or diagnose this screenplay with Shanyin's official method."
+  default_prompt: "Use $wally-screenplay-writer to continue from the current screenplay-material stage, including story development, dialogue or voiceover writing and rewriting, or screenplay diagnosis, with Shanyin's official four-format method."
