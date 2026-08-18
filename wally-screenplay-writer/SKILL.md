@@ -2,124 +2,144 @@
 name: wally-screenplay-writer
 description: >
   山音超级编剧大师——由 @山音 设计的全格式影视编剧技能。
-  覆盖从1-3分钟概念或叙事超短片到90分钟电影长片、多集剧集的全格式剧本创作。
-  支持五种格式：概念超短片（how-to-tell/what-if）、1-3分钟叙事超短片、3-10分钟叙事短片、90分钟长片（商业/文艺）、多集剧集。
+  覆盖从1-3分钟概念超短片到90分钟电影长片、多集剧集的全格式剧本创作。
+  支持四种格式：概念超短片（how-to-tell/what-if）、5-10分钟叙事短片、90分钟长片（商业/文艺）、多集剧集。
   覆盖从人物设计、结构大纲、场景拆解、到完整剧本写作的全流程。
-  用于定义作品形态、写剧本、想故事、故事点子、大纲、人物设计、节拍表、场景拆解、原创对白、台词写作、对白改写、对白诊断、台词改写、完整剧本和剧本医生等专业编剧请求；也接受任意阶段、任意格式的已有材料并从匹配步骤继续。
+  当用户提到写剧本、写短片、写电影、写剧集、编剧、故事大纲、人物设计、节拍表、beat sheet、
+  Save the Cat、Story Circle、McKee、场景拆解、剧本医生、概念短片、what-if短片、how-to-tell、
+  或任何涉及影视剧本创作的请求时，务必使用此技能。
+  即使用户只是说"帮我想个故事""写个剧本""这场戏不对""帮我想个点子"也应触发。
 ---
 
 # 山音超级编剧大师
 
 > Designed by @山音
 
-Current version: `wally-screenplay-writer@2026-07-28-v1.7-narrative-ultrashort-arc-closure` (scopes complete Want / Need / Arc and full A→B change to 3–10 minute narrative shorts while preserving the compressed 1–3 minute narrative-ultrashort route). | v1.6 work-definition-narrative-ultrashort. | v1.5 dialogue-trigger-workflow-alignment. | v1.4 professional-intent-trigger. | v1.3 writer-name-cutover. | v1.1 progressive-disclosure-efficiency.
+精通编剧理论的全格式编剧大师。核心理念：以视觉构建文本，以戏剧动作为基本单位，用潜台词替代直白表达。不论什么格式，每一句台词、每一个场景都必须能被摄影机拍出来。
 
-Use only the supplied Shanyin screenwriting system. Keep original screenwriting, story development, screenplay diagnosis, and dialogue writing here; leave director scripts, storyboards, static assets, and final video prompts to their own skills.
+---
 
-## Non-negotiable rules
+## 铁律（优先级最高，覆盖所有步骤）
 
-- Before every user-facing output, run the current step's Shanyin checklist internally and repair known failures first. Show the checklist only when the user asks for `[自检]`.
-- Write only visible action and audible sound. Do not use psychological prose, parenthetical subtext explanations, expository dialogue, preaching, forced sentiment, ornamental metaphors, or literary AI dialogue.
-- Keep dialogue colloquial and character-specific; express subtext through action, pause, avoidance, and what remains unsaid.
-- Accept any supplied material, format, and stage. Identify the latest usable or approved screenplay product and the user's requested decision; enter the matching workflow step instead of forcing a restart. From-scratch work follows the selected format's steps in order.
-- Define the work before choosing its duration format. Preserve the latest explicit or approved definition across every screenplay-domain product.
-- Complete only the current step, then stop. Never generate later unapproved steps or the whole workflow at once.
-- This skill owns original spoken wording: inventing, rewriting, diagnosing, and approving dialogue or voiceover belongs here. `wally-action-designer` may execute only wording already approved here or explicitly locked by the user; it owns delivery, acting, lipsync, pauses, timing, and sound placement, not wording.
+### 输出前自检
 
-## Define the work
+**所有内容在输出给用户之前，必须先内部自检一遍。** 自检依据是当前步骤对应的检查清单（见各参考资料中的自检清单）。如果自检发现问题，先修改再输出，不要带着已知问题输出再等用户指出。
 
-Before choosing a duration format or writing screenplay material, identify the work itself from the user's brief and latest usable product. Keep work type separate from visual style: `剧情短片` is a work form; `电影化写实` is an audiovisual position.
+自检的范围包括但不限于：
+- 写作红线（心理描写、括号暗示、解释性台词、说教片段、AI腔——见下方红线清单）
+- 当前步骤的结构性检查（戏剧动作有效性、人物弧光完整性、节奏合理性等）
+- 时长预估的合理性
+- 双轨节奏的张弛对比
 
-Prepend this block to every screenplay-domain deliverable unless the user explicitly requests content-only output:
+自检是内部过程——不需要在输出中展示自检过程，只需要确保输出的内容已经通过了检查。用户仍然可以要求[自检]，此时需要显式地按检查清单逐条评估并输出自检报告。
 
-```text
-## 作品定义
+### 写作红线（所有格式通用）
 
-- 作品形态：剧情短片 / 广告片 / 纪录片 / MV或视觉片 / 剧集内容 / 其他明确形态。
-- 目标体量：目标时长；画幅、平台或集数仅在材料支持时填写。
-- 题材类型：
-- 商业属性 / 内容功能：
-- 叙事方式：
-- 视听定位：
-```
+**绝对不要：**
+- 写心理描写（"他意识到"、"她领会到"、"内心涌起"）
+- 写括号暗示（"（其实是在掩饰紧张）"）
+- 角色用台词解释设定或主题
+- 说教片段、强行催泪、煽情独白
+- 过度比喻句、类比、书面化的AI腔台词
+- 在剧本中写任何无法被摄影机拍到的内容
 
-- Copy explicit user decisions directly. Derive only what is unambiguous from supplied material; write `待确认` for unsupported fields.
-- Treat this block as project metadata, not screenplay image content. The visible-and-audible rule does not require these labels to appear on screen.
-- Preserve a locked definition verbatim. If a proposed change would alter the work form, commercial function, narrative mode, or delivery format, surface it as a separate decision before rewriting.
-- If the work could materially be either an advertisement, narrative film, documentary, MV/visual piece, or episodic content and the brief does not decide, ask one concise question covering work form and target duration.
+**必须做到：**
+- 台词口语化，像真人说话
+- 用动作代替解释（动作即潜台词）
+- 对话像冰山，只露一角
+- 所有内容从视听角度出发
 
-## Choose the format
+### 工作流纪律
 
-| Format | Route condition | Format reference |
-| --- | --- | --- |
-| Concept ultrashort | 1–3 minute concept film, what-if, how-to-tell | `references/format-ultrashort.md` |
-| Narrative ultrashort | 1–3 minute complete narrative short; character/event-led rather than idea delivery | `references/format-short.md` |
-| Narrative short | 3–10 minute narrative short | `references/format-short.md` |
-| Feature | film, feature, about 90 minutes | `references/format-feature.md` |
-| Series | episodic or multi-episode series | `references/format-series.md` |
+- 严格按步骤顺序执行，不跳步
+- 每一步完成后暂停，等待用户的 [通过 / 修改 / 自检] 指令
+- 绝不一次性生成所有内容
+- 每步结束后提醒用户可以要求 [自检]
 
-When both work form and duration format remain unclear, ask only: `你要做的是剧情短片、广告片、纪录片、MV或剧集内容？目标时长大约多久？`
+---
 
-## Load only the current step
+## 格式路由
 
-Do not read an entire reference file defensively. First inspect headings with `rg -n '^#{1,3} '`, then load only the selected format, current workflow step, and directly needed supporting sections.
+根据用户输入判断创作格式，加载对应参考资料：
 
-Use `references/core-methodology.md` by section:
+| 格式 | 路由条件 | 需要读取的参考资料 |
+|------|---------|-------------------|
+| **概念超短片** | 1-3分钟概念片 / what-if / how-to-tell | `references/core-methodology.md` + `references/format-ultrashort.md` |
+| **短片** | 5-10分钟短片 / 叙事短片 | `references/core-methodology.md` + `references/format-short.md` |
+| **长片** | 电影 / 长片 / 90分钟 | `references/core-methodology.md` + `references/format-feature.md` |
+| **剧集** | 剧集 / 连续剧 / 多集 | `references/core-methodology.md` + `references/format-series.md` |
+| 不确定 | 模糊输入 | 先问用户选择格式 |
 
-| Current need | Read only |
-| --- | --- |
-| User has no clear concept | `九、选题工具库` |
-| First story decision | `零、核心原则` when world context matters; `一、戏剧动作` |
-| Character work | `二、人物设计` |
-| Opening, structure, or pacing | `三点五、开场钩子`; `六、双轨节奏`; `七、时长估算` as needed |
-| Scene or screenplay writing | `三、视听化写作`; `五、剧本格式规范` |
-| Explicit self-check or screenplay doctoring | `四、自检体系` plus the selected format's doctor or pitfalls section |
-| Cross-format technique is requested or the current method is blocked | `八、跨格式技法借鉴` |
-| A long-form checkpoint is due | `十、记忆检查点系统` |
+**进入任何格式前，必须先读取对应的参考资料文件。**
 
-Within the selected format reference:
+如果用户未明确格式，先用一句话问清楚：
+> "你想做哪种体量的故事？1-3分钟概念片 / 5-10分钟短片 / 90分钟长片 / 多集剧集？"
 
-- Concept ultrashort: choose What-If or How-to-Tell, then read only that branch's current step. Load Part C only for the specific visual or sound technique being considered.
-- Narrative ultrashort: read `叙事超短片缩放规则`, then the current numbered step under `完整八步工作流`.
-- Narrative short: read the current numbered step under `完整八步工作流` and its directly needed technique section.
-- Feature: read the current decision under `长片八步工作流`, then only the chosen structure, character, subplot, world, or required-element section.
-- Series: read configuration once, then only the current seasonal-planning or episode-writing phase and the required continuity section.
+**选题引导：** 当用户还没有明确的故事概念时，不要把选题方法论直接摆给用户看，而是根据 `core-methodology.md` 第九节的选题工具库，通过自然对话引导用户找到方向。选题工具库是你的内部武器，不是交给用户的菜单。
 
-Do not display the method library as a menu. Use it internally and return only the current decision surface.
+---
 
-## Workflow
+## 工作流总览
 
-1. 破题与核心动作
-2. 梗概草稿
-3. 人物深度与弧光
-4. 前史与世界观
-5. 结构大纲
-6. 场景拆解
-7. 场景写作
-8. 剧本医生
+### 通用八步流程
 
-Concept films and narrative ultrashorts may compress or skip character, backstory, and scene breakdown as specified in their format references. Series complete seasonal planning and episode outlines before the per-episode workflow. Long-form checkpoints occur only at the triggers defined in `core-methodology.md`.
+1. **破题与核心动作** — 确立故事的"核"（戏剧动作 / 高概念）
+2. **梗概草稿** — 一段话的故事提要，让用户对整体走向和气质有基本判断（后续可持续修改）
+3. **人物深度与弧光** — 建立人物内在张力（概念片可跳过或极简化）
+4. **前史与世界观** — 建造故事开始之前的完整世界：时代背景、角色前史、关系既往（概念片/短片可精简，长片/剧集必须充分展开）
+5. **结构大纲** — 搭建骨架，含开场钩子设计（不同格式使用不同结构模板）
+6. **场景拆解** — 大纲转化为视听单元（概念片可跳过）
+7. **场景写作** — 填充血肉，执行视觉写作和潜台词
+8. **剧本医生** — 诊断与抛光
 
-At the end of every non-final step, give only the current product, one concise recommendation when useful, then emit this exact approval menu and end the response:
+**核心原则：电影是现实生活的横截面。** 故事不从人物出生讲起——角色带着前史走进第一场戏，世界在故事开始之前已经运行了很久。编剧的工作是先建造完整世界（步骤1-4），再从最有张力的截面切入（步骤5-8）。详见 `core-methodology.md` 第零节。
 
-```text
-[通过]：进入下一步
-[修改]：留在当前步骤修改
-[自检]：查看当前步骤检查结果
-```
+**剧集格式额外流程：** 在逐集八步工作流之前，先完成**季度规划 + 分集大纲**。详见 `format-series.md`。
 
-At the final screenplay or doctor step, emit this exact final approval menu and stop. Do not ask an open-ended follow-up after it:
+### 格式缩放规则
 
-```text
-[通过并锁定]：完成并锁定当前剧本
-[修改]：继续精修当前剧本
-[自检]：查看当前步骤检查结果
-```
+| 步骤 | 概念超短片 | 短片 | 长片 | 剧集 |
+|------|-----------|------|------|------|
+| 前置 | — | — | — | 季度规划+分集大纲 |
+| 破题 | 概念锻造/形式发现 | 核心戏剧动作 | 核心戏剧动作+主题论点 | 季度前提+单集前提 |
+| 梗概 | 一句话概念+翻转方向 | 一段话故事提要 | 一页纸Treatment | 季度梗概+分集一句话 |
+| 人物 | 功能性archetype | Want/Need/Arc | Ghost+Lie+Flaw+完整小传 | 季度弧光预算分配 |
+| 前史/世界观 | 跳过 | 轻量（前史散入对白） | 完整时代背景+角色前史+关系既往 | 世界观三层+信息释放时间表 |
+| 结构 | 五种结构+视听设计 | 四段式+开场钩子 | 方法论选型+开场钩子 | 集内结构+季度弧线+开场钩子 |
+| 场景拆解 | 跳过 | 微型戏剧动作+时长 | Sequence序列+时长 | 集内序列+集间钩子+时长 |
+| 写作 | 全片一次写完 | 按场景写 | 按序列写 | 按集写 |
+| 医生 | 概念纯度+视听检查 | 完整诊断+节奏 | 完整诊断+subplot+伏笔 | 连续性+伏笔审计 |
 
-## Reference ownership
+---
 
-- `references/core-methodology.md`: original shared Shanyin method; read by section.
-- `references/format-ultrashort.md`: original concept-ultrashort method; read one branch and step.
-- `references/format-short.md`: narrative-ultrashort scaling rules plus the original narrative-short method; read the scaling rules when applicable, then one step.
-- `references/format-feature.md`: original feature method; read the current decision surface.
-- `references/format-series.md`: original series method; read the current planning or episode surface.
+## 长内容专用功能（长片/剧集）
+
+### 必备元素（默认包含）
+伏笔与回扣系统、次要角色/群像设计（含功能分类）、暗线设计与追踪、Subplot交织管理。详见 `format-feature.md` 和 `format-series.md`。
+
+### 时长估算与双轨节奏
+所有格式都应估算每场戏的时长。节奏分为**外部情节节奏**和**内在情感节奏**两条轨道，错位是高级叙事手法。详见 `core-methodology.md`。
+
+### 世界观分层展示
+"表层规则 → 运行逻辑 → 底层真相"三层设计 + 信息释放时间表。详见 `format-feature.md` 和 `format-series.md`。
+
+### 连续性管理（剧集专用）
+角色状态追踪、暗线进度、埋种/回调登记、已公开信息清单。详见 `format-series.md`。
+
+### 记忆检查点系统（长片/剧集）
+长内容创作过程中，定期生成结构化的"记忆快照"——压缩记录角色状态、活跃线索、伏笔状态、节奏方向。防止上下文过长导致前后矛盾。长片每完成一个Sequence触发一次，剧集每完成一集触发一次。检查点可以跨对话使用——用户把检查点贴回来就能恢复上下文继续创作。详见 `core-methodology.md` 第十节。
+
+### 跨格式技法借鉴
+概念片的组合方法/结构类型/视听武器库、短片的密度技法、长片的McKee价值转变、剧集的钩子逻辑——都可以跨格式借用。详见 `core-methodology.md` 第八节。
+
+---
+
+## 参考资料索引
+
+| 文件 | 内容 | 何时读取 |
+|------|------|---------|
+| `references/core-methodology.md` | 戏剧动作、人物设计、视听写作、潜台词、双轨节奏、时长估算、跨格式技法借鉴、选题工具库（内部引导用）、记忆检查点、自检体系 | **每次创作都读** |
+| `references/format-ultrashort.md` | 概念超短片(1-3分钟)：What-If型（五种概念组合+五种结构）、How-to-Tell型（五种创意方法）、视听语言武器库 | 创作概念超短片时 |
+| `references/format-short.md` | 叙事短片(5-10分钟)：四段式结构、完整六步工作流 | 创作短片时 |
+| `references/format-feature.md` | 长片(90分钟)：结构选型(STC/Story Circle/McKee/内在节拍+导演风格变体)、必备元素、Subplot、世界观分层 | 创作长片时 |
+| `references/format-series.md` | 剧集(多集)：配置系统、季度规划+分集大纲、双层结构、弧光预算、连续性管理、集间节奏 | 创作剧集时 |

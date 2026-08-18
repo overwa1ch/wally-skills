@@ -1,4 +1,4 @@
 interface:
-  display_name: "Wally Screenplay Writer"
-  short_description: "Write and diagnose screenplays across film formats"
-  default_prompt: "Use $wally-screenplay-writer to develop or diagnose this screenplay material at its current stage."
+  display_name: "山音超级编剧大师"
+  short_description: "Create screenplays with Shanyin's official four-format method"
+  default_prompt: "Use $wally-screenplay-writer to create or diagnose this screenplay with Shanyin's official method."
