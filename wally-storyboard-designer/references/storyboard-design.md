@@ -12,6 +12,8 @@ Use this guide to create or revise storyboard directions, shot sequences, and bo
 ## Establish story authority
 
 - Treat explicit facts, actions, spatial relationships, and constraints in the supplied materials as authoritative.
+- Treat the source screenplay's existing scene boundaries, exact headings, and order as the sole scene authority. Never split, merge, rename, normalize, or renumber source scenes.
+- Require explicit source-scene boundaries for generation. When they are absent, stop and route scene formation to `wally-screenplay-writer`.
 - Separate confirmed facts from interpretation. Mark an inference when it affects shot order, staging, or the ending state.
 - Resolve harmless gaps through economical visual assumptions. Surface conflicts that would produce materially different boards.
 - Preserve the requested story boundary. Do not add future beats, explanations, or decorative action that changes the event.
@@ -25,7 +27,7 @@ Select the design depth from the user's objective rather than from preset labels
 - **Bxx delivery:** use the same locked-sequence rigor and retain the user's `Bxx` identifiers.
 - **Targeted revision:** preserve sound panels and redesign only the weak transition, missing beat, unclear action, or conflicting camera choice.
 
-Use as many panels as the key process needs. Avoid a fixed panel count.
+Use as many panels and storyboard pages as the key process needs. A source scene may contain multiple action chains, multiple dramatic beats, and any number of necessary shots. Avoid a fixed panel count.
 
 ## Build the action spine
 
@@ -38,6 +40,15 @@ Map the visible event before selecting shots:
 5. Ending state: the visible condition that completes the requested scope and leads cleanly onward.
 
 Give important processes enough intermediate states to remain legible. Compress repeated or predictable motion.
+
+## Lock main shots before coverage
+
+- Run `main-shot-adjudication.md` with blind independent agents and an adversarial confrontation before selecting the final shot sequence.
+- Treat the accepted main-shot set as the scene's emphasis backbone, not as a one-shot quota. One source scene may need multiple main shots, and one irreducible process may need a main-shot chain.
+- Do not equate an important story proposition with one mandatory camera setup. Lock the required visible story image, then choose its clearest concrete implementation.
+- Give accepted main shots enough screen priority and surrounding coverage for the audience to notice, understand, and feel their meaning.
+- Use supporting shots to establish space, connect causes and results, preserve continuity, or amplify an accepted main shot. Do not promote support coverage merely because it offers another angle.
+- Compress or background material the user does not want emphasized, while preserving the minimum visible cause-and-effect needed to understand the story.
 
 ## Design the shot sequence
 
@@ -99,3 +110,6 @@ Before delivery, verify:
 9. Every panel note states a complete movement path with start, direction, subject relation, and landing; an undecided move defaults to a slow push-in.
 10. `运镜：固定` appears only when the user locks it or stillness has a stated narrative purpose.
 11. The delivered document carries the source work definition, and its coverage and shot language fit that definition.
+12. Every source scene retains its exact original boundary, heading, and order even when it spans multiple pages or action chains.
+13. Every source scene's main-shot set has a multi-agent adversarial audit; no main shot rests on a single-agent judgment or vote count.
+14. Coverage clearly favors accepted main shots, while supporting and weakened material remain subordinate without breaking the story.

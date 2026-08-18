@@ -1,14 +1,14 @@
 # Visual Optimization Rules
 
-Use only after the source-preserving `SEG` breakdown is visible and the user agrees to optimize, or when the user explicitly asks for a more visual/directorial version.
+Use when the user supplies explicit source-scene boundaries and asks for a more visual, shootable, or directorial version. If the material has no explicit source scenes, stop and route scene formation to `wally-screenplay-writer`.
 
 ## Preservation
 
-Preserve core plot facts, cause/effect, dialogue meaning, character intent, locations, named characters, key props, and beat endings. Get user approval before adding named characters, locations, key props, future turns, or changed endings.
+Preserve source scene boundaries, exact headings, order, core plot facts, cause/effect, dialogue meaning, character intent, locations, named characters, key props, and beat endings. Never split, merge, rename, normalize, or renumber source scenes. Get user approval before adding named characters, locations, key props, future turns, or changed endings.
 
 ## Optimization Targets
 
-Make each `SEG` easier to direct and storyboard by turning abstraction into visible behavior:
+Make each source scene easier to direct and storyboard by turning abstraction into visible behavior:
 
 - emotion into posture, breath, gaze, hand tension, distance, hesitation, or repeated micro-action
 - relationship into blocking, entrance/exit, interruption, pursuit, obstruction, giving/taking props, or changed eye line
@@ -27,7 +27,7 @@ When optimizing toward a director script, prioritize visible execution that can 
 
 Replace style adjectives with visible evidence. Load `ai-video-composition-rules.md` only on explicit composition-heavy requests.
 
-Optimization gathers candidate visible beats at `SEG` level. It does not copy every candidate beat or continuity fact into every shot. When assigning a shot, retain only the active subject, visible contact, and necessary visible result inside that crop.
+Optimization gathers candidate visible beats within each source scene. A scene may contain multiple action chains and multiple dramatic beats. Do not copy every candidate beat or continuity fact into every shot. When assigning a shot, retain only the active subject, visible contact, and necessary visible result inside that crop.
 
 ## 空镜 Use
 
@@ -75,4 +75,4 @@ Use concrete actions such as 遮挡、观察、靠近、追赶、绕身、挡路
 
 ## Density
 
-Each `SEG` should be storyboard-ready with one main action chain and a small number of directorial beats. Compress repeated exposition and unrelated emotional inserts.
+Keep each action chain and dramatic beat legible without imposing a fixed count on the source scene. A source scene may require multiple storyboard pages and any number of shots. Compress repeated exposition and unrelated emotional inserts without changing scene boundaries.

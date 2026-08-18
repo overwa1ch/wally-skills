@@ -59,13 +59,12 @@ class RouteValidatorTests(unittest.TestCase):
     @staticmethod
     def route_a_prompt(body: str) -> str:
         return (
-            "SEG01\n\n"
             "Reference List:\n"
             "“红色保温壶” = @image1 - Pxx 道具身份。\n"
-            "“SEG01镜头板” = @image2 - 故事板。\n\n"
+            "“当前场景镜头板” = @image2 - 故事板。\n\n"
             "影片调性：内容类型为产品短片。\n\n"
             "Prompt:\n"
-            "请根据以上参考生成本段视频。故事板控制镜头顺序、运镜、人物动作、空间关系和道具关系。\n\n"
+            "请根据以上参考生成当前视频。故事板控制镜头顺序、运镜、人物动作、空间关系和道具关系。\n\n"
             f"{body.rstrip()}\n\n"
             "Constraints:\n"
             "无旁白、无画外解说。\n"
@@ -74,13 +73,12 @@ class RouteValidatorTests(unittest.TestCase):
     @staticmethod
     def route_b_prompt(rendered_body: str, avoid: str | None = None) -> str:
         constraints = (
-            "只使用本SEG Asset List中的成品资产；不得把参考板内部局部或状态拆成独立资产。\n"
+            "只使用当前 Asset List 中列出的成品资产；不得把参考板内部局部或状态拆成独立资产。\n"
             "无旁白、无画外解说。"
         )
         if avoid is not None:
             constraints += f"\n禁止出现：{avoid}"
         return (
-            "SEG01\n\n"
             "Asset List:\n"
             "“红色保温壶” = @image1 - Pxx 道具身份。\n\n"
             "Prompt:\n"
@@ -199,7 +197,7 @@ class RouteValidatorTests(unittest.TestCase):
             "raw platform handle",
         )
         self.assertFail(
-            self.run_validator("a", self.route_a_prompt(body) + "SEGXX\n", body, self.bindings_a, "default"),
+            self.run_validator("a", self.route_a_prompt(body) + "[资产名称]\n", body, self.bindings_a, "default"),
             "unresolved template placeholder",
         )
         mismatch = json.loads(json.dumps(self.bindings_a, ensure_ascii=False))
@@ -229,8 +227,7 @@ class RouteValidatorTests(unittest.TestCase):
         storyboard = json.loads(json.dumps(self.bindings_b, ensure_ascii=False))
         storyboard["bindings"].append(
             {
-                "segment": "SEG01",
-                "identity": "SEG01镜头板",
+                "identity": "当前场景镜头板",
                 "handle": "@image2",
                 "kind": "storyboard",
                 "role": "故事板",
@@ -334,15 +331,16 @@ class SkillContractTests(unittest.TestCase):
             path.read_text(encoding="utf-8")
             for path in sorted((REPO / "wally-storyboard-designer").rglob("*.md"))
         )
-        for phrase in ("prose", "tables", "images", "partial", "conflicting"):
+        for phrase in ("scene-divided", "tables", "images", "partial", "conflicting"):
             self.assertIn(phrase, skill)
         for phrase in (
             "Create one SVG per supplied scene immediately",
             "do not require another storyboard-domain product first",
         ):
             self.assertIn(phrase, svg)
-        self.assertIn("Leave `SEGXX` unchanged for a generic reusable prompt", skill)
-        self.assertIn("exact current SEG identifier", skill)
+        self.assertIn("Leave `【源场景标题】` unchanged for a generic reusable prompt", skill)
+        self.assertIn("exact original source scene heading", skill)
+        self.assertIn("Never split, merge, rename, normalize, or renumber", skill)
         self.assertNotIn("READY_FOR_FIXED_STORYBOARD_PROMPT", tree)
         self.assertNotIn("handoff-to-storyboard.md", tree)
         self.assertIsNone(
@@ -375,7 +373,7 @@ class SkillContractTests(unittest.TestCase):
         helper = self.read("wally-helper/SKILL.md")
         workflow = self.read("wally-helper/references/workflow-guide.md")
         self.assertIn(
-            "wally-helper@2026-08-03-v3.12-wally-project-scope-cutover",
+            "wally-helper@2026-08-18-v4.0-single-scope-bindings-v2",
             helper,
         )
         self.assertIn(

@@ -74,6 +74,6 @@ When delivering a production asset prompt, retain the selected `types/<asset>.md
 
 ## Boundaries
 
-- Do not produce scripts, `SEG` breakdowns, director scripts, storyboards, performance, dialogue, timing, or audio design.
+- Do not produce scripts, director scripts, storyboards, performance, dialogue, timing, or audio design.
 - Do not select a video route or assemble a final image-to-video or text-to-video prompt.
 - For cross-module requests, complete only the static-asset portion and name the remaining specialist product.

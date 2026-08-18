@@ -13,29 +13,29 @@ import xml.etree.ElementTree as ET
 
 
 SKILLS = {
-    "wally-helper": "wally-helper@2026-08-03-v3.12-wally-project-scope-cutover",
+    "wally-helper": "wally-helper@2026-08-18-v4.0-single-scope-bindings-v2",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-07-28-v1.7-narrative-ultrashort-arc-closure",
-    "wally-storyboard-designer": "wally-storyboard-designer@2026-07-28-v1.19-work-definition-inheritance",
+    "wally-storyboard-designer": "wally-storyboard-designer@2026-08-18-v2.1-adversarial-main-shot",
     "wally-static-asset-designer": "wally-static-asset-designer@2026-07-22-v2.6-prop-state-four-grid",
     "wally-action-designer": "wally-action-designer@2026-07-29-v3.9-adaptive-camera-shot-grammar",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-07-22-v1.6-boundary-evidence-ownership",
 }
 
 README_VERSIONS = {
-    "wally-helper": "V3.12",
+    "wally-helper": "V4.0",
     "wally-screenplay-writer": "V1.7",
-    "wally-storyboard-designer": "V1.19",
+    "wally-storyboard-designer": "V2.1",
     "wally-static-asset-designer": "V2.6",
     "wally-action-designer": "V3.9",
     "wally-visual-style-extractor": "V1.6",
 }
 
 FROZEN_HASHES = {
-    "wally-helper/templates/route-a-final-prompt.md": "9ec017f111f63022c76934469e588831961e741c81f4fbf4948c173559e7afc0",
-    "wally-helper/templates/route-b-final-prompt.md": "dfb18acd92ff241406b63a468fd953920395d91b2356d8f9486510afab5c4b9b",
-    "wally-storyboard-designer/references/storyboard-style-contract.md": "41be97b116623ac8883c8b02a380cfe03f19d2172a8a093a6a1ebde2e2e45e24",
-    "wally-storyboard-designer/templates/storyboard-prompt-template.md": "812e785e681b2b8509d83463e0cc6fda5cf44861a99a7c6e9c42fb2bbe692102",
-    "wally-storyboard-designer/templates/shot-table-prompt-template.md": "88eb19e62678deaf7979f5f0524ac45ccc5caa30c55cb22e733039e07d300ba9",
+    "wally-helper/templates/route-a-final-prompt.md": "9dc2b8ced5b8b4276c291d1b268ed546f0ee53fe08f2d6fe0e5a8b1d3d3b5188",
+    "wally-helper/templates/route-b-final-prompt.md": "96ef1ffed75ab5bfc204f2f2ef4205cfe0e71c13a9671133d152a3e34d089ca6",
+    "wally-storyboard-designer/references/storyboard-style-contract.md": "b2daf11298d50845ae2644f7444bd992078ae55df8edf66b4aa1d95a7fd77d69",
+    "wally-storyboard-designer/templates/storyboard-prompt-template.md": "2164c752ddd8086b4afd9429f76814bd358b959970ea06b9199dda98463bdcc4",
+    "wally-storyboard-designer/templates/shot-table-prompt-template.md": "a3708139bb78491b415fc40d1cd16b9ca8b349e5bda4c3a0c5736ab66379c1d6",
     "wally-static-asset-designer/templates/preview-prompt.md": "cc1cf4dadc4a29a9f14eeb78244ae57327e8dca3fdcd7699d6d5bdaffba0b145",
     "wally-static-asset-designer/templates/visual-direction-proposal.md": "125f3b1fdb2f56c510bd35a920a5de573f6e06bb04a51f49af2cce3a8e90619d",
     "wally-static-asset-designer/types/multi-angle.md": "90203837a5ec2dd836f7fa6bd04c4f73b8f0b12930a990160510d4f7f439cfa7",
@@ -43,6 +43,32 @@ FROZEN_HASHES = {
 
 CANONICAL_STYLE_HASH = "7b09eff252af0861472ad7111eb1ff887950f22c345bdd39b0a3c0f885dc630d"
 IGNORED_NAMES = {".DS_Store", ".git", "__pycache__"}
+RETIRED_UNIT_FRAGMENT = "".join(("s", "e", "g"))
+TEXT_SUFFIXES = {
+    ".body",
+    ".cfg",
+    ".css",
+    ".csv",
+    ".html",
+    ".ini",
+    ".js",
+    ".json",
+    ".jsx",
+    ".md",
+    ".prompt",
+    ".py",
+    ".sh",
+    ".svg",
+    ".toml",
+    ".ts",
+    ".tsv",
+    ".tsx",
+    ".txt",
+    ".xml",
+    ".yaml",
+    ".yml",
+}
+TEXT_FILENAMES = {".gitignore", "LICENSE"}
 MARKDOWN_LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 CODE_MD = re.compile(r"`([^`\n]+\.md(?:#[^`\n]+)?)`")
 
@@ -153,12 +179,28 @@ def check_public_safety(root: Path, errors: list[str], *, skills_only: bool = Fa
     )
     files = iter_skill_files(root) if skills_only else iter_files(root)
     for path in files:
-        if path.suffix.lower() not in {".md", ".py", ".yml", ".yaml", ".json"}:
+        if path.suffix.lower() not in TEXT_SUFFIXES and path.name not in TEXT_FILENAMES:
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
         for token in forbidden:
             if token in text:
                 fail(errors, f"{path}: public-safety token {token!r}")
+
+
+def check_retired_unit_absent(
+    root: Path, errors: list[str], *, skills_only: bool = False
+) -> None:
+    """Prevent the removed intermediate story-unit vocabulary from returning."""
+    files = iter_skill_files(root) if skills_only else iter_files(root)
+    for path in files:
+        relative = path.relative_to(root).as_posix()
+        if RETIRED_UNIT_FRAGMENT in relative.casefold():
+            fail(errors, f"retired story-unit token remains in path: {relative}")
+        if path.suffix.lower() not in TEXT_SUFFIXES and path.name not in TEXT_FILENAMES:
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        if RETIRED_UNIT_FRAGMENT in text.casefold():
+            fail(errors, f"retired story-unit token remains in file: {relative}")
 
 
 def check_frozen(skills: Path, errors: list[str]) -> None:
@@ -183,6 +225,7 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
     helper = (skills / "wally-helper/SKILL.md").read_text(encoding="utf-8")
     helper_contract = (skills / "wally-helper/references/artifact-compatibility.md").read_text(encoding="utf-8")
     helper_workflow = (skills / "wally-helper/references/workflow-guide.md").read_text(encoding="utf-8")
+    helper_parser = (skills / "wally-helper/scripts/prompt_validation_common.py").read_text(encoding="utf-8")
     for relative in (
         "wally-helper/scripts/prompt_validation_common.py",
         "wally-helper/scripts/validate_route_a_prompt.py",
@@ -202,6 +245,13 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fail(errors, "Helper specialist-product boundary is missing")
     if "integrate every named shot-design revision" in helper_workflow:
         fail(errors, "Helper still claims specialist shot-design revision work")
+    for phrase in (
+        "exactly one current generation scope",
+        "wally-reference-bindings/v2",
+        "all five entry fields",
+    ):
+        if phrase not in f"{helper}\n{helper_contract}\n{helper_parser}":
+            fail(errors, f"Helper single-scope binding contract is missing: {phrase}")
 
     screenplay_root = skills / "wally-screenplay-writer"
     screenplay = (screenplay_root / "SKILL.md").read_text(encoding="utf-8")
@@ -278,12 +328,9 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fail(errors, "Storyboard retains obsolete READY gate")
     if "storyboard-style-contract.md" not in storyboard:
         fail(errors, "Storyboard entry does not load canonical style contract")
-    for token in ("prose", "tables", "images", "partial", "conflicting", "mixture"):
+    for token in ("scene-divided", "tables", "images", "partial", "conflicting", "mixture"):
         if token not in storyboard:
             fail(errors, f"Storyboard open-input contract is missing {token!r}")
-    seg_rules = (storyboard_root / "references/seg-breakdown-rules.md").read_text(encoding="utf-8")
-    if "Completion and approval labels are not prerequisites" not in seg_rules:
-        fail(errors, "Storyboard SEG route still implies completed or locked input")
     svg_rules = (storyboard_root / "references/scene-layout-svg-rules.md").read_text(encoding="utf-8")
     for phrase in (
         "Create one SVG per supplied scene immediately",
@@ -311,8 +358,9 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         if phrase not in storyboard_design:
             fail(errors, f"Storyboard design work-definition carrier is missing: {phrase}")
     for phrase in (
-        "Leave `SEGXX` unchanged for a generic reusable prompt",
-        "exact current SEG identifier",
+        "Leave `【源场景标题】` unchanged for a generic reusable prompt",
+        "exact original source scene heading",
+        "Never split, merge, rename, normalize, or renumber",
         "output only its stored, labeled",
         "There is no rough/formal grade",
     ):
@@ -420,6 +468,8 @@ def check_repository_metadata(root: Path, errors: list[str]) -> None:
         fail(errors, "CHANGELOG lacks the coordinated 2026-07-28 contract repair entry")
     if "Helper 升级为 V3.12" not in changelog or ".agents/skills" not in changelog:
         fail(errors, "CHANGELOG lacks the 2026-08-03 Wally project-scope cutover entry")
+    if "Helper 升级为 V4.0" not in changelog or "Storyboard 升级为 V2.1" not in changelog:
+        fail(errors, "CHANGELOG lacks the 2026-08-18 source-scene migration entry")
     if not workflow_path.is_file() or "validate-wally-skills:" not in workflow_path.read_text(encoding="utf-8"):
         fail(errors, "validate-wally-skills GitHub Actions job is missing")
     if not test_path.is_file():
@@ -460,6 +510,10 @@ def main() -> int:
             fail(errors, f"{directory}: target version {version} not found")
 
     check_links(skills, errors)
+    if (supplied_root / "README.md").is_file():
+        check_retired_unit_absent(supplied_root, errors)
+    else:
+        check_retired_unit_absent(skills, errors, skills_only=True)
     check_frozen(skills, errors)
     check_module_contracts(skills, errors)
     check_machine_files(skills, errors)

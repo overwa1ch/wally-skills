@@ -1,8 +1,7 @@
 {
-  "schema_version": "wally-reference-bindings/v1",
+  "schema_version": "wally-reference-bindings/v2",
   "bindings": [
     {
-      "segment": "SEG01",
       "identity": "红色保温壶",
       "handle": "@image1",
       "kind": "static",
@@ -10,8 +9,7 @@
       "source_aliases": []
     },
     {
-      "segment": "SEG01",
-      "identity": "SEG01镜头板",
+      "identity": "当前场景镜头板",
       "handle": "@image2",
       "kind": "storyboard",
       "role": "故事板",

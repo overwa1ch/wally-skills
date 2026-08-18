@@ -1,19 +1,29 @@
 ---
 name: wally-storyboard-designer
-description: Convert any user-supplied prose, scripts, briefs, scene excerpts, tables, images, reference boards, partial or conflicting materials, existing SEGs, director scripts, shot sequences, storyboards, or mixtures into SEG breakdowns, optional scene-layout SVGs, visually optimized material, processed director scripts, storyboard designs, the fixed storyboard prompt, and the fixed shot-table prompt while inheriting the source work definition. Use for 拆SEG, 导演脚本, 镜头脚本, 场景布局, 分镜设计, 故事板, 分镜表, Bxx, 景别, 构图, 运镜, 镜头连续性, returned-board review, or existing copy-ready storyboard prompts. Trigger from professional storyboard or shot-design intent; explicit wally mention is not required. Keep original screenwriting, static asset design, performance/dialogue/audio design, and final video prompt assembly outside this skill.
+description: Convert user-supplied scene-divided scripts, scene excerpts, briefs, tables, images, reference boards, partial or conflicting materials, director scripts, shot sequences, storyboards, or mixtures into optional scene-layout SVGs, visually optimized scenes, processed director scripts, storyboard designs, adversarial multi-agent 主镜 judgments, the fixed storyboard prompt, and the fixed shot-table prompt while inheriting the source work definition. Use for 导演脚本, 镜头脚本, 场景布局, 主镜判断, 分镜设计, 故事板, 分镜表, Bxx, 景别, 构图, 运镜, 镜头连续性, returned-board review, or existing copy-ready storyboard prompts. Trigger from professional storyboard or shot-design intent; explicit wally mention is not required. Keep original screenwriting, static asset design, performance/dialogue/audio design, and final video prompt assembly outside this skill.
 ---
 
 # Wally Storyboard Designer
 
 Provide on-demand storyboard-domain functions for the user's supplied story, scene, image, board, or shot material.
 
-Current version: `wally-storyboard-designer@2026-07-28-v1.19-work-definition-inheritance` (inherits and displays the upstream work definition without originating it). | v1.18 functional-only-scope.
+Current version: `wally-storyboard-designer@2026-08-18-v2.1-adversarial-main-shot`
+
+## Changelog
+
+- `2026-08-18-v2.1-adversarial-main-shot`: Require blind multi-agent proposal, adversarial deletion and merge tests, and evidence-based adjudication before locking any source scene's main-shot set.
+- `2026-08-18-v2.0-source-scene-authority`: Treat the source screenplay's existing scene boundaries, exact headings, and order as the sole scene authority for every generation product.
+- `2026-07-28-v1.19-work-definition-inheritance`: Inherit and display the upstream work definition without originating it.
+- `v1.18-functional-only-scope`: Keep storyboard-domain functions on demand.
 
 ## Accept the user's current material
 
-- Accept prose, scripts, briefs, scene excerpts, test plots, tables, images, reference boards, asset references, partial artifacts, conflicting drafts, existing `SEG` units, director scripts, shot sequences, storyboards, or any mixture.
+- Accept scene-divided scripts, individual scene excerpts, briefs, test plots, tables, images, reference boards, asset references, partial artifacts, conflicting drafts, director scripts, shot sequences, storyboards, or any mixture.
 - Do not require completeness, a locked or approved source, a particular schema, an asset package, a route choice, or a fixed starting stage. Surface only conflicts that would materially change the named product.
 - Preserve supplied story facts. Do not expand, rewrite, doctor, or originate the screenplay; send original screenwriting work to `wally-screenplay-writer`.
+- For a generation product that needs scene boundaries, require an upstream screenplay or excerpt with explicit source scenes. When those boundaries are absent, stop and route scene formation to `wally-screenplay-writer`; never split, merge, or number the material in this skill.
+- Treat the source scene boundaries, exact headings, and order as the sole authority. Never split, merge, rename, normalize, or renumber them.
+- A source scene may contain multiple action chains, multiple dramatic beats, multiple storyboard pages, and any number of necessary shots.
 - Preserve the latest explicit or approved `作品定义` as source authority. Keep work form, commercial function, narrative mode, delivery format, and audiovisual position distinct.
 - **Functions are on-demand.** Deliver exactly the product the user names — nothing before it, nothing after it. Do not pull in earlier stages, volunteer later stages, or ask sequence questions. If the named product lacks a required input, name the missing input and stop; do not produce the upstream product uninvited.
 
@@ -23,14 +33,10 @@ Current version: `wally-storyboard-designer@2026-07-28-v1.19-work-definition-inh
 - When the user states the definition directly but the source lacks a block, transcribe only those explicit decisions into the same field structure; do not infer unsupported classification.
 - Treat work type as upstream story authority. This skill may use `剧情短片`, `广告片`, `纪录片`, `MV或视觉片`, or `剧集内容` to control coverage and shot language, but it may not originate or doctor that choice.
 - For a complete director script or storyboard design, surface a missing definition when the difference between advertisement, narrative film, documentary, MV/visual piece, or episodic content would materially change the result. Request the definition from the user or `wally-screenplay-writer`; do not silently guess.
-- Keep definition metadata outside `SEG` source passages and shot blocks. Do not turn labels such as commercial function, genre, or audiovisual position into visible objects, dialogue, or per-shot prompt detail.
+- Keep definition metadata outside source scene passages and shot blocks. Do not turn labels such as commercial function, genre, or audiovisual position into visible objects, dialogue, or per-shot prompt detail.
 - Keep the fixed storyboard and shot-table prompt templates verbatim. Their exact-payload contract is unchanged.
 
 ## Route the work
-
-### SEG breakdown
-
-For source-preserving `SEG` work, read [references/seg-breakdown-rules.md](references/seg-breakdown-rules.md). Output the pure-script breakdown and stop when the user has not yet chosen visual optimization.
 
 ### Scene-layout SVG
 
@@ -47,7 +53,9 @@ Read [references/director-script-output-contract.md](references/director-script-
 ### Storyboard design or review
 
 - For every storyboard design, redesign, `Bxx`, or returned-board review, first read [references/storyboard-style-contract.md](references/storyboard-style-contract.md) so the canonical surface is available without changing it.
-- For direct storyboard design, redesign, or shot-sequence revision, read [references/storyboard-design.md](references/storyboard-design.md).
+- For direct storyboard design, redesign, shot-sequence revision, or main-shot judgment, read [references/main-shot-adjudication.md](references/main-shot-adjudication.md), then [references/storyboard-design.md](references/storyboard-design.md).
+- Lock each source scene's main-shot set through the required multi-agent adversarial protocol before designing coverage around it. Never substitute one agent's judgment, majority vote, average score, or consensus language for the evidence-based adjudication.
+- If independent agents are unavailable, label the result `主镜未裁决` and stop before claiming a final main-shot set; do not silently perform a single-agent substitute.
 - For a returned board or existing shot sequence, read [references/storyboard-review.md](references/storyboard-review.md).
 - Prepend the inherited `## 作品定义` block to the delivered design or review; use it to judge whether coverage and shot language fit the source work.
 - Cite concrete panels, shots, pages, or visible features when reviewing. Preserve usable choices and propose the smallest correction.
@@ -58,14 +66,15 @@ Read [references/director-script-output-contract.md](references/director-script-
 
 - For the storyboard prompt, read [templates/storyboard-prompt-template.md](templates/storyboard-prompt-template.md) and output only its stored, labeled `【故事板生成模版】` payload and separate labeled `【短任务提示词】` payload. There is no rough/formal grade; one fixed storyboard prompt serves every storyboard request, and `Bxx` remains only the identifier for returned boards.
 - For the shot-table (分镜表) prompt, read [templates/shot-table-prompt-template.md](templates/shot-table-prompt-template.md) and output only its stored, labeled `【分镜表生成模版】` payload and separate labeled `【短任务提示词】` payload.
-- For either short-task payload, replace only the literal `SEGXX` with the exact current SEG identifier when the request or supplied material provides one. Do not infer, normalize, or renumber an identifier. Leave `SEGXX` unchanged for a generic reusable prompt with no exact current SEG identifier.
-- Storyboards and shot tables have different strengths: a storyboard gives annotated per-shot direction sketches (景别/运镜/动作); a shot table renders the model's native 分镜表 concept — the complete SEG shot sequence, numbered panels, no text, no style constraints. The choice between them belongs to the user.
-- The exact runtime `SEGXX` replacement above is the only allowed payload substitution. Do not modify the stored templates or otherwise fill, summarize, explain, relabel, wrap, or append anything to either fixed prompt.
+- For either short-task payload, replace only the literal `【源场景标题】` with the exact original source scene heading when the request or supplied material provides one. Do not infer, normalize, rename, or renumber a heading. Leave `【源场景标题】` unchanged for a generic reusable prompt with no exact source heading.
+- Storyboards and shot tables have different strengths: a storyboard gives annotated per-shot direction sketches (景别/运镜/动作); a shot table renders the model's native 分镜表 concept — the complete source-scene shot sequence, numbered panels, no text, no style constraints. One source scene may use multiple pages and as many shots as needed. The choice between the two products belongs to the user.
+- The exact runtime `【源场景标题】` replacement above is the only allowed payload substitution. Do not modify the stored templates or otherwise fill, summarize, explain, relabel, wrap, or append anything to either fixed prompt.
 - If the requested prompt type is unclear and cannot be inferred, ask only whether the user wants the storyboard prompt or the shot-table 分镜表 prompt.
 
 ## Boundaries
 
 - Do not originate, rewrite, validate, or doctor a screenplay as a screenplay.
+- Do not split, merge, rename, normalize, or renumber source scenes.
 - Do not design character, group, scale, prop, scene, or other static assets.
 - Do not design performance, dialogue, vocal delivery, timing performance, or audio design.
 - Do not choose Route A/B or assemble a final image-to-video or text-to-video prompt.

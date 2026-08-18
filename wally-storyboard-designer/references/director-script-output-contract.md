@@ -16,27 +16,23 @@ Use when writing a `processed director script`.
 Copy the latest explicit or approved work-definition block from the source screenplay or user brief.
 
 ## 完整剧本 / 来源
-...
-
-## SEG 拆解
-Only pure segmented source script: `SEGXX｜地点 / 时间` followed by screenplay/source text.
-Do not use analysis fields such as `功能`、`剧情片段`、`起始状态`、`主要动作`、`转折`、`结束状态`、`必须保留`、`对白锚点`.
+Keep the supplied screenplay or excerpt under its original scene headings and in its original scene order.
 
 ## 导演脚本
-SEG01｜地点 / 时间
+<原始场景标题，逐字保留>
 
 分镜01｜分镜时间：00:00-00:03｜景别/镜头类型：近景 / 道具空镜
 ...
 
-SEG02｜地点 / 时间
+<下一个原始场景标题，逐字保留>
 
 分镜02｜分镜时间：00:03-00:06｜景别/镜头类型：中景
 ...
 ```
 
-Use provided source as authority. For locked briefs, test prompts, or excerpts, cite them directly and keep `SEG` plus director script complete. Run continuity validation internally before delivery; show a compact PASS line or table only when requested.
+Use provided source as authority. A generation request requires explicit source-scene boundaries; when they are absent, stop and route scene formation to `wally-screenplay-writer`. Preserve every source scene boundary, heading, and position exactly; never split, merge, rename, normalize, or renumber scenes. For locked briefs, test prompts, or excerpts, cite them directly and keep the source scenes plus director script complete. Run continuity validation internally before delivery; show a compact PASS line or table only when requested.
 
-The work definition is required metadata for a complete director script. Copy it without reinterpretation and keep it outside the pure `SEG` text and individual shot blocks. If the distinction between advertisement, narrative film, documentary, MV/visual piece, or episodic content would materially change the shot design and the source does not decide it, report the missing definition instead of guessing.
+The work definition is required metadata for a complete director script. Copy it without reinterpretation and keep it outside source scene text and individual shot blocks. If the distinction between advertisement, narrative film, documentary, MV/visual piece, or episodic content would materially change the shot design and the source does not decide it, report the missing definition instead of guessing.
 
 Core principle: if unsure, write less. Use only visible, shootable anchors that control the frame, action, timing, sound, continuity, or handoff. Do not fill uncertainty with invented props, extra blocking, mood words, or explanatory coverage.
 
@@ -112,10 +108,10 @@ Compact examples:
 
 ## Director Shot Fields
 
-Group the `导演脚本` section by SEG. Every SEG contains timecoded blocks using this field order:
+Group the `导演脚本` section by the screenplay's original source scenes. Copy every scene heading verbatim and preserve source order. One scene may contain multiple action chains, multiple dramatic beats, multiple storyboard pages, and any number of timecoded shot blocks. Use this field order:
 
 ```text
-SEG01｜地点 / 时间
+<原始场景标题，逐字保留>
 
 分镜01｜分镜时间：00:00-00:03｜景别/镜头类型：近景 / 道具空镜
 拍摄手法：
@@ -127,7 +123,7 @@ SEG01｜地点 / 时间
 
 ## Field Rules
 
-- SEG heading: preserve selected `SEGXX｜地点 / 时间` groups.
+- Scene heading: copy the exact original source scene heading. Never infer, normalize, rename, split, merge, or renumber it.
 - Shot heading: use `分镜XX｜分镜时间：MM:SS-MM:SS｜景别/镜头类型：...` with cumulative time. Put shot size first: 全景、中景、近景、特写. Add shot type only when known, such as 道具空镜、状态空镜、插入. Omit shot type when unclear. Keep camera movement out of this heading.
 - `拍摄手法`: write one efficient sentence in the fixed Shooting Method Grammar order: `拍摄角度 + 景别（取景框） + 机位 + [按需：焦段 / 光学效果] + 运镜`. Keep angle, crop, and camera position distinct. Add another spatial layer only when it is visible and controls blocking, focus, or continuity. A close-up or insert does not import full-body, wardrobe, remote-prop, or background detail. Define the movement start, physical path, relation to the subject, and landing. Default to a slow push from the stated shot size to a slightly tighter framing. Use `固定镜头` only for a locked or intentionally still shot. Separate subject movement and camera movement.
 - `环境变化`: write only the visible place, light, prop, or object change. Use `无` when nothing changes inside the crop.
@@ -161,6 +157,6 @@ SEG01｜地点 / 时间
 - Replace generic quality adjectives with visible evidence.
 - In `拍摄手法`, keep only anchors that control the shot. Default spatial description is foreground only; do not add `中景是...` or `背景是...` unless requested.
 - When camera movement is present, it should answer five checks compactly: why it moves, where it starts, how it travels, how the subject relates to the lens, and where it lands.
-- `SEG 拆解` remains pure segmented source text; analysis belongs in reasoning or `导演脚本`.
+- Source scenes remain intact under their original headings and order; analysis belongs in reasoning or `导演脚本`.
 - The document carries the latest source `作品定义`; work type and audiovisual style are not collapsed into one label.
 - Keep `画面变化`, standalone `构图 / 空间层次` fields, separate wardrobe/prop/mood fields, storyboard panels, `Bxx`, asset IDs, and final video prompts out unless explicitly requested.

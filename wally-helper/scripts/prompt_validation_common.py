@@ -11,7 +11,6 @@ import re
 from typing import Iterable
 
 
-SEGMENT_HEADING = re.compile(r"(?m)^SEG\d+\s*$")
 ASSET_BINDING = re.compile(r"^“([^”]+)”\s*=\s*(@[^\s]+)\s+-\s+(.+?)。?$")
 SHOT_HEADING = re.compile(r"(?m)^\*{0,2}Shot\s+\d+.*$")
 FIELD_HEADING = re.compile(
@@ -47,7 +46,6 @@ PLACEHOLDER_MARKERS = (
     "[含Voiceover、Dialogue",
     "[正文含 Avoid:",
     "[原字段内容。]",
-    "SEGXX",
 )
 
 AUDIO_MODES = ("default", "music", "silence")
@@ -89,7 +87,7 @@ NON_MUSICAL_SOUND_TERMS = (
     "room tone",
 )
 
-BINDING_SCHEMA_VERSION = "wally-reference-bindings/v1"
+BINDING_SCHEMA_VERSION = "wally-reference-bindings/v2"
 BINDING_KINDS = {"static", "storyboard", "preview"}
 
 
@@ -102,7 +100,6 @@ class Binding:
 
 @dataclass(frozen=True)
 class ExpectedBinding:
-    segment: str
     identity: str
     handle: str
     kind: str
@@ -110,19 +107,7 @@ class ExpectedBinding:
     source_aliases: tuple[str, ...]
 
 
-def split_segments(text: str) -> list[tuple[str, str]]:
-    """Split a finished prompt into numbered SEG blocks."""
-    matches = list(SEGMENT_HEADING.finditer(text))
-    segments: list[tuple[str, str]] = []
-    for index, match in enumerate(matches):
-        end = matches[index + 1].start() if index + 1 < len(matches) else len(text)
-        body = text[match.end() : end].strip()
-        body = re.sub(r"\n---\s*\Z", "", body).strip()
-        segments.append((match.group().strip(), body))
-    return segments
-
-
-def parse_bindings(text: str, heading: str, list_name: str) -> tuple[list[Binding], list[str]]:
+def parse_bindings(text: str, list_name: str) -> tuple[list[Binding], list[str]]:
     """Parse a rendered Reference/Asset List and report grammar failures."""
     bindings: list[Binding] = []
     errors: list[str] = []
@@ -131,7 +116,7 @@ def parse_bindings(text: str, heading: str, list_name: str) -> tuple[list[Bindin
         match = ASSET_BINDING.fullmatch(line)
         if not match:
             errors.append(
-                f"{heading} {list_name} line {line_number}: expected "
+                f"{list_name} line {line_number}: expected "
                 "“referable object name” = @handle - asset form and role"
             )
             continue
@@ -141,9 +126,9 @@ def parse_bindings(text: str, heading: str, list_name: str) -> tuple[list[Bindin
     names = [binding.name for binding in bindings]
     handles = [binding.handle for binding in bindings]
     if len(names) != len(set(names)):
-        errors.append(f"{heading}: duplicate quoted identity name in {list_name}")
+        errors.append(f"duplicate quoted identity name in {list_name}")
     if len(handles) != len(set(handles)):
-        errors.append(f"{heading}: duplicate platform handle in {list_name}")
+        errors.append(f"duplicate platform handle in {list_name}")
     return bindings, errors
 
 
@@ -262,30 +247,25 @@ def director_reference_errors(prompt: str) -> list[str]:
     return errors
 
 
-def load_binding_schema(path: Path) -> dict[str, list[ExpectedBinding]]:
-    """Load and strictly validate wally-reference-bindings/v1 JSON."""
+def load_binding_schema(path: Path) -> list[ExpectedBinding]:
+    """Load and strictly validate wally-reference-bindings/v2 JSON."""
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as exc:
         raise ValueError(f"cannot read binding schema: {exc}") from exc
-    # A direct array is accepted only as a compatibility input. The documented
-    # and help-facing contract is the versioned object form.
-    if isinstance(payload, list):
-        entries = payload
-    elif isinstance(payload, dict):
-        if set(payload) != {"schema_version", "bindings"}:
-            raise ValueError("binding schema root must contain exactly `schema_version` and `bindings`")
-        if payload.get("schema_version") != BINDING_SCHEMA_VERSION:
-            raise ValueError(f"schema_version must equal {BINDING_SCHEMA_VERSION}")
-        entries = payload.get("bindings")
-    else:
+    if not isinstance(payload, dict):
         raise ValueError("binding schema root must be the versioned object")
+    if set(payload) != {"schema_version", "bindings"}:
+        raise ValueError("binding schema root must contain exactly `schema_version` and `bindings`")
+    if payload.get("schema_version") != BINDING_SCHEMA_VERSION:
+        raise ValueError(f"schema_version must equal {BINDING_SCHEMA_VERSION}")
+    entries = payload.get("bindings")
     if not isinstance(entries, list):
         raise ValueError("binding schema `bindings` must be an array")
 
-    parsed: dict[str, list[ExpectedBinding]] = {}
-    required = {"segment", "identity", "handle", "kind", "role", "source_aliases"}
-    semantic_owner: dict[tuple[str, str], str] = {}
+    parsed: list[ExpectedBinding] = []
+    required = {"identity", "handle", "kind", "role", "source_aliases"}
+    semantic_owner: dict[str, str] = {}
     for index, entry in enumerate(entries, start=1):
         if not isinstance(entry, dict) or set(entry) != required:
             raise ValueError(f"binding entry {index} must contain exactly {sorted(required)}")
@@ -299,14 +279,11 @@ def load_binding_schema(path: Path) -> dict[str, list[ExpectedBinding]]:
             raise ValueError(f"binding entry {index} contains duplicate source_aliases")
         if entry["identity"] in aliases:
             raise ValueError(f"binding entry {index} repeats identity in source_aliases")
-        if not re.fullmatch(r"SEG\d+", entry["segment"]):
-            raise ValueError(f"binding entry {index} has invalid segment {entry['segment']!r}")
         if not entry["handle"].startswith("@") or re.search(r"\s", entry["handle"]):
             raise ValueError(f"binding entry {index} has invalid platform handle")
         if entry["kind"] not in BINDING_KINDS:
             raise ValueError(f"binding entry {index} has unsupported kind {entry['kind']!r}")
         item = ExpectedBinding(
-            segment=entry["segment"],
             identity=entry["identity"],
             handle=entry["handle"],
             kind=entry["kind"],
@@ -314,85 +291,64 @@ def load_binding_schema(path: Path) -> dict[str, list[ExpectedBinding]]:
             source_aliases=tuple(aliases),
         )
         for semantic in (item.identity, *item.source_aliases):
-            semantic_key = (item.segment, semantic.casefold())
+            semantic_key = semantic.casefold()
             owner = semantic_owner.get(semantic_key)
             if owner is not None:
                 raise ValueError(
-                    f"{item.segment} semantic {semantic!r} is duplicated by identities/aliases "
+                    f"semantic {semantic!r} is duplicated by identities/aliases "
                     f"for {owner!r} and {item.identity!r}"
                 )
             semantic_owner[semantic_key] = item.identity
-        parsed.setdefault(item.segment, []).append(item)
+        parsed.append(item)
 
-    for heading, items in parsed.items():
-        identities = [item.identity for item in items]
-        handles = [item.handle for item in items]
-        if len(identities) != len(set(identities)):
-            raise ValueError(f"{heading} inventory contains duplicate identities")
-        if len(handles) != len(set(handles)):
-            raise ValueError(f"{heading} inventory contains duplicate handles")
+    identities = [item.identity for item in parsed]
+    handles = [item.handle for item in parsed]
+    if len(identities) != len(set(identities)):
+        raise ValueError("binding inventory contains duplicate identities")
+    if len(handles) != len(set(handles)):
+        raise ValueError("binding inventory contains duplicate handles")
     return parsed
 
 
 def schema_binding_errors(
-    heading: str,
     actual: list[Binding],
-    expected_by_segment: dict[str, list[ExpectedBinding]],
+    expected: list[ExpectedBinding],
     route: str,
 ) -> list[str]:
-    """Prove rendered bindings equal the approved per-SEG inventory."""
+    """Prove rendered bindings equal the approved current-scope inventory."""
     errors: list[str] = []
-    if heading not in expected_by_segment:
-        return [f"{heading}: missing from binding inventory"]
-    expected = expected_by_segment[heading]
     if route == "A":
         storyboards = [item for item in expected if item.kind == "storyboard"]
         previews = [item for item in expected if item.kind == "preview"]
         if len(storyboards) != 1:
-            errors.append(f"{heading}: Route A inventory must contain exactly one storyboard")
+            errors.append("Route A inventory must contain exactly one storyboard")
         if len(previews) > 1:
-            errors.append(f"{heading}: Route A inventory may contain at most one Preview")
+            errors.append("Route A inventory may contain at most one Preview")
 
     actual_map = {(item.name, item.handle): item for item in actual}
     expected_map = {(item.identity, item.handle): item for item in expected}
     missing = expected_map.keys() - actual_map.keys()
     extra = actual_map.keys() - expected_map.keys()
     for name, handle in sorted(missing):
-        errors.append(f"{heading}: rendered list is missing approved binding “{name}” = {handle}")
+        errors.append(f"rendered list is missing approved binding “{name}” = {handle}")
     for name, handle in sorted(extra):
-        errors.append(f"{heading}: rendered list contains unapproved binding “{name}” = {handle}")
+        errors.append(f"rendered list contains unapproved binding “{name}” = {handle}")
 
     for key in actual_map.keys() & expected_map.keys():
         rendered = actual_map[key].description
         item = expected_map[key]
         if item.role not in rendered:
-            errors.append(f"{heading}: “{item.identity}” description omits role `{item.role}`")
+            errors.append(f"“{item.identity}” description omits role `{item.role}`")
         if item.kind == "storyboard" and "故事板" not in rendered:
-            errors.append(f"{heading}: storyboard binding “{item.identity}” is not labeled 故事板")
+            errors.append(f"storyboard binding “{item.identity}” is not labeled 故事板")
         elif item.kind == "preview" and "preview" not in rendered.lower():
-            errors.append(f"{heading}: Preview binding “{item.identity}” is not labeled Preview")
+            errors.append(f"Preview binding “{item.identity}” is not labeled Preview")
     return errors
 
 
 TRAILING_AVOID = re.compile(
     r"(?s)(?P<prefix>.*?)(?:\n+)(?:\*{0,2}Avoid:\*{0,2}\s*|避免：\s*)(?P<content>.+?)\s*\Z"
 )
-
-
-def approved_body_map(text: str, rendered_headings: list[str]) -> dict[str, str]:
-    """Map one BODY file to rendered segments without weakening byte checks."""
-    body_segments = split_segments(text)
-    if body_segments:
-        mapped = {heading: body for heading, body in body_segments}
-        if set(mapped) != set(rendered_headings):
-            raise ValueError(
-                "SEG headings in BODY must exactly equal PROMPT headings: "
-                f"BODY={sorted(mapped)}, PROMPT={sorted(rendered_headings)}"
-            )
-        return mapped
-    if len(rendered_headings) != 1:
-        raise ValueError("a multi-SEG PROMPT requires matching numbered SEG blocks inside BODY")
-    return {rendered_headings[0]: text.rstrip("\n")}
 
 
 def extract_trailing_avoid(text: str) -> tuple[str, str | None]:
@@ -422,7 +378,6 @@ def normalize_declared_identities(value: str, bindings: list[ExpectedBinding]) -
 
 
 def identity_transform_errors(
-    heading: str,
     approved_body: str,
     rendered_body: str,
     bindings: list[ExpectedBinding],
@@ -447,17 +402,17 @@ def identity_transform_errors(
         marker_ids.append(marker)
         quoted = f"“{item.identity}”"
         if quoted not in rendered_body:
-            errors.append(f"{heading}: rendered body does not use declared identity {quoted}")
+            errors.append(f"rendered body does not use declared identity {quoted}")
         if item.identity in masked_rendered:
             errors.append(
-                f"{heading}: identity {item.identity!r} appears outside its exact quoted form"
+                f"identity {item.identity!r} appears outside its exact quoted form"
             )
         source_terms.extend(((quoted, marker), (item.identity, marker)))
         rendered_terms.append((quoted, marker))
         for alias in item.source_aliases:
             if alias in masked_rendered:
                 errors.append(
-                    f"{heading}: source alias {alias!r} remains outside a quoted identity"
+                    f"source alias {alias!r} remains outside a quoted identity"
                 )
             source_terms.append((alias, marker))
 
@@ -475,7 +430,7 @@ def identity_transform_errors(
     if not marker_ids:
         if approved_base != rendered_body:
             errors.append(
-                f"{heading}: rendered director body changes content beyond terminal Avoid extraction"
+                "rendered director body changes content beyond terminal Avoid extraction"
             )
         return errors, avoid_content
 
@@ -501,7 +456,7 @@ def identity_transform_errors(
 
     if source_skeleton != rendered_skeleton or missing_anchors:
         errors.append(
-            f"{heading}: rendered director body changes content beyond declared identity "
+            "rendered director body changes content beyond declared identity "
             "replacement/insertion and terminal Avoid extraction"
         )
     return errors, avoid_content

@@ -9,6 +9,7 @@ The reviewing agent reviews text, not pixels. The user views the returned boards
 ## Set the evidence base
 
 - Review against the current user request, supplied story facts, visible reference constraints, and any accepted storyboard decisions.
+- Treat the screenplay's original scene boundaries, exact headings, and order as authoritative. A board may spread one source scene across multiple pages or shot groups without creating a new scene unit.
 - Accept incomplete, mixed, or nonstandard materials. Identify what can and cannot be verified from them.
 - Distinguish a confirmed mismatch from an open question. Do not convert missing context into a false error.
 
@@ -17,6 +18,9 @@ The reviewing agent reviews text, not pixels. The user views the returned boards
 ### 1. Story coverage
 
 - Confirm that the board stays inside the requested scope.
+- Confirm that the board does not split, merge, rename, normalize, or renumber source scenes.
+- Confirm that every accepted main shot remains concretely visible, receives its intended viewing priority, and preserves the adjudicated story and audience-state change.
+- Flag any unadjudicated shot that competes with or dilutes a main shot merely through extra angle, duration, movement, or visual polish.
 - Confirm the entry state, key process or turn, required visible facts, and ending state.
 - Flag invented beats, missing consequences, premature future action, and panels that serve no story function.
 
@@ -66,7 +70,7 @@ Apply style checks only when that style is part of the current task.
 A board is a test of the shot design. Sort every material issue into one of three:
 
 1. **Board-execution failure:** the board misdrew the supplied design — wrong order, missing action, broken style, unreadable arrows. The design stands; request a corrected redraw.
-2. **Shot-design failure:** the board faithfully rendered the design and the result still fails — the action cannot read in this shot size, the composition hides the story point, the spatial relation contradicts itself, the rhythm has no beat. The test succeeded by exposing it: route the finding to the shot design (director script or storyboard design) for revision before any redraw.
+2. **Shot-design failure:** the board faithfully rendered the design and the result still fails — the action cannot read in this shot size, the composition hides an accepted main shot or demotes it to background, the spatial relation contradicts itself, or the rhythm has no beat. The test succeeded by exposing it: route the finding to the shot design (director script or storyboard design) for revision before any redraw. Reopen multi-agent adjudication when the proposed fix would add, remove, merge, or change a main shot's story duty.
 3. **Undecidable from this board:** the panel is too ambiguous to attribute. Request a targeted redraw of only that panel to isolate the cause.
 
 ## Write actionable findings

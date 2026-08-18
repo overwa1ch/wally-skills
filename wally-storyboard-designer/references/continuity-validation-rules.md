@@ -37,6 +37,7 @@ Use this checklist in reasoning, validation records, or requested evidence:
 ## Checks
 
 - Camera continuity: screen direction, entrance / exit direction, eyeline match, shot-size progression, motivated camera movement, and whether the move can connect to the previous shot.
+- Scene authority: every source scene boundary, exact heading, and position remains unchanged; scene transitions preserve the supplied order.
 - Shooting-method structure: each shot orders `拍摄角度 + 景别（取景框） + 机位 + [按需：焦段 / 光学效果] + 运镜`; angle, visible crop, and physical camera position remain distinct.
 - Camera-movement completeness: every shot defines start, physical path, relation to the subject, and landing. An undecided move uses a slow push-in.
 - Fixed-camera exception: `固定镜头` has an explicit user lock or a stated narrative purpose for stillness.
@@ -68,7 +69,7 @@ Revise the director script before delivery when any of these appear:
 ## Revision Rule
 
 Keep fixes minimal.
-Preserve the source story and selected `SEG` structure.
+Preserve the source story and its exact source scene boundaries, headings, and order. Never split, merge, rename, normalize, or renumber a scene.
 Adjust shot order, shot size, camera movement, blocking, transition, duration, or visible action wording only as needed.
 Move off-frame continuity facts into validation instead of repeating them in shot blocks.
 

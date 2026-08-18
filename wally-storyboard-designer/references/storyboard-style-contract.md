@@ -4,8 +4,8 @@ Use this file for every storyboard module call: script direction, `Bxx` boards, 
 
 ## Fixed Visual Style
 
-- Each short task prompt targets the current `SEG` and asks for multiple separated storyboard versions.
-- If the user asks for another `SEG`, output another current-task prompt.
+- Each short task prompt targets the current source scene by its exact original heading and asks for multiple separated storyboard versions.
+- If the user asks for another source scene, output another current-task prompt using that scene's exact original heading.
 - The following Chinese style prompt is canonical and immutable. Use it verbatim in every model-facing storyboard template; the fixed storyboard prompt must use this exact same style block. Do not rewrite, paraphrase, compress, expand, translate, or change any character unless the user explicitly requests a storyboard style prompt edit.
 
 ```text
@@ -43,7 +43,7 @@ Use this file for every storyboard module call: script direction, `Bxx` boards, 
 
 - Script-only direction boards judge画面内容、节奏和表达方向. They may use role labels and rough placeholders without stable identity.
 - `Bxx` boards with approved assets use them for identity provenance, but still draw people as labeled mannequins.
-- Returned-board review judges whether the board communicates the SEG clearly in this fixed style, and whether the communicated shots prove the design; a faithful board that exposes a design flaw is a successful test, not a failed board.
+- Returned-board review judges whether the board communicates the requested source scene clearly in this fixed style, and whether the communicated shots prove the design; a faithful board that exposes a design flaw is a successful test, not a failed board.
 - Route A final-look redraw leaves this style behind; it preserves one approved panel's composition and removes storyboard artifacts.
 
 ## Continuous Action

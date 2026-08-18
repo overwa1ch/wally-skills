@@ -4,12 +4,13 @@ Use whenever the user requests spatial planning from supplied material with enou
 
 ## Purpose
 
-Create one simple top-down spatial check per supplied scene or continuity space.
+Create one simple top-down spatial check per supplied source scene.
 
 ## Input Behavior
 
 - Create one SVG per supplied scene immediately. Do not ask whether the user wants SVGs and do not require another storyboard-domain product first.
-- If the supplied material lacks the spatial facts needed for the requested SVG, name only the missing facts and stop. Do not produce a screenplay, `SEG`, or other upstream product uninvited.
+- Require explicit source-scene boundaries. If they are absent, stop and route scene formation to `wally-screenplay-writer`; never infer, split, merge, or number scenes here.
+- If the supplied material lacks the spatial facts needed for the requested SVG, name only the missing facts and stop. Do not produce a screenplay, director script, storyboard, or other upstream product uninvited.
 
 ## Output
 
@@ -21,6 +22,7 @@ Create local `.svg` files, one per scene, with clear names such as:
 ```
 
 If the scene count is small and the user asks for one file, a single multi-panel SVG is acceptable, but default to one SVG per scene.
+Create multiple layouts for one source scene only when the user explicitly requests them; do not create new scene units from internal spatial changes.
 
 ## Drawing Rules
 
@@ -56,7 +58,7 @@ Leave dramatically important small props to the supplied story material or direc
 
 Before delivery, check:
 
-- Scene count: one SVG exists for each supplied scene or continuity space in scope.
+- Scene count: one SVG exists for each supplied source scene in scope unless the user explicitly requested multiple layouts for one scene.
 - Layout clarity: the viewer can tell where characters are and what major spatial areas exist.
 - Simplicity: no clutter, no small prop overload, no camera/shot/storyboard content.
 - Source fidelity: locations and character positions match the supplied material.

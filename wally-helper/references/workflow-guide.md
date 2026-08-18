@@ -13,11 +13,11 @@ Cross-module approval belongs to Helper, not to the specialist that creates the 
 Keep `wally-helper` with the user throughout the process. Treat the following as the current field-tested default, not a prerequisite for calling any specialist:
 
 1. Finish a usable screenplay first draft.
-2. Establish a rough shot design from the screenplay, either through an existing director-script draft or through the storyboard direction itself. Use the fixed storyboard prompt to make simple draft boards. Judge overall pacing, rough shot choice, framing, camera movement, action, and sequence; the board is a cheap test, not a polished final image.
+2. Establish a rough shot design from the screenplay, either through an existing director-script draft or through the storyboard direction itself. Use the fixed storyboard prompt on each exact source scene to make simple draft boards. Judge overall pacing, rough shot choice, framing, camera movement, action, and sequence; the board is a cheap test, not a polished final image.
 3. Revise the screenplay or rough shot design from the returned-board findings until the board is usable. Route story changes to `wally-screenplay-writer`; route shot-design changes or board review to `wally-storyboard-designer`. Treat acceptance of a text director draft before this visual test only as acceptance to test it, never as final director-script lock.
 4. Produce and approve the reusable static assets.
 5. Derive a multi-angle scene reference from every approved scene asset. Start with the nine-grid. If the nine-grid cannot keep the same scene identity, topology, furniture, equipment, or visual style across all cells, reduce the information load and switch to a `2×2` four-grid. Prefer four consistent views over nine drifting views.
-6. Upload the revised screenplay and approved static assets, then use the fixed shot-table prompt. Review the complete numbered, no-text shot sequence for story coverage, rhythm, continuity, and shootability; revise the screenplay or shot design and regenerate when the table exposes a problem.
+6. Upload the revised screenplay and approved static assets, then use the fixed shot-table prompt on each exact source scene. Review the complete numbered, no-text shot sequence for story coverage, rhythm, continuity, and shootability; revise the screenplay or shot design and regenerate when the table exposes a problem.
 7. Continue to `wally-action-designer`, then return to Helper for compatibility review, platform binding, and final assembly.
 
 In this path, storyboards and shot tables are two tests at different stages. The early storyboard cheaply tests proposed shot design while change is easy. The later asset-backed shot table tests the complete sequence after identity and space are visually grounded. A user may still request either product independently at any time.
@@ -33,7 +33,7 @@ Route by this registry: name a function, tell the user which skill to call, and 
 
 ### wally-storyboard-designer — 分镜功能
 - 职责：按用户点名，把所给故事、场景、图板或镜头材料转换为分镜领域的指定产物。
-- 功能菜单：拆SEG、场景布局SVG、视觉优化、处理版导演脚本、分镜设计与修订、固定故事板提示词、固定分镜表提示词、回板审查（文字审查；板执行失败/分镜设计失败/无法判定三分类路由）。
+- 功能菜单：准确源场景继承、场景布局SVG、视觉优化、处理版导演脚本、分镜设计与修订、固定故事板提示词、固定分镜表提示词、回板审查（文字审查；板执行失败/分镜设计失败/无法判定三分类路由）。
 - 何时调用：需要设计镜头、用板子验证分镜、或审查回板时。
 
 ### wally-static-asset-designer — 静态资产
@@ -83,7 +83,7 @@ For the early storyboard test, use this handoff:
 为什么先做它：现在修改镜头和剧本的成本最低，故事板能快速暴露景别、运镜、动作和镜头顺序问题。
 交给：wally-storyboard-designer
 你需要提供：当前剧本初稿、不能改变的故事事实，以及已有粗镜头设计（如有）。
-直接复制这句话：请给我固定故事板提示词。我会上传这份剧本初稿和已有粗镜头设计（如有），用简单故事板草稿测试整体节奏、粗略景别、运镜、人物动作和镜头顺序是否符合预期。
+直接复制这句话：请给我固定故事板提示词。我会上传这份剧本初稿和已有粗镜头设计（如有），请按剧本中的准确源场景逐场生成简单故事板草稿，测试整体节奏、粗略景别、运镜、人物动作和镜头顺序是否符合预期。
 完成标志：固定故事板提示词，以及生成后可供检查的故事板草稿。
 完成后：把结果发回给 Wally，我继续带你下一步。
 ```
@@ -96,7 +96,7 @@ For the asset-backed shot-table test, use this handoff:
 为什么先做它：分镜表能在人物、空间和道具已有视觉依据后，集中暴露剧情覆盖、节奏、连续性和可拍性问题。
 交给：wally-storyboard-designer
 你需要提供：修改后的剧本和全部已批准静态资产。
-直接复制这句话：请给我固定分镜表提示词。我会上传修改后的剧本和已批准静态资产，用分镜表完整呈现各 SEG 的镜头序列，再据此验证剧本。
+直接复制这句话：请给我固定分镜表提示词。我会上传修改后的剧本和已批准静态资产，请按剧本中的准确源场景逐场用分镜表完整呈现镜头序列，再据此验证剧本。
 完成标志：固定分镜表提示词，以及生成后可供复核完整序列的分镜表。
 完成后：把结果发回给 Wally，我继续带你下一步。
 ```

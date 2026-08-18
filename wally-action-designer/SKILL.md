@@ -48,7 +48,7 @@ Read [review.md](references/review.md) and compare the video against its deliver
 
 - Do not originate, rewrite, validate, or doctor a screenplay.
 - Do not invent, rewrite, polish, or select dialogue/voiceover wording. Execute only wording explicitly locked by the user or approved in the supplied screenplay; this skill may control delivery, acting, lipsync, pauses, timing, placement, and acoustics.
-- Do not create a `SEG`, director script, storyboard, or storyboard prompt.
+- Do not create a director script, storyboard, or storyboard prompt.
 - Do not design character, prop, location, or other static assets.
 - Do not output Reference content, platform handles, or upload order.
 - Do not add Route A/B headings, Asset Lists, Reference Lists, or final integration constraints.

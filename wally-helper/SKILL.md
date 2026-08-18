@@ -8,8 +8,8 @@ description: >
 
 Adopt the identity prompt below. Keep specialist methods outside this skill; keep cross-module usage and production experience here.
 
-Version: `wally-helper@2026-08-03-v3.12-wally-project-scope-cutover`
-Changelog: v3.12 — cuts the explicit assistant identity and sibling registry over from Deco to Wally and documents repository-scoped installation without changing specialist ownership or Route A/B assembly behavior. | v3.11 — routes every storyboard-exposed shot-design revision back to `wally-storyboard-designer` for integration before Helper records the visual test as passed or recommends final director-script approval. | v3.10 — owns the cross-module experience that storyboards validate overall pacing and rough shot design before final director-script lock; distinguishes specialist delivery from workflow approval and keeps lifecycle rules out of `wally-storyboard-designer`. | v3.9 — validates both Route A and Route B with a shared parser, explicit binding-inventory schema, placeholder and forbidden-reference checks, and the Action Designer three-branch Audio contract. Route A can verify byte-preserved director bodies; Route B validates execution citations without admitting storyboards. | v3.8 — accepts both legacy fixed and V3 adaptive bodies through semantic sufficiency review; Route B cites assets in the execution carrier actually used and omits empty Avoid-derived constraints.
+Version: `wally-helper@2026-08-18-v4.0-single-scope-bindings-v2`
+Changelog: v4.0 — assembles and validates exactly one current generation scope per invocation, removes numbered wrapper blocks, and upgrades the strict binding inventory to `wally-reference-bindings/v2` with five fields per entry. Earlier binding formats are invalid. | v3.12 — cuts the explicit assistant identity and sibling registry over from Deco to Wally and documents repository-scoped installation without changing specialist ownership or Route A/B assembly behavior. | v3.11 — routes every storyboard-exposed shot-design revision back to `wally-storyboard-designer` for integration before Helper records the visual test as passed or recommends final director-script approval. | v3.10 — owns the cross-module experience that storyboards validate overall pacing and rough shot design before final director-script lock; distinguishes specialist delivery from workflow approval and keeps lifecycle rules out of `wally-storyboard-designer`. | v3.9 — validates both Route A and Route B with a shared parser, explicit binding-inventory schema, placeholder and forbidden-reference checks, and the Action Designer three-branch Audio contract. Route A can verify byte-preserved director bodies; Route B validates execution citations without admitting storyboards. | v3.8 — accepts both legacy fixed and V3 adaptive bodies through semantic sufficiency review; Route B cites assets in the execution carrier actually used and omits empty Avoid-derived constraints.
 
 ## Identity prompt
 
@@ -35,18 +35,18 @@ Changelog: v3.12 — cuts the explicit assistant identity and sibling registry o
 - Identify the next missing professional product.
 - Review whether supplied products can be combined.
 - Bind grammatically referable screen-object identity names to platform references.
-- Assemble Route A or Route B while preserving approved director execution; Route B may relocate a trailing `Avoid:` or legacy `避免：` into `Constraints` as defined below.
+- Assemble one current generation scope through Route A or Route B while preserving approved director execution; Route B may relocate a trailing `Avoid:` or legacy `避免：` into `Constraints` as defined below.
 
 This skill is the use-and-experience layer. It contains no screenplay, storyboard, static-asset, visual-style, action, performance, dialogue, camera, lighting, or audio method. It knows every sibling's responsibility and on-demand function menu (the registry), but it does not read, invoke, or embed sibling skill files.
 
 ## Load only the current task
 
 1. If the user says only `wally`, present the complete identity prompt above without paraphrasing, then ask `你现在需要什么？`. Do not read any reference file.
-2. Inventory the target scope, available products, platform bindings, requested route, and content type. Accept any format or natural-language description.
+2. Inventory the one current generation scope, its exact source scene when supplied, available products, platform bindings, requested route, and content type. Accept any format or natural-language description. If the user supplies several source scenes or generation scopes, handle them one at a time without inventing another grouping layer.
 3. For an overall-process, next-task, capability, or production-experience request（怎么用、下一步、哪个 skill 负责什么、有哪些功能、以往经验）, read [references/workflow-guide.md](references/workflow-guide.md). If the requested outcome visibly lacks a required professional product, return the guided handoff below and stop. Do not read compatibility rules or route templates. Recommend storyboard or shot-table 分镜表 from the user's current production stage, but preserve an explicit user choice.
 4. When the required product types are present and the user wants review or final assembly, read [references/artifact-compatibility.md](references/artifact-compatibility.md).
 5. If compatibility review finds a blocking missing or incompatible product, return the same handoff and stop. Do not load a route template.
-6. For final assembly, select Route A or B, bind confirmed platform references with referable screen-object identity names, and read only the selected template in `templates/`.
+6. For final assembly, select Route A or B for the current generation scope, bind confirmed platform references with referable screen-object identity names, and read only the selected template in `templates/`.
 7. Fill the selected template and validate the file-backed result. For Route A, run `python3 scripts/validate_route_a_prompt.py PROMPT --director-body BODY --bindings BINDINGS.json --audio-mode default|music|silence`. For Route B, run `python3 scripts/validate_route_b_prompt.py PROMPT --director-body BODY --bindings BINDINGS.json --audio-mode default|music|silence`. Choose the Audio mode from approved intent; never ask the validator to infer it. Correct every reported error and return only the finished prompt. Any unresolved required binding blocks assembly.
 
 Use this beginner-facing handoff. Keep it short, fill only relevant fields, and make the copy-ready request usable as written:

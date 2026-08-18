@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Basic cross-contract tests for the staged Helper validators."""
+"""Basic cross-contract tests for the single-scope Helper validators."""
 
 from __future__ import annotations
 
@@ -24,22 +24,17 @@ Action: 雨伞张开。
 Audio: 无BGM。持续雨声和伞面摩擦声。
 Constraints: 保持动作连续。"""
 
-ROUTE_B_SCHEMA = {
-    "SEG01": [
-        ExpectedBinding(
-            segment="SEG01",
-            identity="红伞",
-            handle="@图片1",
-            kind="static",
-            role="P03 prop_reference；身份与外观",
-            source_aliases=("雨伞",),
-        )
-    ]
-}
+ROUTE_B_SCHEMA = [
+    ExpectedBinding(
+        identity="红伞",
+        handle="@图片1",
+        kind="static",
+        role="P03 prop_reference；身份与外观",
+        source_aliases=("雨伞",),
+    )
+]
 
-ROUTE_B_PROMPT = """SEG01
-
-Asset List:
+ROUTE_B_PROMPT = """Asset List:
 “红伞” = @图片1 - P03 prop_reference；身份与外观。
 
 Prompt:
@@ -49,7 +44,7 @@ Audio: 无BGM。持续雨声和伞面摩擦声。
 Constraints: 保持动作连续。
 
 Constraints:
-只使用本SEG Asset List中的成品资产；不得把参考板内部局部或状态拆成独立资产。
+只使用当前 Asset List 中列出的成品资产；不得把参考板内部局部或状态拆成独立资产。
 无旁白、无画外解说。"""
 
 
@@ -72,12 +67,11 @@ class AudioContractTests(unittest.TestCase):
 
 
 class BindingSchemaTests(unittest.TestCase):
-    def test_six_field_object_schema(self) -> None:
+    def test_five_field_object_schema(self) -> None:
         payload = {
-            "schema_version": "wally-reference-bindings/v1",
+            "schema_version": "wally-reference-bindings/v2",
             "bindings": [
                 {
-                    "segment": "SEG01",
                     "identity": "红伞",
                     "handle": "@图片1",
                     "kind": "static",
@@ -90,14 +84,24 @@ class BindingSchemaTests(unittest.TestCase):
             path = Path(directory) / "bindings.json"
             path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
             parsed = load_binding_schema(path)
-        self.assertEqual("红伞", parsed["SEG01"][0].identity)
+        self.assertEqual("红伞", parsed[0].identity)
+
+    def test_earlier_schema_version_fails(self) -> None:
+        payload = {
+            "schema_version": "wally-reference-bindings/v1",
+            "bindings": [],
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "bindings.json"
+            path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                load_binding_schema(path)
 
     def test_unknown_field_fails(self) -> None:
         payload = {
-            "schema_version": "wally-reference-bindings/v1",
+            "schema_version": "wally-reference-bindings/v2",
             "bindings": [
                 {
-                    "segment": "SEG01",
                     "identity": "红伞",
                     "handle": "@图片1",
                     "kind": "static",
@@ -120,7 +124,7 @@ class RouteValidatorTests(unittest.TestCase):
             ROUTE_B_PROMPT,
             audio_mode="default",
             binding_schema=ROUTE_B_SCHEMA,
-            approved_bodies={"SEG01": DEFAULT_BODY},
+            approved_body=DEFAULT_BODY,
         )
         self.assertEqual([], errors)
         self.assertEqual((1, 2, ["default"]), (bindings, citations, modes))
@@ -131,7 +135,7 @@ class RouteValidatorTests(unittest.TestCase):
             changed,
             audio_mode="default",
             binding_schema=ROUTE_B_SCHEMA,
-            approved_bodies={"SEG01": DEFAULT_BODY},
+            approved_body=DEFAULT_BODY,
         )
         self.assertTrue(any("changes content beyond" in error for error in errors))
 
@@ -142,7 +146,7 @@ class RouteValidatorTests(unittest.TestCase):
             prompt,
             audio_mode="default",
             binding_schema=ROUTE_B_SCHEMA,
-            approved_bodies={"SEG01": approved},
+            approved_body=approved,
         )
         self.assertEqual([], errors)
 
@@ -153,38 +157,33 @@ class RouteValidatorTests(unittest.TestCase):
             prompt,
             audio_mode="default",
             binding_schema=ROUTE_B_SCHEMA,
-            approved_bodies={"SEG01": approved},
+            approved_body=approved,
         )
         self.assertEqual([], errors)
 
     def test_route_b_rejects_storyboard_inventory(self) -> None:
-        schema = {
-            "SEG01": [
-                ExpectedBinding(
-                    segment="SEG01",
-                    identity="SEG01故事板",
-                    handle="@图片2",
-                    kind="storyboard",
-                    role="故事板",
-                    source_aliases=(),
-                )
-            ]
-        }
+        schema = [
+            ExpectedBinding(
+                identity="当前故事板",
+                handle="@图片2",
+                kind="storyboard",
+                role="故事板",
+                source_aliases=(),
+            )
+        ]
         errors, *_rest = validate_route_b(
             ROUTE_B_PROMPT,
             audio_mode="default",
             binding_schema=schema,
-            approved_bodies={"SEG01": DEFAULT_BODY},
+            approved_body=DEFAULT_BODY,
         )
         self.assertTrue(any("globally forbids storyboard" in error for error in errors))
 
     def test_route_a_preserves_body_exactly(self) -> None:
         body = "Action: 红伞张开。\nAudio: 无BGM。持续雨声和伞面摩擦声。"
-        prompt = f"""SEG01
-
-Reference List:
+        prompt = f"""Reference List:
 “红伞” = @图片1 - 身份与外观。
-“SEG01故事板” = @图片2 - 故事板。
+“当前故事板” = @图片2 - 故事板。
 
 影片调性：内容类型为叙事短片。
 
@@ -196,29 +195,49 @@ Prompt:
 Constraints:
 无旁白、无画外解说。
 画面里不要出现故事板边框、镜头编号、中文标注、红色箭头或线稿风格。"""
-        schema = {
-            "SEG01": [
-                ExpectedBinding("SEG01", "红伞", "@图片1", "static", "身份与外观", ()),
-                ExpectedBinding("SEG01", "SEG01故事板", "@图片2", "storyboard", "故事板", ()),
-            ]
-        }
+        schema = [
+            ExpectedBinding("红伞", "@图片1", "static", "身份与外观", ()),
+            ExpectedBinding("当前故事板", "@图片2", "storyboard", "故事板", ()),
+        ]
         errors, bindings, modes = validate_route_a(
             prompt,
             audio_mode="default",
             binding_schema=schema,
-            approved_bodies={"SEG01": body},
+            approved_body=body,
         )
         self.assertEqual([], errors)
         self.assertEqual((2, ["default"]), (bindings, modes))
+
+    def test_route_a_requires_one_storyboard(self) -> None:
+        body = "Action: 红伞张开。\nAudio: 无BGM。持续雨声和伞面摩擦声。"
+        prompt = f"""Reference List:
+“红伞” = @图片1 - 身份与外观。
+
+影片调性：内容类型为叙事短片。
+
+Prompt:
+{CONTROL_SENTENCE}
+
+{body}
+
+Constraints:
+无旁白、无画外解说。"""
+        schema = [ExpectedBinding("红伞", "@图片1", "static", "身份与外观", ())]
+        errors, *_rest = validate_route_a(
+            prompt,
+            audio_mode="default",
+            binding_schema=schema,
+            approved_body=body,
+        )
+        self.assertTrue(any("exactly one storyboard" in error for error in errors))
 
 
 class CliContractTests(unittest.TestCase):
     def test_exact_route_b_cli_and_public_audio_choices(self) -> None:
         payload = {
-            "schema_version": "wally-reference-bindings/v1",
+            "schema_version": "wally-reference-bindings/v2",
             "bindings": [
                 {
-                    "segment": "SEG01",
                     "identity": "红伞",
                     "handle": "@图片1",
                     "kind": "static",

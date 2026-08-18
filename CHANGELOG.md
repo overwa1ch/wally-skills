@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-08-18
+
+- Helper 升级为 V4.0，Storyboard 升级为 V2.1；剧本已有场景结构与源场景标题或编号成为唯一分镜叙事边界，分镜流程不再创建另一层故事分段。
+- Storyboard 的场景布局、导演脚本、分镜设计、固定故事板提示词和固定分镜表提示词统一继承源场景；固定提示词以源场景标题占位符定位，执行时保留原始标题或编号。
+- Storyboard V2.1 在源场景内部增加盲选、多 agent 对抗质询与删除 / 合并检验，以证据裁定主镜集合；该流程不创建新的场景层级。
+- Helper 的 Route A/B 组装改为单一当前生成范围，binding 合同升级为 `wally-reference-bindings/v2`；每项只保留五个资产字段，不保留范围字段，并拒绝旧格式。
+- 固定提示词、冻结面、验证器、匿名 fixtures 与合同测试随场景权威迁移同步更新，并新增旧概念零残留检查。
+- Action 与 Static Asset 仅清理旧边界措辞，专业职责和现有版本保持不变；Screenplay 与 Visual Style 的场景和镜头职责不变。
+
 ## 2026-08-03
 
 - Deco 系列正式更名为 Wally Skills；六个 skill 的目录名、frontmatter、内部 handoff、验证脚本、测试和 CI job 统一使用 `wally-*`。
@@ -21,7 +30,7 @@
 - 六项 skill 完成协调健康修复：Helper V3.9、Screenplay V1.5、Storyboard V1.16、Static Asset V2.6、Action V3.8 与 Visual Style V1.6。
 - Helper 对齐 Action 的无BGM、明确音乐、绝对静音三分支，新增 Route A validator 并补全 Route B 的正文保护、故事板排除、占位符、Audio 和资产清单检查；Route A/B 固定模板逐字节不变。
 - Screenplay 统一八步名称与编号，允许已有材料直接进入对应产品，明确拥有原创 / 改写对白，并把审批菜单收口为单一来源。Action 只负责已批准台词的表演、口型、停顿、声音和镜头执行。
-- Storyboard 接受任意阶段与混合材料，区分单产品 / full-chain Scene SVG 路由，删除失效 handoff 与冗余 READY Gate，并统一固定故事板 / 分镜表的 `SEGXX` 运行时替换；canonical style 和两个固定模板未改。
+- Storyboard 接受任意阶段与混合材料，区分单产品 / full-chain Scene SVG 路由，删除失效 handoff 与冗余 READY Gate，并统一固定故事板 / 分镜表的旧分段占位符运行时替换；canonical style 和两个固定模板未改。
 - Static Asset 新增 `Pxx-state` 与 `2×2` 四宫格场景 fallback；现有 Preview、视觉方向和九宫格固定提示词未改。Visual Style 收紧为 style layer，Established style 必须有来源与匹配强度，Analysis Card 只保留一个 Evidence strength owner。
 - 新增无第三方依赖的公共健康检查、匿名合同 fixtures 与 `validate-wally-skills` GitHub Actions status check。
 - `wally-action-designer` 升级为 V3.7，包含 V3.6–V3.7 累积更新：多镜头或既有镜头权威仍使用全片时间的 `Shot N [start-end s]` 标题；Shot 内动作改为从 `0.0s` 起算的直接局部时间码行，统一格式为 `0.2-0.6s: 动作描述`。

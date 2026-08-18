@@ -6,9 +6,9 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 
 | Skill | 当前版本 | 职责 |
 | --- | --- | --- |
-| `wally-helper` | V3.12 | Wally 用法与经验层；管理视觉测试状态，把专业修改交回对应 specialist，验证 Route A/B 合同并组装最终视频提示词。 |
+| `wally-helper` | V4.0 | Wally 用法与经验层；管理视觉测试状态，把专业修改交回对应 specialist，并以单一当前生成范围的 bindings v2 验证 Route A/B 合同和组装最终视频提示词。 |
 | `wally-screenplay-writer` | V1.7 | 定义作品形态，创作概念或叙事超短片至长片 / 剧集，并负责故事、人物、结构、原创对白和诊断。 |
-| `wally-storyboard-designer` | V1.19 | 继承上游作品定义，按需交付 SEG、场景布局、导演脚本、分镜设计、固定提示词和 returned-board 审查。 |
+| `wally-storyboard-designer` | V2.1 | 继承上游作品定义与剧本已有场景结构，以源场景标题或编号为权威，按需交付场景布局、导演脚本、分镜设计、固定提示词和 returned-board 审查；其中分镜设计通过多 agent 对抗式裁定锁定主镜。 |
 | `wally-static-asset-designer` | V2.6 | 静态资产规划、Preview、Pxx-state、九宫格 / 2×2 场景参考、生产提示词与成图审查。 |
 | `wally-action-designer` | V3.9 | 按任务自适应设计动作、摄影与剪辑语法、光影、声音和已批准台词的表演执行，并审查生成视频。 |
 | `wally-visual-style-extractor` | V1.6 | 检索既有风格并提取有证据的 style layer，不代做资产、镜头、动作或最终提示词。 |
@@ -29,14 +29,14 @@ cp -R wally-skills/wally-* /path/to/repository/.agents/skills/
 
 - 专业产物保留所属 skill 的模板或输出合同结构。
 - `wally-screenplay-writer` 在专业产物前保存明确的作品定义；1–3 分钟完整叙事使用压缩的叙事超短片规则，不强制完整 Want / Need / Arc。
-- `wally-storyboard-designer` 继承上游作品定义并只交付用户点名的分镜专业功能；跨模块流程判断和最终批准状态由 `wally-helper` 管理。
+- `wally-storyboard-designer` 继承上游作品定义与剧本已有场景结构，保留源场景标题或编号，不再创建另一层故事分段；它只交付用户点名的分镜专业功能，跨模块流程判断和最终批准状态由 `wally-helper` 管理。
 - `wally-static-asset-designer` 以用户提供的参考图承载已清楚可见的规格；正式提示词保留字段名和相对顺序，不显示数字或字母序号，只补目标变化、布局、身份锚点与真实漂移风险。
 - `wally-static-asset-designer` 为一个已批准基础 Pxx 的单一关键改变态提供 `Pxx-state`；场景覆盖默认九宫格，九格一致性不足或用户明确要求时可改用 `2×2` 四宫格。
 - `wally-action-designer` 只写当前任务中承担独立控制作用的字段；连续动作使用 `Action`，精确单镜使用 `Action + Timing/beats`，多镜头或已有镜头权威使用 Shot。Shot 保留全片时间标题，内部直接使用从 `0.0s` 起算的 `0.2-0.6s: 动作描述` 时间码行，不添加 `Action:` 或 `beat N` 包装；正向不变量与独立失败风险统一进入一个 `Constraints` 字段。
 - Camera 和 Shot 只按任务需要选择 capture physics、光学、稳定性、运动动机、剪辑语法、视点、前景、焦点、空间层次与时长预算；这些控制不得覆盖已批准的镜头权威。
 - 原创或改写对白属于 `wally-screenplay-writer`；`wally-action-designer` 只保留已批准措辞并设计其表演、口型、停顿、声音与镜头内执行。
 - `wally-visual-style-extractor` 按请求选择 Style Lookup、Analysis Card、Three-Stage Brief、Reusable JSON Prompt 或 Transfer Validation；`subject`、`scene`、`camera` 只接受用户已有值或复用占位符。
-- `wally-helper` 同时消费旧版固定导演正文和新版弹性导演正文；Route A 保留外层 `Reference List`，Route B 保留外层 `Asset List / Prompt / Constraints`，两条路线均可用确定性脚本验证。
+- `wally-helper` 同时消费旧版固定导演正文和新版弹性导演正文；每次组装只处理一个当前生成范围，bindings v2 只记录该范围实际使用的资产，不再保存额外的范围字段。Route A 保留外层 `Reference List`，Route B 保留外层 `Asset List / Prompt / Constraints`，两条路线均可用确定性脚本验证。
 - 未明确提供音乐时，每段导演正文默认使用无BGM的完整环境声与 SFX；明确提供音乐或要求绝对静音时按该声音状态执行。导演正文不写 `Reference:` 或平台绑定。
 
 ## 新手使用方式
@@ -46,9 +46,9 @@ cp -R wally-skills/wally-* /path/to/repository/.agents/skills/
 ## 当前推荐经验
 
 1. `wally-screenplay-writer` 完成可用的剧本初稿。
-2. `wally-storyboard-designer` 用简单故事板草稿低成本测试景别、运镜、动作和镜头顺序；故事问题交回 Screenplay，镜头问题交回 Storyboard，Helper 记录测试与批准状态。
+2. `wally-storyboard-designer` 按剧本原有场景逐场制作简单故事板草稿，低成本测试景别、运镜、动作和镜头顺序；故事问题交回 Screenplay，镜头问题交回 Storyboard，Helper 记录测试与批准状态。
 3. `wally-static-asset-designer` 准备并批准可复用静态资产；场景九宫格一致性不足时，优先改用 `2×2` 四宫格。
-4. `wally-storyboard-designer` 用修改后的剧本和已批准资产生成分镜表，复核完整序列的剧情覆盖、节奏、连续性和可拍性。
+4. `wally-storyboard-designer` 用修改后的剧本和已批准资产，按源场景标题或编号生成分镜表，复核场景内完整镜头序列的剧情覆盖、节奏、连续性和可拍性。
 5. `wally-action-designer` 设计动作、表演、摄影、光影和声音执行。
 6. `wally-helper` 检查产物兼容性并完成最终组装。
 

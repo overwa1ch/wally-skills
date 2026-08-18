@@ -4,7 +4,7 @@ Single source for cross-product compatibility review and final assembly. Review 
 
 ## Shared checks
 
-- Confirm one current video scope or `SEG` label.
+- Confirm exactly one current generation scope.
 - Confirm the content type when Route A needs its fixed tone line.
 - Confirm that names for the same character, prop, place, and scope are unambiguous across products.
 - Confirm that platform handles resolve to the user-intended approved references and every binding has a declared role.
@@ -29,7 +29,7 @@ If names differ but identity is clear, normalize only the model-facing display l
 
 - Every model-facing reference has a quoted referable screen-object identity name, a confirmed platform handle, an asset form, and a role.
 - Every entry maps to an approved finished file. A multi-view, nine-grid, or multi-state board remains one asset unless separate finished files and handles actually exist.
-- The static references cover identities and structures the current SEG cannot safely infer from text alone. If required coverage is absent, request a static-asset product instead of inventing a name or handle.
+- The static references cover identities and structures the current generation scope cannot safely infer from text alone. If required coverage is absent, request a static-asset product instead of inventing a name or handle.
 - Every asset in `Asset List` uses `“[referable screen-object identity]” = @[confirmed platform handle] - [asset form and use]`.
 - Cite each exact quoted identity in an execution-bearing location where it visibly controls generation: `Subject`, `Action`, `Timing/beats`, or a Shot. A citation only in `Continuity`, an explanation, a summary, or the outer list fails.
 - For a legacy V2 body, cite each visible asset in its relevant timecoded Shot. For a V3 body, use whichever allowed execution carrier the body actually contains; never add Shot solely for asset citation.
@@ -51,10 +51,9 @@ Pass the approved binding inventory to either route validator with `--bindings`.
 
 ```json
 {
-  "schema_version": "wally-reference-bindings/v1",
+  "schema_version": "wally-reference-bindings/v2",
   "bindings": [
     {
-      "segment": "SEG01",
       "identity": "红伞",
       "handle": "@图片1",
       "kind": "static",
@@ -62,8 +61,7 @@ Pass the approved binding inventory to either route validator with `--bindings`.
       "source_aliases": ["雨伞", "道具伞"]
     },
     {
-      "segment": "SEG01",
-      "identity": "SEG01故事板",
+      "identity": "当前故事板",
       "handle": "@图片2",
       "kind": "storyboard",
       "role": "故事板",
@@ -73,7 +71,7 @@ Pass the approved binding inventory to either route validator with `--bindings`.
 }
 ```
 
-`schema_version`, `bindings`, and all six entry fields are required; unknown fields, duplicate identities/handles, and overlapping alias semantics are rejected. `kind` is one of `static`, `storyboard`, or `preview`. Route B globally rejects every `storyboard` binding; Route A requires exactly one `storyboard` per SEG and may include `static` and one selected `preview`. `identity` and `handle` must match the rendered list exactly, and the rendered description must contain `role`. `source_aliases` lists every approved-body term that may be replaced by or normalized to the quoted identity; use an empty array only for a pure identity insertion.
+`schema_version`, `bindings`, and all five entry fields are required; unknown fields, duplicate identities/handles, and overlapping alias semantics are rejected. The only accepted version is `wally-reference-bindings/v2`; earlier formats are invalid. `kind` is one of `static`, `storyboard`, or `preview`. Route B globally rejects every `storyboard` binding; Route A requires exactly one `storyboard` for the current generation scope and may include `static` and one selected `preview`. `identity` and `handle` must match the rendered list exactly, and the rendered description must contain `role`. `source_aliases` lists every approved-body term that may be replaced by or normalized to the quoted identity; use an empty array only for a pure identity insertion.
 
 ## Director-body preservation
 
@@ -83,7 +81,7 @@ Pass the approved binding inventory to either route validator with `--bindings`.
 
 ## One asset, one name
 
-After binding, every mention of a bound asset in Prompt or Constraints uses its exact quoted identity name. Replace asset-denoting aliases such as `人物`, `产品`, `商品`, `折叠体`, `对比产品`, or `自家产品` with the bound name. Keep each product part to one canonical part name. Do not name an asset absent from the current SEG; rewrite cross-SEG comparisons into results directly visible here.
+After binding, every mention of a bound asset in Prompt or Constraints uses its exact quoted identity name. Replace asset-denoting aliases such as `人物`, `产品`, `商品`, `折叠体`, `对比产品`, or `自家产品` with the bound name. Keep each product part to one canonical part name. Do not name an asset absent from the current generation scope; rewrite comparisons with other scopes into results directly visible here.
 
 Image-form labels such as `人物三视图参考` and genre or technique words such as `产品演示` or `纸就产品` are not asset identities and are exempt. `scripts/validate_route_b_prompt.py` reports generic asset aliases outside quoted identities.
 
@@ -93,7 +91,7 @@ Image-form labels such as `人物三视图参考` and genre or technique words s
 - All template placeholders are replaced.
 - No `Reference:` heading or platform handle appears inside the director body. Route B also contains no outer `Reference List`; Route A contains no `Asset List`.
 - The outer reference list matches the selected route and contains only confirmed bindings.
-- The Route B asset-name set equals the approved asset inventory for that SEG; a reference board appears once regardless of internal panels or states.
+- The Route B asset-name set equals the approved asset inventory for the current generation scope; a reference board appears once regardless of internal panels or states.
 - Every Route B identity is cited in `Subject`, `Action`, `Timing/beats`, or a Shot. `Continuity` alone does not count. No raw handle, asset-form identity, `Asset Use:` section, or asset-summary block appears.
 - When the director body supplied `Avoid:` or `避免：`, its content appears once as `禁止出现：` under outer `Constraints`; when it supplied neither, no empty `禁止出现：` line appears.
 - Bodies containing approved `Voiceover`, `Dialogue`, or other speech include `画面中不得生成文字、字幕或对白气泡。`

@@ -14,7 +14,7 @@ description: >
 
 Current version: `wally-screenplay-writer@2026-07-28-v1.7-narrative-ultrashort-arc-closure` (scopes complete Want / Need / Arc and full A→B change to 3–10 minute narrative shorts while preserving the compressed 1–3 minute narrative-ultrashort route). | v1.6 work-definition-narrative-ultrashort. | v1.5 dialogue-trigger-workflow-alignment. | v1.4 professional-intent-trigger. | v1.3 writer-name-cutover. | v1.1 progressive-disclosure-efficiency.
 
-Use only the supplied Shanyin screenwriting system. Keep original screenwriting, story development, screenplay diagnosis, and dialogue writing here; leave `SEG`, director scripts, storyboards, static assets, and final video prompts to their own skills.
+Use only the supplied Shanyin screenwriting system. Keep original screenwriting, story development, screenplay diagnosis, and dialogue writing here; leave director scripts, storyboards, static assets, and final video prompts to their own skills.
 
 ## Non-negotiable rules
 

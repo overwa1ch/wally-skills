@@ -11,13 +11,12 @@ import sys
 from prompt_validation_common import (
     AUDIO_MODES,
     Binding,
-    approved_body_map,
+    ExpectedBinding,
     director_reference_errors,
     load_binding_schema,
     parse_bindings,
     placeholder_errors,
     schema_binding_errors,
-    split_segments,
     validate_audio,
 )
 
@@ -29,20 +28,20 @@ SECTIONS = re.compile(
     re.DOTALL,
 )
 CONTROL_SENTENCE = (
-    "请根据以上参考生成本段视频。故事板控制镜头顺序、运镜、人物动作、空间关系和道具关系。"
+    "请根据以上参考生成当前视频。故事板控制镜头顺序、运镜、人物动作、空间关系和道具关系。"
 )
 STORYBOARD_DESCRIPTION = re.compile(r"故事板|storyboard", re.IGNORECASE)
 PREVIEW_DESCRIPTION = re.compile(r"preview", re.IGNORECASE)
 
 
-def _route_a_binding_errors(heading: str, bindings: list[Binding]) -> list[str]:
+def _route_a_binding_errors(bindings: list[Binding]) -> list[str]:
     errors: list[str] = []
     storyboards = [item for item in bindings if STORYBOARD_DESCRIPTION.search(item.description)]
     previews = [item for item in bindings if PREVIEW_DESCRIPTION.search(item.description)]
     if len(storyboards) != 1:
-        errors.append(f"{heading}: Route A Reference List must contain exactly one storyboard")
+        errors.append("Route A Reference List must contain exactly one storyboard")
     if len(previews) > 1:
-        errors.append(f"{heading}: Route A Reference List may contain at most one Preview")
+        errors.append("Route A Reference List may contain at most one Preview")
     return errors
 
 
@@ -65,8 +64,8 @@ def validate(
     text: str,
     *,
     audio_mode: str,
-    binding_schema: dict,
-    approved_bodies: dict[str, str],
+    binding_schema: list[ExpectedBinding],
+    approved_body: str,
 ) -> tuple[list[str], int, list[str]]:
     errors = placeholder_errors(text)
     binding_count = 0
@@ -74,47 +73,35 @@ def validate(
 
     if "Asset List:" in text:
         errors.append("Route A must not contain an Asset List")
-    segments = split_segments(text)
-    if not segments:
-        return errors + ["no numbered SEG block found"], 0, modes
-    for heading, block in segments:
-        section_match = SECTIONS.fullmatch(block)
-        if not section_match:
-            errors.append(
-                f"{heading}: expected exact Reference List / 影片调性 / Prompt / Constraints order"
-            )
-            continue
+    section_match = SECTIONS.fullmatch(text.rstrip("\n"))
+    if not section_match:
+        return errors + [
+            "expected exact Reference List / 影片调性 / Prompt / Constraints order"
+        ], 0, modes
 
-        bindings, binding_errors = parse_bindings(
-            section_match.group("references").strip(), heading, "Reference List"
+    bindings, binding_errors = parse_bindings(
+        section_match.group("references").strip(), "Reference List"
+    )
+    errors.extend(binding_errors)
+    errors.extend(_route_a_binding_errors(bindings))
+    binding_count += len(bindings)
+    errors.extend(schema_binding_errors(bindings, binding_schema, "A"))
+
+    director_body, body_errors = _extract_director_body(section_match.group("prompt"))
+    errors.extend(body_errors)
+    if director_body is None:
+        return errors, binding_count, modes
+    errors.extend(director_reference_errors(director_body))
+    audio_errors, detected_mode = validate_audio(director_body, audio_mode)
+    errors.extend(audio_errors)
+    if detected_mode:
+        modes.append(detected_mode)
+
+    if director_body != approved_body.rstrip("\n"):
+        errors.append(
+            "pasted director body differs from approved body "
+            "(comparison ignores only the approved file's terminal newline)"
         )
-        errors.extend(binding_errors)
-        errors.extend(_route_a_binding_errors(heading, bindings))
-        binding_count += len(bindings)
-        errors.extend(schema_binding_errors(heading, bindings, binding_schema, "A"))
-
-        director_body, body_errors = _extract_director_body(section_match.group("prompt"))
-        errors.extend(f"{heading}: {error}" for error in body_errors)
-        if director_body is None:
-            continue
-        errors.extend(f"{heading}: {error}" for error in director_reference_errors(director_body))
-        audio_errors, detected_mode = validate_audio(director_body, audio_mode)
-        errors.extend(f"{heading}: {error}" for error in audio_errors)
-        if detected_mode:
-            modes.append(detected_mode)
-
-        approved = approved_bodies.get(heading)
-        if approved is None:
-            errors.append(f"{heading}: approved BODY is missing this segment")
-        elif director_body != approved.rstrip("\n"):
-            errors.append(
-                f"{heading}: pasted director body differs from approved body "
-                "(comparison ignores only the approved file's terminal newline)"
-            )
-
-    rendered = {heading for heading, _body in segments}
-    for extra_heading in sorted(set(binding_schema) - rendered):
-        errors.append(f"binding inventory contains unrendered segment {extra_heading}")
     return errors, binding_count, modes
 
 
@@ -127,7 +114,7 @@ def main() -> int:
         required=True,
         type=Path,
         metavar="BODY",
-        help="Approved BODY; for multi-SEG prompts, include matching SEG blocks.",
+        help="Approved BODY for the current generation scope.",
     )
     parser.add_argument(
         "--bindings",
@@ -135,7 +122,7 @@ def main() -> int:
         required=True,
         type=Path,
         metavar="BINDINGS.json",
-        help="BINDINGS.json using wally-reference-bindings/v1.",
+        help="BINDINGS.json using wally-reference-bindings/v2.",
     )
     parser.add_argument("--audio-mode", choices=AUDIO_MODES, required=True)
     args = parser.parse_args()
@@ -144,10 +131,6 @@ def main() -> int:
         text = args.prompt_file.read_text(encoding="utf-8")
         binding_schema = load_binding_schema(args.bindings)
         source_text = args.director_body.read_text(encoding="utf-8")
-        prompt_segments = split_segments(text)
-        approved_bodies = approved_body_map(
-            source_text, [heading for heading, _body in prompt_segments]
-        )
     except (OSError, ValueError) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 2
@@ -156,7 +139,7 @@ def main() -> int:
         text,
         audio_mode=args.audio_mode,
         binding_schema=binding_schema,
-        approved_bodies=approved_bodies,
+        approved_body=source_text,
     )
     if errors:
         for error in errors:
