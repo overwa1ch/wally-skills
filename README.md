@@ -7,7 +7,7 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 | Skill | 当前版本 | 职责 |
 | --- | --- | --- |
 | `wally-helper` | V4.0 | Wally 用法与经验层；管理视觉测试状态，把专业修改交回对应 specialist，并以单一当前生成范围的 bindings v2 验证 Route A/B 合同和组装最终视频提示词。 |
-| `wally-screenplay-writer` | V1.7 | 定义作品形态，创作概念或叙事超短片至长片 / 剧集，并负责故事、人物、结构、原创对白和诊断。 |
+| `wally-screenplay-writer` | V2.0 | 定义并保存作品定义，按概念超短片、叙事短片、长片、剧集四种格式创作，并负责故事、人物、结构、场景拆解、原创 / 改写对白和剧本诊断。 |
 | `wally-storyboard-designer` | V2.1 | 继承上游作品定义与剧本已有场景结构，以源场景标题或编号为权威，按需交付场景布局、导演脚本、分镜设计、固定提示词和 returned-board 审查；其中分镜设计通过多 agent 对抗式裁定锁定主镜。 |
 | `wally-static-asset-designer` | V2.6 | 静态资产规划、Preview、Pxx-state、九宫格 / 2×2 场景参考、生产提示词与成图审查。 |
 | `wally-action-designer` | V3.9 | 按任务自适应设计动作、摄影与剪辑语法、光影、声音和已批准台词的表演执行，并审查生成视频。 |
@@ -28,7 +28,7 @@ cp -R wally-skills/wally-* /path/to/repository/.agents/skills/
 ## 输出结构
 
 - 专业产物保留所属 skill 的模板或输出合同结构。
-- `wally-screenplay-writer` 在专业产物前保存明确的作品定义；1–3 分钟完整叙事使用压缩的叙事超短片规则，不强制完整 Want / Need / Arc。
+- `wally-screenplay-writer` 在专业产物前保存六字段作品定义；按 1–3 分钟概念超短片、5–10 分钟叙事短片、约 90 分钟长片、多集剧集四种方法路由，实际体量可在所选方法内明确缩放，不建立第五条路线。已有材料从当前可用阶段和用户指定范围继续，定向改写不被无关的格式追问阻塞。1–3 分钟完整人物 / 事件叙事或 3–5 分钟叙事需要先确认是改造成概念超短片，还是扩展为 5–10 分钟叙事短片。
 - `wally-storyboard-designer` 继承上游作品定义与剧本已有场景结构，保留源场景标题或编号，不再创建另一层故事分段；它只交付用户点名的分镜专业功能，跨模块流程判断和最终批准状态由 `wally-helper` 管理。
 - `wally-static-asset-designer` 以用户提供的参考图承载已清楚可见的规格；正式提示词保留字段名和相对顺序，不显示数字或字母序号，只补目标变化、布局、身份锚点与真实漂移风险。
 - `wally-static-asset-designer` 为一个已批准基础 Pxx 的单一关键改变态提供 `Pxx-state`；场景覆盖默认九宫格，九格一致性不足或用户明确要求时可改用 `2×2` 四宫格。
