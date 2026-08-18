@@ -1,0 +1,13 @@
+Asset List:
+“红色保温壶” = @image1 - Pxx 道具身份。
+
+Prompt:
+Subject: “红色保温壶”。
+Action: “红色保温壶”在灰色桌面上静止展示。
+Audio: 无BGM。轻微室内房间音与壶底接触桌面的细小摩擦声。
+Constraints: 道具外形和颜色保持稳定。
+
+Constraints:
+只使用当前 Asset List 中列出的成品资产；不得把参考板内部局部或状态拆成独立资产。
+无旁白、无画外解说。
+禁止出现：额外文字和水印。

@@ -4,3 +4,5 @@ __MACOSX/
 *.zip
 .env
 .env.*
+__pycache__/
+*.pyc

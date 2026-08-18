@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wally Visual Style Extractor"
+  short_description: "Extract evidence-backed reusable visual style systems"
+  default_prompt: "Use $wally-visual-style-extractor to identify or extract an evidence-backed reusable visual style system from these materials."

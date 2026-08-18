@@ -1,0 +1,4 @@
+interface:
+  display_name: "Wally Storyboard Designer"
+  short_description: "Design storyboards, shot plans, and continuity"
+  default_prompt: "Use $wally-storyboard-designer to turn this supplied material into the storyboard-domain product I request."

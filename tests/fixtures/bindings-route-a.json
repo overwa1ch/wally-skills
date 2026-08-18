@@ -1,0 +1,19 @@
+{
+  "schema_version": "wally-reference-bindings/v2",
+  "bindings": [
+    {
+      "identity": "红色保温壶",
+      "handle": "@image1",
+      "kind": "static",
+      "role": "Pxx 道具身份",
+      "source_aliases": []
+    },
+    {
+      "identity": "当前场景镜头板",
+      "handle": "@image2",
+      "kind": "storyboard",
+      "role": "故事板",
+      "source_aliases": []
+    }
+  ]
+}
