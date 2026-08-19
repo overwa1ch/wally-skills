@@ -33,7 +33,6 @@ README_VERSIONS = {
 FROZEN_HASHES = {
     "wally-helper/templates/route-a-final-prompt.md": "9dc2b8ced5b8b4276c291d1b268ed546f0ee53fe08f2d6fe0e5a8b1d3d3b5188",
     "wally-helper/templates/route-b-final-prompt.md": "96ef1ffed75ab5bfc204f2f2ef4205cfe0e71c13a9671133d152a3e34d089ca6",
-    "wally-storyboard-designer/references/storyboard-style-contract.md": "b26e28e64fc7a94430e1ebdf6dadccbeb6df5efd218b301b957ad7db03caf186",
     "wally-storyboard-designer/templates/storyboard-prompt-template.md": "2164c752ddd8086b4afd9429f76814bd358b959970ea06b9199dda98463bdcc4",
     "wally-storyboard-designer/templates/shot-table-prompt-template.md": "a3708139bb78491b415fc40d1cd16b9ca8b349e5bda4c3a0c5736ab66379c1d6",
     "wally-static-asset-designer/templates/preview-prompt.md": "cc1cf4dadc4a29a9f14eeb78244ae57327e8dca3fdcd7699d6d5bdaffba0b145",
@@ -211,10 +210,10 @@ def check_frozen(skills: Path, errors: list[str]) -> None:
         elif sha256(path) != expected:
             fail(errors, f"frozen surface changed: {relative}")
 
-    style = (skills / "wally-storyboard-designer/references/storyboard-style-contract.md").read_text(encoding="utf-8")
-    match = re.search(r"```text\n(.*?)```", style, re.DOTALL)
+    template = (skills / "wally-storyboard-designer/templates/storyboard-prompt-template.md").read_text(encoding="utf-8")
+    match = re.search(r"(使用极其简单的.*?将宽高比设为 16:9。\n)", template, re.DOTALL)
     if not match:
-        fail(errors, "canonical storyboard style block not found")
+        fail(errors, "canonical storyboard style block not found in the fixed template")
     else:
         block_hash = hashlib.sha256((match.group(1)).encode("utf-8")).hexdigest()
         if block_hash != CANONICAL_STYLE_HASH:
@@ -518,8 +517,6 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fail(errors, "Storyboard retains dead handoff reference")
     if "READY_FOR_FIXED_STORYBOARD_PROMPT" in storyboard_tree:
         fail(errors, "Storyboard retains obsolete READY gate")
-    if "storyboard-style-contract.md" not in storyboard:
-        fail(errors, "Storyboard entry does not load canonical style contract")
     for token in ("scene-divided", "tables", "images", "partial", "conflicting", "mixture"):
         if token not in storyboard:
             fail(errors, f"Storyboard open-input contract is missing {token!r}")
@@ -554,10 +551,11 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         "references/main-shot-adjudication.md",
         "references/continuity-validation-rules.md",
         "references/ai-video-composition-rules.md",
+        "references/storyboard-style-contract.md",
     ):
         if (storyboard_root / retired).exists():
             fail(errors, f"Storyboard retains retired guide {retired}")
-    for phrase in ("visual-optimization-rules.md", "storyboard-design.md", "storyboard-review.md", "main-shot-adjudication.md", "continuity-validation-rules.md", "ai-video-composition-rules.md"):
+    for phrase in ("visual-optimization-rules.md", "storyboard-design.md", "storyboard-review.md", "main-shot-adjudication.md", "continuity-validation-rules.md", "ai-video-composition-rules.md", "storyboard-style-contract.md"):
         if phrase in storyboard_tree:
             fail(errors, f"Storyboard still references retired guide {phrase}")
     for phrase in (

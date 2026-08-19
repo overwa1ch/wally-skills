@@ -529,6 +529,7 @@ class SkillContractTests(unittest.TestCase):
             "references/main-shot-adjudication.md",
             "references/continuity-validation-rules.md",
             "references/ai-video-composition-rules.md",
+            "references/storyboard-style-contract.md",
         ):
             self.assertFalse(
                 (REPO / "wally-storyboard-designer" / retired).exists(),
@@ -541,6 +542,7 @@ class SkillContractTests(unittest.TestCase):
             "main-shot-adjudication.md",
             "continuity-validation-rules.md",
             "ai-video-composition-rules.md",
+            "storyboard-style-contract.md",
         ):
             self.assertNotIn(phrase, tree)
         self.assertIn("This skill is the test layer", skill)

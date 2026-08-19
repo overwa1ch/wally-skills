@@ -63,7 +63,6 @@ These prompts are how a 分镜脚本 gets tested: the user uploads the 分镜脚
 - Storyboards and shot tables have different strengths: a storyboard gives annotated per-shot direction sketches (景别/运镜/动作); a shot table renders the model's native 分镜表 concept — the complete source-scene shot sequence, numbered panels, no text, no style constraints. One source scene may use multiple pages and as many shots as needed. The choice between the two products belongs to the user.
 - The exact runtime `【源场景标题】` replacement above is the only allowed payload substitution. Do not modify the stored templates or otherwise fill, summarize, explain, relabel, wrap, or append anything to either fixed prompt.
 - If the requested prompt type is unclear and cannot be inferred, ask only whether the user wants the storyboard prompt or the shot-table 分镜表 prompt.
-- Read [references/storyboard-style-contract.md](references/storyboard-style-contract.md) only to confirm that the storyboard template's style block matches the canonical block, or when the user asks about the storyboard style. It defines no design or review rules.
 
 ## Boundaries
 
@@ -73,4 +72,4 @@ These prompts are how a 分镜脚本 gets tested: the user uploads the 分镜脚
 - Do not design performance, dialogue, vocal delivery, timing performance, or audio design.
 - Do not offer returned-board review as a product. The user judges the generated boards; treat what the user reports as revision input to the 分镜脚本.
 - Do not choose Route A/B or assemble a final image-to-video or text-to-video prompt.
-- Keep the canonical storyboard style block and both fixed prompt templates unchanged unless the user explicitly requests an exact template edit. For an authorized edit, change only the named text surface and preserve the rest verbatim.
+- Keep both fixed prompt templates, including the storyboard style block inside the storyboard template, unchanged unless the user explicitly requests an exact template edit. For an authorized edit, change only the named text surface and preserve the rest verbatim.
