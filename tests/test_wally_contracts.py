@@ -493,8 +493,10 @@ class SkillContractTests(unittest.TestCase):
         for phrase in ("scene-divided", "tables", "images", "partial", "conflicting"):
             self.assertIn(phrase, skill)
         for phrase in (
-            "Create one SVG per supplied scene immediately",
-            "do not require another storyboard-domain product first",
+            "Use explicit source scenes.",
+            "Show only the initial state.",
+            "Include only active interaction content.",
+            "Preserve true top-down geometry.",
         ):
             self.assertIn(phrase, svg)
         self.assertIn("Leave `【源场景标题】` unchanged for a generic reusable prompt", skill)
@@ -517,16 +519,32 @@ class SkillContractTests(unittest.TestCase):
         director_contract = self.read(
             "wally-storyboard-designer/references/director-script-output-contract.md"
         )
-        self.assertIn("状态：DIRECTOR_SCRIPT_READY", director_contract)
         self.assertIn("## 作品定义", director_contract)
-        design = self.read(
-            "wally-storyboard-designer/references/storyboard-design.md"
-        )
-        self.assertIn("## Carry the work definition", design)
-        self.assertIn(
-            "Begin every complete storyboard or shot-sequence design",
-            design,
-        )
+        self.assertIn("## Targeted Revision", director_contract)
+        self.assertIn("## Shot format", director_contract)
+        for retired in (
+            "references/visual-optimization-rules.md",
+            "references/storyboard-design.md",
+            "references/storyboard-review.md",
+            "references/main-shot-adjudication.md",
+            "references/continuity-validation-rules.md",
+            "references/ai-video-composition-rules.md",
+        ):
+            self.assertFalse(
+                (REPO / "wally-storyboard-designer" / retired).exists(),
+                retired,
+            )
+        for phrase in (
+            "visual-optimization-rules.md",
+            "storyboard-design.md",
+            "storyboard-review.md",
+            "main-shot-adjudication.md",
+            "continuity-validation-rules.md",
+            "ai-video-composition-rules.md",
+        ):
+            self.assertNotIn(phrase, tree)
+        self.assertIn("This skill is the test layer", skill)
+        self.assertIn("Do not offer returned-board review as a product", skill)
 
     def test_helper_routes_storyboard_revisions_to_the_storyboard_specialist(self) -> None:
         helper = self.read("wally-helper/SKILL.md")

@@ -6,7 +6,7 @@ Use this guide to orient the user and identify the next useful professional prod
 
 Every text design step must yield an artifact a human can judge at a glance — shot tables and storyboards test shot designs, Previews test visual direction, returned assets test asset prompts, returned clips test director bodies. Like tests in coding, these visual results let the human spot failures intuitively and fast. The agent designs and classifies in text; the human perceives in images; no expensive generation runs without a cheaper visual test before it.
 
-Cross-module approval belongs to Helper, not to the specialist that creates the artifact. A complete director script delivered by `wally-storyboard-designer` is still only the current rough shot design until the user has judged its storyboard or shot-table result. Text continuity checks prove that the design is coherent enough to visualize; they do not prove that the overall pacing, coverage density, or felt rhythm works.
+Cross-module approval belongs to Helper, not to the specialist that creates the artifact. A complete director script delivered by `wally-storyboard-designer` is still only the current rough shot design until the user has judged its storyboard or shot-table result. A text director script alone does not prove that the overall pacing, coverage density, or felt rhythm works.
 
 ## Recommended production experience
 
@@ -14,7 +14,7 @@ Keep `wally-helper` with the user throughout the process. Treat the following as
 
 1. Finish a usable screenplay first draft.
 2. Establish a rough shot design from the screenplay, either through an existing director-script draft or through the storyboard direction itself. Use the fixed storyboard prompt on each exact source scene to make simple draft boards. Judge overall pacing, rough shot choice, framing, camera movement, action, and sequence; the board is a cheap test, not a polished final image.
-3. Revise the screenplay or rough shot design from the returned-board findings until the board is usable. Route story changes to `wally-screenplay-writer`; route shot-design changes or board review to `wally-storyboard-designer`. Treat acceptance of a text director draft before this visual test only as acceptance to test it, never as final director-script lock.
+3. Revise the screenplay or rough shot design from the returned-board findings until the board is usable. Route story changes to `wally-screenplay-writer`; route shot-design changes to `wally-storyboard-designer`. Treat acceptance of a text director draft before this visual test only as acceptance to test it, never as final director-script lock.
 4. Produce and approve the reusable static assets.
 5. Derive a multi-angle scene reference from every approved scene asset. Start with the nine-grid. If the nine-grid cannot keep the same scene identity, topology, furniture, equipment, or visual style across all cells, reduce the information load and switch to a `2×2` four-grid. Prefer four consistent views over nine drifting views.
 6. Upload the revised screenplay and approved static assets, then use the fixed shot-table prompt on each exact source scene. Review the complete numbered, no-text shot sequence for story coverage, rhythm, continuity, and shootability; revise the screenplay or shot design and regenerate when the table exposes a problem.
@@ -33,8 +33,8 @@ Route by this registry: name a function, tell the user which skill to call, and 
 
 ### wally-storyboard-designer — 分镜功能
 - 职责：按用户点名，把所给故事、场景、图板或镜头材料转换为分镜领域的指定产物。
-- 功能菜单：准确源场景继承、场景布局SVG、视觉优化、处理版导演脚本、分镜设计与修订、固定故事板提示词、固定分镜表提示词、回板审查（文字审查；板执行失败/分镜设计失败/无法判定三分类路由）。
-- 何时调用：需要设计镜头、用板子验证分镜、或审查回板时。
+- 功能菜单：准确源场景继承、场景布局SVG、分镜脚本（处理版导演脚本）设计与定向修订、固定故事板提示词、固定分镜表提示词。回板由用户亲自看图判断，观察结果作为分镜脚本修订输入交回。
+- 何时调用：需要设计镜头、用板子验证分镜、或根据回板观察修改分镜脚本时。
 
 ### wally-static-asset-designer — 静态资产
 - 职责：跨镜头稳定的身份锚——人物、产品、场景、世界与风格。
@@ -69,7 +69,7 @@ Route by this registry: name a function, tell the user which skill to call, and 
 Use the production stage to recommend the next visual test:
 
 1. A usable screenplay first draft with no visual shot test yet: recommend the fixed storyboard prompt.
-2. A returned storyboard that misses the intended story: route screenplay revision to `wally-screenplay-writer`. A board that exposes framing, camera, action, or sequence problems: route review or redesign to `wally-storyboard-designer`.
+2. A returned storyboard that misses the intended story: route screenplay revision to `wally-screenplay-writer`. A board that exposes framing, camera, action, or sequence problems: route the shot-design revision to `wally-storyboard-designer`.
 3. An approved screenplay revision plus approved static assets: recommend the fixed shot-table prompt and use the returned table to validate full sequence coverage, rhythm, continuity, and shootability.
 4. An existing director script with no returned visual board: treat it as the rough shot design to visualize next. Do not lock it as the final director script from text review alone.
 5. A returned board that is usable but names shot-design revisions: hand those revisions to `wally-storyboard-designer` for integration. When the updated director script returns, record the visual test as passed and recommend final director-script approval. A faithful board that still feels slow, repetitive, unclear, or spatially weak has successfully exposed a rough-shot failure; route the shot-design revision to `wally-storyboard-designer` rather than approving it or merely redrawing the same design.

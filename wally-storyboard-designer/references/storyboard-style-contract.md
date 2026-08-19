@@ -1,12 +1,10 @@
 # Storyboard Style Contract
 
-Use this file for every storyboard module call: script direction, `Bxx` boards, returned-board review, and redrawing source selection.
+This file is the canonical home of the immutable storyboard style block. The fixed storyboard prompt in `templates/storyboard-prompt-template.md` carries this exact block; the fixed shot-table prompt carries no style block by design.
 
 ## Fixed Visual Style
 
-- Each short task prompt targets the current source scene by its exact original heading and asks for multiple separated storyboard versions.
-- If the user asks for another source scene, output another current-task prompt using that scene's exact original heading.
-- The following Chinese style prompt is canonical and immutable. Use it verbatim in every model-facing storyboard template; the fixed storyboard prompt must use this exact same style block. Do not rewrite, paraphrase, compress, expand, translate, or change any character unless the user explicitly requests a storyboard style prompt edit.
+- The following Chinese style prompt is canonical and immutable. Use it verbatim in every model-facing storyboard template. Do not rewrite, paraphrase, compress, expand, translate, or change any character unless the user explicitly requests a storyboard style prompt edit.
 
 ```text
 使用极其简单的 2D 预览草图风格：
@@ -25,31 +23,8 @@ Use this file for every storyboard module call: script direction, `Bxx` boards, 
 每一格下方添加简短中文说明，固定写：景别：...｜运镜：...｜人物动作：...。
 将宽高比设为 16:9。
 ```
-- Use clear storyboard drawing, not a polished poster.
-- Add fixed short Chinese notes under each panel in this form: `景别：...｜运镜：...｜人物动作：...`.
-- Use red camera viewfinder boxes.
-- Use arrows to show motion, force, breath, or direction.
-- Use red arrows to mark key character actions and camera movement (camera viewfinder movement). Arrow marks carry short Chinese labels.
-- Set aspect ratio to 16:9.
-- Draw the key process in as much detail as possible.
 
-## Style Limits
+## Use
 
-- Keep labels, arrows, and notes secondary to the panel image.
-- Keep storyboard pages separate from character design sheets and final-look style frames.
-- Treat polished posters, concept art, manga cleanup, film stills, UI legends, raw JSON, schema field names, dense diagrams, and long text columns as style drift.
-
-## Context Behavior
-
-- Script-only direction boards judge画面内容、节奏和表达方向. They may use role labels and rough placeholders without stable identity.
-- `Bxx` boards with approved assets use them for identity provenance, but still draw people as labeled mannequins.
-- Returned-board review judges whether the board communicates the requested source scene clearly in this fixed style, and whether the communicated shots prove the design; a faithful board that exposes a design flaw is a successful test, not a failed board.
-- Route A final-look redraw leaves this style behind; it preserves one approved panel's composition and removes storyboard artifacts.
-
-## Continuous Action
-
-Use same-panel continuous action only when one important motion benefits from it:
-
-- one character or body part may appear in two solid-line positions;
-- connect positions with one arrow;
-- use sparingly so it reads as one moving subject, not two people.
+- Read this file only to confirm that the storyboard template's style block is intact, or when the user asks about the storyboard style. It defines no shot-design or board-review rules.
+- Each short task prompt targets the current source scene by its exact original heading and asks for multiple separated storyboard versions. For another source scene, output another short task prompt with that scene's exact original heading.

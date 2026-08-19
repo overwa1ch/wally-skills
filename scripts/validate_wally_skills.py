@@ -15,7 +15,7 @@ import xml.etree.ElementTree as ET
 SKILLS = {
     "wally-helper": "wally-helper@2026-08-18-v4.0-single-scope-bindings-v2",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-08-18-v2.0-four-format-workflow-unification",
-    "wally-storyboard-designer": "wally-storyboard-designer@2026-08-18-v2.1-adversarial-main-shot",
+    "wally-storyboard-designer": "wally-storyboard-designer@2026-08-19-v3.9-four-rule-layout",
     "wally-static-asset-designer": "wally-static-asset-designer@2026-07-22-v2.6-prop-state-four-grid",
     "wally-action-designer": "wally-action-designer@2026-07-29-v3.9-adaptive-camera-shot-grammar",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-07-22-v1.6-boundary-evidence-ownership",
@@ -24,7 +24,7 @@ SKILLS = {
 README_VERSIONS = {
     "wally-helper": "V4.0",
     "wally-screenplay-writer": "V2.0",
-    "wally-storyboard-designer": "V2.1",
+    "wally-storyboard-designer": "V3.9",
     "wally-static-asset-designer": "V2.6",
     "wally-action-designer": "V3.9",
     "wally-visual-style-extractor": "V1.6",
@@ -33,7 +33,7 @@ README_VERSIONS = {
 FROZEN_HASHES = {
     "wally-helper/templates/route-a-final-prompt.md": "9dc2b8ced5b8b4276c291d1b268ed546f0ee53fe08f2d6fe0e5a8b1d3d3b5188",
     "wally-helper/templates/route-b-final-prompt.md": "96ef1ffed75ab5bfc204f2f2ef4205cfe0e71c13a9671133d152a3e34d089ca6",
-    "wally-storyboard-designer/references/storyboard-style-contract.md": "b2daf11298d50845ae2644f7444bd992078ae55df8edf66b4aa1d95a7fd77d69",
+    "wally-storyboard-designer/references/storyboard-style-contract.md": "b26e28e64fc7a94430e1ebdf6dadccbeb6df5efd218b301b957ad7db03caf186",
     "wally-storyboard-designer/templates/storyboard-prompt-template.md": "2164c752ddd8086b4afd9429f76814bd358b959970ea06b9199dda98463bdcc4",
     "wally-storyboard-designer/templates/shot-table-prompt-template.md": "a3708139bb78491b415fc40d1cd16b9ca8b349e5bda4c3a0c5736ab66379c1d6",
     "wally-static-asset-designer/templates/preview-prompt.md": "cc1cf4dadc4a29a9f14eeb78244ae57327e8dca3fdcd7699d6d5bdaffba0b145",
@@ -525,9 +525,11 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
             fail(errors, f"Storyboard open-input contract is missing {token!r}")
     svg_rules = (storyboard_root / "references/scene-layout-svg-rules.md").read_text(encoding="utf-8")
     for phrase in (
-        "Create one SVG per supplied scene immediately",
-        "do not require another storyboard-domain product first",
-        "name only the missing facts and stop",
+        "Use explicit source scenes.",
+        "Show only the initial state.",
+        "Include only active interaction content.",
+        "Preserve true top-down geometry.",
+        "name only what is missing and stop",
     ):
         if phrase not in svg_rules:
             fail(errors, f"Storyboard Scene SVG route is missing: {phrase}")
@@ -542,13 +544,29 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         if phrase not in storyboard:
             fail(errors, f"Storyboard work-definition inheritance is missing: {phrase}")
     director_contract = (storyboard_root / "references/director-script-output-contract.md").read_text(encoding="utf-8")
-    storyboard_design = (storyboard_root / "references/storyboard-design.md").read_text(encoding="utf-8")
-    for phrase in ("状态：DIRECTOR_SCRIPT_READY", "## 作品定义"):
+    for phrase in ("## 作品定义", "## Targeted Revision", "## Shot format"):
         if phrase not in director_contract:
             fail(errors, f"Storyboard director-script contract is missing: {phrase}")
-    for phrase in ("## Carry the work definition", "Begin every complete storyboard or shot-sequence design"):
-        if phrase not in storyboard_design:
-            fail(errors, f"Storyboard design work-definition carrier is missing: {phrase}")
+    for retired in (
+        "references/visual-optimization-rules.md",
+        "references/storyboard-design.md",
+        "references/storyboard-review.md",
+        "references/main-shot-adjudication.md",
+        "references/continuity-validation-rules.md",
+        "references/ai-video-composition-rules.md",
+    ):
+        if (storyboard_root / retired).exists():
+            fail(errors, f"Storyboard retains retired guide {retired}")
+    for phrase in ("visual-optimization-rules.md", "storyboard-design.md", "storyboard-review.md", "main-shot-adjudication.md", "continuity-validation-rules.md", "ai-video-composition-rules.md"):
+        if phrase in storyboard_tree:
+            fail(errors, f"Storyboard still references retired guide {phrase}")
+    for phrase in (
+        "This skill is the test layer",
+        "### 分镜脚本 (processed director script)",
+        "Do not offer returned-board review as a product",
+    ):
+        if phrase not in storyboard:
+            fail(errors, f"Storyboard test-layer contract is missing: {phrase}")
     for phrase in (
         "Leave `【源场景标题】` unchanged for a generic reusable prompt",
         "exact original source scene heading",
@@ -662,6 +680,10 @@ def check_repository_metadata(root: Path, errors: list[str]) -> None:
         fail(errors, "CHANGELOG lacks the 2026-08-03 Wally project-scope cutover entry")
     if "Helper 升级为 V4.0" not in changelog or "Storyboard 升级为 V2.1" not in changelog:
         fail(errors, "CHANGELOG lacks the 2026-08-18 source-scene migration entry")
+    if "Storyboard 升级为 V3.0" not in changelog or "测试层" not in changelog:
+        fail(errors, "CHANGELOG lacks the 2026-08-18 Storyboard V3.0 test-layer entry")
+    if "Storyboard 升级为 V3.9" not in changelog or "四条规则" not in changelog:
+        fail(errors, "CHANGELOG lacks the 2026-08-19 Storyboard V3.9 four-rule layout entry")
     if "Screenplay 升级为 V2.0" not in changelog or "正式收敛为四种格式" not in changelog:
         fail(errors, "CHANGELOG lacks the 2026-08-18 Screenplay V2.0 entry")
     if not workflow_path.is_file() or "validate-wally-skills:" not in workflow_path.read_text(encoding="utf-8"):
