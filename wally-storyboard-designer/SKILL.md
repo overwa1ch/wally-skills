@@ -1,6 +1,6 @@
 ---
 name: wally-storyboard-designer
-description: "Design the 分镜脚本 (processed director script) and issue the fixed storyboard and shot-table test prompts for user-supplied scene-divided scripts, scene excerpts, briefs, tables, images, partial or conflicting materials, existing director scripts, or mixtures, inheriting the source work definition and the source scene structure. Use for 分镜脚本, 导演脚本, 镜头脚本, 场景布局, 拍摄手法, 景别, 机位, 运镜, 分镜脚本修订, the fixed 故事板 prompt, or the fixed 分镜表 prompt. This skill is the test layer: it designs shots in text and hands the user a cheap visual test; the user judges the generated boards. Trigger from professional shot-design or storyboard-test intent; explicit wally mention is not required. Keep original screenwriting, static asset design, performance/dialogue/audio design, returned-board review, and final video prompt assembly outside this skill."
+description: "Design the 分镜脚本 (processed director script) and issue the fixed storyboard and shot-table test prompts for user-supplied scene-divided scripts, scene excerpts, briefs, tables, images, partial or conflicting materials, existing director scripts, or mixtures, inheriting the source work definition and the source scene structure. Use for 分镜脚本, 导演脚本, 镜头脚本, 场景布局, 拍摄手法, 景别, 机位, 运镜, 分镜脚本修订, 提示词污染检查, the fixed 故事板 prompt, or the fixed 分镜表 prompt. This skill is the test layer: it designs shots in text and hands the user a cheap visual test; the user judges the generated boards. Trigger from professional shot-design or storyboard-test intent; explicit wally mention is not required. Keep original screenwriting, static asset design, performance/dialogue/audio design, returned-board review, and final video prompt assembly outside this skill."
 ---
 
 # Wally Storyboard Designer
@@ -9,10 +9,11 @@ Provide on-demand storyboard-domain functions for the user's supplied story, sce
 
 This skill is the test layer of the Wally pipeline. It designs the 分镜脚本 (processed director script) in text, then issues the fixed storyboard or shot-table prompt so the user can generate boards cheaply and see whether the shot design reads as intended. The user judges the generated boards; this skill does not review them. What the user saw comes back here as targeted 分镜脚本 revision instructions.
 
-Current version: `wally-storyboard-designer@2026-08-19-v3.9-four-rule-layout`
+Current version: `wally-storyboard-designer@2026-08-19-v3.10-pollution-check`
 
 ## Changelog
 
+- `2026-08-19-v3.10-pollution-check`: Add the on-demand prompt-pollution check: a clean-context agent that sees only the shot blocks judges 越框 and 过密 per shot and returns deletion-only findings. It never runs by default, and the writing agent never checks its own text.
 - `2026-08-19-v3.9-four-rule-layout`: Reduce the scene-layout SVG contract to four rules: explicit source scenes, initial state only, active-interaction content only, and true top-down geometry. Remove camera-continuity construction and visual-hierarchy directives from this product.
 - `2026-08-19-v3.1-interaction-layout`: Restrict scene-layout SVGs to character starting positions and only the environment or objects that characters visibly interact with; passive location-establishing boundaries and background anchors are omitted.
 - `2026-08-18-v3.0-test-layer`: Reposition the skill as the test layer. Cut visual optimization, storyboard design, main-shot adjudication, returned-board review, continuity validation, and the fixed document scaffold together with their guides; merge the composition rules into the shot format and retire that file. The 分镜脚本 now follows one principle (一切为了讲故事，内容是优先级最高的评判标准), one contract (shot format `拍摄手法 / 画面内容 / 任务`, duration only on request, the core rule 如果你不确定，就写得更少, and a two-pass approach: key pictures written as main shots first, connecting shots second), and the fixed test prompts; the user judges the boards.
@@ -51,6 +52,10 @@ When the user explicitly starts a new spatial-planning SVG task, read [reference
 ### 分镜脚本 (processed director script)
 
 Read [references/director-script-output-contract.md](references/director-script-output-contract.md): choose shots by its principle, prepend the inherited work definition, group shots under the original source scene headings, and write each shot in its format. When the user brings back what they saw in the boards, apply the contract's targeted-revision rule: only the named shots change.
+
+### 提示词污染检查 (on demand only)
+
+Only when the user asks for a pollution check, read [references/pollution-check.md](references/pollution-check.md): dispatch the check to a clean context that sees only the shot blocks — an isolated subagent, or a fresh chat the user runs with the copy-ready prompt. The writing agent never checks its own shot text. Apply the report through the contract's targeted-revision rule.
 
 ### Fixed storyboard and shot-table prompts (the test step)
 

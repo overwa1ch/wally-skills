@@ -15,7 +15,7 @@ import xml.etree.ElementTree as ET
 SKILLS = {
     "wally-helper": "wally-helper@2026-08-18-v4.0-single-scope-bindings-v2",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-08-18-v2.0-four-format-workflow-unification",
-    "wally-storyboard-designer": "wally-storyboard-designer@2026-08-19-v3.9-four-rule-layout",
+    "wally-storyboard-designer": "wally-storyboard-designer@2026-08-19-v3.10-pollution-check",
     "wally-static-asset-designer": "wally-static-asset-designer@2026-07-22-v2.6-prop-state-four-grid",
     "wally-action-designer": "wally-action-designer@2026-07-29-v3.9-adaptive-camera-shot-grammar",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-07-22-v1.6-boundary-evidence-ownership",
@@ -24,7 +24,7 @@ SKILLS = {
 README_VERSIONS = {
     "wally-helper": "V4.0",
     "wally-screenplay-writer": "V2.0",
-    "wally-storyboard-designer": "V3.9",
+    "wally-storyboard-designer": "V3.10",
     "wally-static-asset-designer": "V2.6",
     "wally-action-designer": "V3.9",
     "wally-visual-style-extractor": "V1.6",
