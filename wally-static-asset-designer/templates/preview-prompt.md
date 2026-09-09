@@ -1,15 +1,24 @@
-# Preview Prompt
+# Preview 候选提示词模板
 
-Use this immediately after the user confirms the asset plan, provisional `regional_anchor`, and provisional `style_aesthetic`.
+用于 [Preview 方向测试](../references/preview.md)。按 SKILL 的最低数量为每个不同风格方向分别填一份，生成前保存完整提示词，按 [浏览器流程](../references/browser-execution.md) 依次执行。
+
+以下记录字段不发送为生图正文：
 
 ```text
-Preview
-
-测试目标：
-验证人物、regional_anchor 与 style_aesthetic 结合后的整体视觉效果。
-
-Prompt:
-[生成对象 + 核心风格]，[人物主体：人数、年龄区间、身份、服装与关键外形]，[人物正在进行的自然动作与状态]，[符合 regional_anchor 的场景、空间、环境与光影]，[构图、景别与观察视角]，[情绪与整体氛围]，[少量符合 style_aesthetic 的真实、不规则或手工质感细节]。
+版本号：
+方向名：
+剧本调性依据：
+本方向与其他候选的可见差异：
+共同不变的人物、场景、动作与取景：
+完整提示词文件：
 ```
 
-Replace every bracketed block. Write the final `Prompt:` as efficient, visible clauses separated by commas. Translate the two anchors into the image instead of pasting their abstract definitions. Use the confirmed visual medium; do not assume a live-action film still.
+每版独立填写以下正文并提交；不用“同上”或依赖上一版本。将共同事实和本方向转为可见语句，不粘贴抽象锚点字段。
+
+```text
+生成一张独立的全局视觉效果候选图，本次只生成这个方向，不与其他版本拼成一张图。
+[生成对象与本方向核心风格]，[来自共同底稿的人物主体]，[共同的自然动作与状态]，[符合剧本与地域时代事实的场景、空间、环境]，[本方向具体的造型、色彩、光线、材质与纹理处理]，[共同的取景范围与观察视角]，[符合剧本整体调性的情绪与氛围]，[少量有依据的真实或手工质感细节]。
+保持[已确认的身份、世界事实与媒介限制]；本方向的视觉表现为[本方向的明确区别]。
+```
+
+替换全部占位符；有锁定媒介时沿用，无锁定媒介时遵循本候选的设计。保持文字精简，不为凑字段添加画面外信息。

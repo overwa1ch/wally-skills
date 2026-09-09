@@ -1,6 +1,6 @@
 # Returned-Video Review（回片评审）
 
-Use when a generated video returns for acceptance or needs a rerun, targeted edit, or extension. During generation the director body was a cinematography brief and could yield variants; once delivered, it becomes the acceptance baseline. Approved storyboard or director-script authority stays higher if the body itself deviated from it.
+Use when a generated video returns for acceptance or needs a rerun, targeted edit, or extension. During generation the director body was a cinematography brief and could yield variants; once delivered, it becomes the acceptance baseline. If the body deviated from the user's explicit requirements, record that as a body defect and use those requirements to guide correction.
 
 ## Procedure
 
@@ -17,12 +17,12 @@ Accept partial evidence and state what remains unverified. Do not mark an omitte
 ## Checks to apply when declared or materially required
 
 1. **Duration and order:** declared duration and beats fit; direct Shot-local timecode lines reset to `0.0s`, stay sequential, and end at the Shot duration; cause precedes response; the landing registers.
-2. **Subject and scene:** visible subjects, setting, spatial facts, and frame-zero scene condition match the body; where effect depends on a before-state, the contamination, damage, or disorder type, amount or density, distribution, and location are readable before action begins.
+2. **Subject and scene:** visible subjects, setting, spatial facts, and frame-zero scene condition match the body. Where `Reference` supplies appearance or scene bindings, compare each named object against its assigned material; where the result depends on a before-state, its relevant physical condition, extent, and location are readable before action begins.
 3. **Action fidelity:** the primary process, useful response, and landing occur as written; no unsupported choreography appears.
 4. **Continuity:** when declared or required across cuts/states, identity, wardrobe, props, positions, and states remain invariant.
 5. **Physics:** when declared, contact, deformation, fluid, cloth, collision, reflection, transformation, or occlusion behaves causally.
 6. **Visible text:** every string in `“……”` renders verbatim at its declared moment; no conflicting text appears.
-7. **Dialogue and acting:** approved wording, speaker, order, delivery, listener behavior, and lip sync hold where controlled.
+7. **Dialogue and acting:** approved wording, speaker, order, delivery, listener behavior, and lip sync hold where controlled; voice references apply to their named speakers.
 8. **Camera, style, light, and color:** only the controls actually declared in these fields or Shots are acceptance criteria; no contradiction or unplanned camera move breaks execution.
 9. **Audio:** the declared branch holds—default no BGM with designed ambience/SFX, explicitly requested music, or explicit absolute silence—and the controlled foley, causal triggers, voice acoustics, spatial behavior, and transitions occur as written.
 10. **Constraints:** the single consolidated field's positive invariants hold and its specific negative failure modes do not occur.
@@ -43,8 +43,8 @@ For every material issue, report the execution unit and time when known, the obs
 - Preserve every unaffected field, beat, Shot, dialogue line, timing, and outcome.
 - If the result is close, let the user approve it as the new baseline and describe only the remaining tweak in the next edit.
 - If the result is chaotic or repeatedly misfires, simplify in this order: freeze or reduce camera motion, reduce the action, clear the background; then restore one required control at a time.
-- Report a platform limit plainly instead of accumulating contradictory detail or redesigning locked story and shot authority.
+- Report a platform limit with the affected requirement and the available revision options.
 
 ## Verdict
 
-Return one verdict: **usable**, **usable with minor revisions**, or **revise and return**. Escalate story or shot-structure conflicts to the shot-authority owner instead of redesigning them here.
+Return one verdict: **usable**, **usable with minor revisions**, or **revise and return**. For conflicts involving explicit user requirements, identify the conflicting requirements and the decision needed to resolve them.

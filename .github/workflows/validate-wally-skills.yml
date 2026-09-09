@@ -19,6 +19,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Install storyboard pipeline dependencies
+        run: python -m pip install Pillow reportlab
+
       - name: Validate skill contracts and frozen surfaces
         run: python scripts/validate_wally_skills.py --skills-root .
 
@@ -26,3 +29,4 @@ jobs:
         run: |
           python -m unittest discover -s wally-helper/tests -p 'test_*.py' -v
           python -m unittest discover -s tests -p 'test_*.py' -v
+          python -m unittest discover -s wally-storyboard-designer/tests -p 'test_*.py' -v

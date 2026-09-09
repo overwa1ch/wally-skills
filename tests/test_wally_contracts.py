@@ -486,6 +486,12 @@ class SkillContractTests(unittest.TestCase):
     def test_storyboard_open_input_svg_and_fixed_prompt_routes(self) -> None:
         skill = self.read("wally-storyboard-designer/SKILL.md")
         svg = self.read("wally-storyboard-designer/references/scene-layout-svg-rules.md")
+        storyboard_template = self.read(
+            "wally-storyboard-designer/templates/storyboard-prompt-template.md"
+        )
+        shot_table_template = self.read(
+            "wally-storyboard-designer/templates/shot-table-prompt-template.md"
+        )
         tree = "\n".join(
             path.read_text(encoding="utf-8")
             for path in sorted((REPO / "wally-storyboard-designer").rglob("*.md"))
@@ -499,8 +505,52 @@ class SkillContractTests(unittest.TestCase):
             "Preserve true top-down geometry.",
         ):
             self.assertIn(phrase, svg)
-        self.assertIn("Leave `【源场景标题】` unchanged for a generic reusable prompt", skill)
-        self.assertIn("exact original source scene heading", skill)
+        self.assertIn(
+            "Do not insert a scene title or make any other runtime substitution",
+            skill,
+        )
+        self.assertNotIn("【源场景标题】", storyboard_template)
+        self.assertNotIn("【源场景标题】", shot_table_template)
+        storyboard_blocks = re.findall(
+            r"```text\n(.*?)```", storyboard_template, re.DOTALL
+        )
+        self.assertEqual(
+            [block.strip() for block in storyboard_blocks],
+            [
+                """【短任务提示词】
+你绘制故事板，我来审查。请读取我上传的材料，作为当前故事板生成依据。不要拆分、改写、补全、总结、修复或判断我上传的故事 / 剧本 / 导演脚本等材料；不要新增剧情。
+[每次只生成1个版本；我会另行要求下一个版本。每个版本必须是一张独立的故事板图像。]""",
+                """【故事板生成模版】
+粗略的导演分镜手稿，不是概念艺术：
+- 原则：如果你不确定，就画得更少，而不是更多。
+- 使用极其简单的 2D 预览草图风格
+- 黑色松散的草图线条
+- 用红色方框表示镜头(摄像机)取景框
+- 箭头表示运动/力/呼吸/方向
+- 只有人物/人偶的造型
+- 没有面部细节，没有服装细节，没有解剖细节
+- 没有纹理，没有阴影，没有抛光的渲染
+
+红色箭头表示"关键"人物动作、运镜(取景框移动)，箭头标记上写简短的中文说明。
+把关键过程尽可能详细地画出来。
+每一格下方添加简短中文说明，景别、运镜、人物动作。
+将每一格的宽高比设为 16:9。""",
+            ],
+        )
+        shot_table_blocks = re.findall(
+            r"```text\n(.*?)```", shot_table_template, re.DOTALL
+        )
+        self.assertEqual(
+            [block.strip() for block in shot_table_blocks],
+            [
+                """【短任务提示词】
+你绘制分镜，制作分镜表，我来审查。请读取我上传的导演脚本、静态资产，以导演脚本为分镜的唯一依据，以静态资产为视觉效果的唯一依据。不要拆分、改写、补全、总结、修复或判断我上传的故事 / 剧本 / 导演脚本等材料；不要新增剧情。
+[每次只生成1个版本；我会另行要求下一个版本。每个版本必须是一张独立的分镜表图像。]""",
+                """【分镜表生成模版】
+1.用数字标出镜头序号，不需要文字描述。
+2.每一格分镜的宽高比为 16:9。""",
+            ],
+        )
         self.assertIn("Never split, merge, rename, normalize, or renumber", skill)
         self.assertNotIn("READY_FOR_FIXED_STORYBOARD_PROMPT", tree)
         self.assertNotIn("handoff-to-storyboard.md", tree)
@@ -509,19 +559,29 @@ class SkillContractTests(unittest.TestCase):
         )
         self.assertIn("Provide on-demand storyboard-domain functions", skill)
         self.assertIn(
-            "Copy the source screenplay's `## 作品定义` block verbatim",
-            skill,
-        )
-        self.assertIn(
             "Keep the fixed storyboard and shot-table prompt templates verbatim",
             skill,
         )
         director_contract = self.read(
             "wally-storyboard-designer/references/director-script-output-contract.md"
         )
+        self.assertIn(
+            "Copy the source screenplay's `## 作品定义` block verbatim",
+            director_contract,
+        )
         self.assertIn("## 作品定义", director_contract)
         self.assertIn("## Targeted Revision", director_contract)
         self.assertIn("## Shot format", director_contract)
+        self.assertIn("## 画面内容合同", director_contract)
+        self.assertIn(
+            "默认只写一个主要主体和一个核心可见动作或状态",
+            director_contract,
+        )
+        self.assertIn("前景、背景和道具都不是必填项", director_contract)
+        self.assertIn(
+            "把心理、象征、关系解释、剧情意义和镜头理由留在 `任务`",
+            director_contract,
+        )
         for retired in (
             "references/visual-optimization-rules.md",
             "references/storyboard-design.md",
@@ -552,7 +612,7 @@ class SkillContractTests(unittest.TestCase):
         helper = self.read("wally-helper/SKILL.md")
         workflow = self.read("wally-helper/references/workflow-guide.md")
         self.assertIn(
-            "wally-helper@2026-08-18-v4.0-single-scope-bindings-v2",
+            "wally-helper@2026-09-08-v4.1-bgm-request-template",
             helper,
         )
         self.assertIn(
@@ -577,9 +637,16 @@ class SkillContractTests(unittest.TestCase):
             "参考场景资产图，生成这个XX场景不同角度不同景别的2×2四宫格场景图。",
         )
         self.assertEqual(fixed_blocks[0].count("XX"), 1)
-        static_skill = self.read("wally-static-asset-designer/SKILL.md")
-        self.assertIn("This nine-grid remains the default", static_skill)
-        self.assertIn("do not append the fallback prompt", static_skill)
+        nine = self.read("wally-static-asset-designer/types/multi-angle.md")
+        nine_blocks = re.findall(r"```text\n(.*?)```", nine, re.DOTALL)
+        self.assertEqual(
+            nine_blocks[0].strip(),
+            "参考场景资产图，生成这个XX场景不同角度不同景别的九宫格场景图。",
+        )
+        self.assertEqual(nine_blocks[0].count("XX"), 1)
+        self.assertIn("九宫格是地点多角度参考的默认产物", nine)
+        self.assertIn("用户可以直接点名", four)
+        self.assertIn("用户选择后再执行", four)
         state = self.read("wally-static-asset-designer/types/pxx-state.md")
         labels = (
             "**基础道具参考**", "**目标状态**", "**状态变化**",
@@ -613,16 +680,16 @@ class SkillContractTests(unittest.TestCase):
 
     def test_action_owns_only_approved_dialogue_execution_and_three_audio_modes(self) -> None:
         skill = self.read("wally-action-designer/SKILL.md")
-        craft = self.read("wally-action-designer/references/craft.md")
         contract = self.read("wally-action-designer/references/contract.md")
-        self.assertIn("已批准台词的表演与口型执行", skill)
-        self.assertIn("do not trigger for original dialogue writing or rewrite", skill)
-        self.assertIn("never propose alternatives here", craft)
+        self.assertIn("Preserve the supplied story, approved dialogue", skill)
+        self.assertIn("wally-screenplay-writer", skill)
+        self.assertIn("Preserve approved wording", contract)
+        self.assertIn("do not create alternatives", contract)
         self.assertIn("Music unspecified: start with `无BGM。`", contract)
         self.assertIn("Music explicitly supplied or requested", contract)
         self.assertIn("Absolute silence explicitly required", contract)
-        self.assertIn("compose Camera and each Shot from only the conditional controls", skill)
-        self.assertIn("Capture physics", craft)
+        self.assertIn("Build the frame-zero setup adaptively from:", contract)
+        self.assertIn("Every action, camera response, path, contact, state change, landing", contract)
         self.assertIn("Budget duration for action preparation", contract)
 
 

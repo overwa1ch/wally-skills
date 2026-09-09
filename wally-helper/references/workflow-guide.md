@@ -33,7 +33,7 @@ Route by this registry: name a function, tell the user which skill to call, and 
 
 ### wally-storyboard-designer — 分镜功能
 - 职责：按用户点名，把所给故事、场景、图板或镜头材料转换为分镜领域的指定产物。
-- 功能菜单：准确源场景继承、场景布局SVG、分镜脚本（处理版导演脚本）设计与定向修订、按需提示词污染检查（干净上下文、只回删词建议）、固定故事板提示词、固定分镜表提示词。回板由用户亲自看图判断，观察结果作为分镜脚本修订输入交回。
+- 功能菜单：准确源场景继承、场景布局SVG、分镜脚本（处理版导演脚本）设计与定向修订、按需提示词污染检查（干净上下文、只回删词建议）、固定故事板提示词、固定分镜表提示词、内置Browser原生图片视觉测试执行与本地拼接。回板由用户亲自看图判断，观察结果作为分镜脚本修订输入交回。
 - 何时调用：需要设计镜头、用板子验证分镜、或根据回板观察修改分镜脚本时。
 
 ### wally-static-asset-designer — 静态资产
@@ -64,7 +64,21 @@ Route by this registry: name a function, tell the user which skill to call, and 
 5. Give a copy-ready next request for the user to call the responsible skill explicitly.
 6. Resume from the saved position when that product returns.
 
+## Fixed BGM production request
+
+When the user asks Wally for the BGM production prompt, return exactly this single sentence without explanation or expansion:
+
+```text
+请完整观看成片并结合剧本，使用网页自动化操控 Gemini 制作配乐，精确对齐剪辑时长，检查异常静音后输出可直接拖入剪辑软件的整轨WAV。
+```
+
 ## Storyboard and shot-table experience
+
+执行确认：用户已明确授权本轮材料、目标平台和操作范围后，范围内的建项目/聊天、上传、生成、约定次数内重试、下载、切割、拼接和导出连续执行，不再逐步询问“确认上传”或“是否继续”。最终画面与资产仍由用户审查；登录、验证码、工具强制确认及新增材料、目的地、费用或扩大范围时仍需用户处理或授权。
+
+2026-08-31 用户操作经验：ChatGPT Web 生成普通剧情图像时，可能误报少年人物或暴力限制；遇到这类疑似误判，保持材料和提示词不变，先点击原回复的“重试”。仍失败或没有重试入口时，记录实际停点。此为用户经验，本轮自动化尚未验证重试恢复成功。
+
+2026-09-02 流程修正：故事板与分镜表的每个版本分别调用一次ChatGPT原生生图，只从原生图片卡下载。Python、代码解释器或普通文件按钮生成的替代附件一律拒收；本地只允许无损切格、排序和拼接，不能重绘画格内容。
 
 Use the production stage to recommend the next visual test:
 

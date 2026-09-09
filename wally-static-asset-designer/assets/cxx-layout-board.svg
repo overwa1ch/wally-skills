@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
-  <!-- Cxx 基础角色资产页布局板：左=半身肖像区,右=A-pose 三视图三列。作构图参考用,低权重绑定;上传平台前转 PNG。 -->
+  <!-- Cxx 基础角色资产页布局板：左=半身肖像区,右=A-pose 三视图三列。仅作构图参考,上传前转 PNG;平台操作见 references/browser-execution.md。 -->
   <rect width="1600" height="900" fill="#d4d4d4"/>
   <!-- 左:半身肖像区 -->
   <rect x="50" y="50" width="520" height="800" fill="#c7c7c7" stroke="#9a9a9a" stroke-width="4"/>

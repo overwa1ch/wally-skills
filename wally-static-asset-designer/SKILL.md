@@ -1,79 +1,52 @@
 ---
 name: wally-static-asset-designer
-description: Plan, discuss, lock, prompt, revise, and review reusable static visual assets from any user-provided material or stage, including storyboards. Use for asset lists; Cxx, Cxx-Lxx, Gxx, CSxx, Pxx, Pxx-state, and Sxx assets; regional_anchor; style_aesthetic; person-led Preview; production image prompts; multi-angle and multi-shot-size nine-grid references; 2x2 four-grid scene-reference fallbacks; and returned-asset review. Trigger from the professional static-asset or production-image intent; explicit wally mention is not required. Produce only static-asset work, not screenplays, storyboards, performance, dialogue, audio design, or final video prompts.
+description: Plan, generate through ChatGPT Web in the in-app Browser, revise, archive, and review reusable static visual assets. Use for asset lists, regional_anchor, style_aesthetic, person-led Preview, Cxx, Cxx-Lxx, Gxx, CSxx, Pxx, Pxx-state, Sxx, multi-angle nine-grid and 2x2 four-grid references, or returned-asset review. Generate multiple distinct prompt-and-image candidates for user selection in named project chats; keep screenplay, storyboard, performance, dialogue, audio, and final video prompts outside this skill.
 ---
 
 # Wally Static Asset Designer
 
-Plan reusable static assets with the user, test their shared direction through Preview, then write or review asset prompts.
+规划静态资产，先用 Preview 选择全局视觉效果，再生成各项资产的候选版本，由用户逐项选择并归档。
 
-Version: `wally-static-asset-designer@2026-07-22-v2.6-prop-state-four-grid`
-Changelog: v2.6 — adds a reference-bound `Pxx-state` production contract and a separate 2x2 four-grid fallback path while preserving the existing Preview, visual-direction, and nine-grid prompt files verbatim. | v2.5 — uploaded reference images are the primary visible specification; image-bound prompts describe only requested changes, layout, key identity anchors, and real drift risks. | v2.4 — production prompts retain field labels and field order without visible numeric prefixes. | v2.3 — production prompts retain the selected asset type's field structure and field labels instead of flattening them into one paragraph. | v2.2 — professional static-asset or production-image intent triggers directly; explicit wally mention is not required. | v2.1 — functions are an on-demand menu: deliver exactly the named product, no sequence pressure; full chain only on explicit request. | v2.0 four-layer restructure — shared rules single-sourced in contracts.md; one asset type = one self-contained types/ file (layout contract front-loaded, exact count slots, two-layer fixed-block contract, per-type review checklist and gold example).
+Version: `wally-static-asset-designer@2026-09-08-v2.9-reference-cleanup`
 
-## Layers (load per stage, never all at once)
+## 共用边界
 
-- **Process**: this file only.
-- **Knowledge**: references/planning.md (what to lock), references/craft.md (how to write image prompts).
-- **Contracts**: references/contracts.md (all shared production-prompt rules), references/review-protocol.md (shared checks and verdicts).
-- **Types**: types/<asset>.md — one self-contained file per asset type: geometry contract, content slots, review checklist, gold example.
+- 接受剧本、文字、表格、图像、故事板、参考板、已有资产、部分材料和混合输入。只处理会影响当前产物的缺失与矛盾，不要求用户从固定起点重做。
+- 保留剧本事实、整体调性与用户已确认的视觉约束。故事板只作为状态、构图、空间与道具的证据，不修改镜头序列。
+- 有参考图时先看图，以图中可见事实为依据；缺少的必要依据明确指出，不凭空补齐。具体生产依赖由所选类型文件维护。
+- 只交付用户点名的产品。完整流程仅在用户要求建立整套资产系统或完成全流程时运行；已有选定的 Preview 或基础资产直接继承。
+- 不创作剧本、分镜、表演、对白、时序或声音，不选择 Route A/B 或组装最终视频提示词。
 
-## Route from the user's actual materials
+## 候选版本与选择
 
-- Accept prose, scripts, tables, images, storyboards, moodboards, reference boards, partial assets, platform links, contradictory drafts, or any mixture.
-- When the user provides a reference image, inspect it first and use its visible content as the primary specification for identity, silhouette, construction, materials, colors, markings, and state. Identify only the key anchors, ambiguities, and requested changes that affect generation.
-- Keep image-bound prompts compact. Let the reference image carry details it already shows clearly; write only the binding instruction, target layout or state, a few identity-critical anchors, and real drift controls. Do not transcribe the image into an exhaustive verbal inventory.
-- Do not require an upstream artifact, identifier system, schema, approval state, or fixed starting stage.
-- Distinguish explicit visual facts, user decisions, provisional inference, and material conflicts.
-- Use storyboards as evidence for visible state, props, composition, and space. Do not redesign their shot sequence.
-- Credit every locked decision or usable product.
-- **Functions are on-demand.** Deliver exactly the product the user names — an asset plan, a Preview prompt, one asset prompt, a returned-asset review, or a multi-angle prompt — nothing before it, nothing after it. Do not pull in earlier stages, volunteer later stages, or ask sequence questions. If the named product lacks a required input, name the missing input and stop; do not produce upstream products uninvited. The numbered workflow below runs only when the user explicitly requests a new asset system or the full chain.
+本节统一维护每轮候选包的最低数量，适用于提示词准备与对应图像生成：
 
-## Full-chain workflow (only on explicit request)
+| 产品 | 不同完整提示词 | 独立图像版本 | 变化范围 |
+| --- | --- | --- | --- |
+| Preview | 至少 8 套 | 至少 8 版 | 符合剧本整体调性的不同全局视觉风格方向。 |
+| 每项静态资产，包括九宫格、四宫格 | 至少 4 套 | 至少 4 版 | 继承已选全局风格与基础参考，在当前资产允许的范围内形成不同候选。 |
 
-### 1. Plan and confirm the visual asset system
+- 一套提示词对应一个候选版本；提示词之间须有可见、可解释的设计差异。重复相同提示词、只改编号或依赖随机结果，不构成不同方案。
+- 用户看完整候选包后自行选择。Agent 负责说明差异、剧本调性适配和技术问题，不替用户选定，不把 `usable` 当成批准。
+- 用户选定后记录版本与原图，依赖它的生产才能继续。批量执行授权只覆盖生成候选，不替代选图；用户明确指定采用已有版本时直接记录，不重复询问。
+- 只做审查、解释或归档时不自动补生成候选包。用户针对一个候选要求技术修正时，只修该候选；新一轮方向探索才重新形成候选包。
 
-Read [planning.md](references/planning.md), [regional-anchor.md](references/regional-anchor.md), and [style-aesthetic.md](references/style-aesthetic.md). Use [visual-direction-proposal.md](templates/visual-direction-proposal.md).
+## 默认执行方式
 
-Propose the smallest useful asset set, one `regional_anchor` per coherent world, one compatible `style_aesthetic`, and any conflicts or open decisions. Explain each asset's reuse value. Ask the user to revise or confirm all three surfaces, then stop.
+- 图片产物默认内部起草提示词，通过内置 Browser 操控 ChatGPT Web，生成、检查、下载并交付候选图，不要求用户搬运提示词。
+- 用户只说“给我提示词”仍默认执行生成；明确要求只给文本、查看或修改提示词、不要生成时，仅交付相应文本。
+- 建立新一轮制作项目、项目与聊天命名、逐版提交、原图验收、重试和归档统一遵循 [browser-execution.md](references/browser-execution.md)。每项资产独立聊天，各版本在该资产聊天内依次生成。
 
-If the user already supplies all three as locked decisions, proceed to Preview. Follow `style-aesthetic.md` when complex references may benefit from the user-managed `wally-visual-style-extractor` handoff.
+## 按任务读取
 
-### 2. Produce one Preview prompt
+只读当前任务对应文件；历史版本记录留在仓库 Changelog，不默认加载。
 
-Read [preview.md](references/preview.md) and [craft.md](references/craft.md), then use [preview-prompt.md](templates/preview-prompt.md). Return one person-led test prompt in the confirmed medium. Do not generate the image unless the user asks.
+| 当前任务 | 读取入口与交付范围 |
+| --- | --- |
+| 资产规划与视觉边界 | [planning.md](references/planning.md)、[regional-anchor.md](references/regional-anchor.md)、[style-aesthetic.md](references/style-aesthetic.md)，使用 [方案模板](templates/visual-direction-proposal.md)；确认资产范围、剧本调性和不可变事实，风格方向留待 Preview 看图选择。 |
+| Preview 候选与选定 | [preview.md](references/preview.md)、[craft.md](references/craft.md) 与 [Preview 模板](templates/preview-prompt.md)；要图时再读浏览器流程。 |
+| 单项正式资产候选 | [contracts.md](references/contracts.md) 与所选 `types/<asset>.md`；类型对应关系见 planning，字段、几何和呈现按类型合同保留；要图时再读浏览器流程。 |
+| 九宫格 / 四宫格候选 | 默认使用 [multi-angle.md](types/multi-angle.md)；用户直接要求或选择 fallback 时使用 [multi-angle-2x2.md](types/multi-angle-2x2.md)。基础地点须已选定；审查九宫格时不擅自追加或执行四宫格。 |
+| 已有资产或候选审查 | [review-protocol.md](references/review-protocol.md) 和相关类型清单；Preview 还使用 preview 的调性与方向检查。 |
 
-### 3. Review and lock the Preview
-
-Read [preview.md](references/preview.md). Review the returned image or feedback, revise only the affected visual decisions or Preview prompt, and continue after the user confirms the tested direction. If the user supplies an already tested and locked Preview, proceed directly to production prompts.
-
-### 4. Write production asset prompts
-
-Read [contracts.md](references/contracts.md), then only the relevant types/<asset>.md file. Follow both exactly. Do not add a separate design report.
-
-### 5. Review returned assets
-
-Read [review-protocol.md](references/review-protocol.md), then the asset's types/<asset>.md checklist. Return the smallest actionable correction and one verdict.
-
-### 6. Produce multi-angle scene references
-
-After an `Sxx location_reference` image is approved, use [multi-angle.md](types/multi-angle.md) once per scene with that image as the reference. This nine-grid remains the default.
-
-Use [multi-angle-2x2.md](types/multi-angle-2x2.md) when the user explicitly requests a 2x2 four-grid, or after review shows that a returned nine-grid cannot preserve the same scene identity, topology, furniture, equipment, lighting, or style across cells. During review, return the smallest correction and verdict; do not append the fallback prompt unless the user requests that product.
-
-## Output
-
-Outside copy-ready prompt steps, use concise professional language and add only useful metadata:
-
-```text
-产物类型：
-使用材料：
-未决事项：
-```
-
-When delivering a production asset prompt, retain the selected `types/<asset>.md` template's field labels, fill the applicable fields in their defined order without numeric prefixes, and add the platform-settings line from `contracts.md`. Do not flatten the template into free prose.
-
-## Boundaries
-
-- Do not produce scripts, director scripts, storyboards, performance, dialogue, timing, or audio design.
-- Do not select a video route or assemble a final image-to-video or text-to-video prompt.
-- For cross-module requests, complete only the static-asset portion and name the remaining specialist product.
+完整流程：资产范围与剧本调性 → Preview 候选 → 用户选择全局效果 → 各资产候选 → 用户逐项选择 → 按需制作依赖资产或多角度参考。一次产物是一项资产的一组可比较候选，不附重复设计报告。

@@ -13,34 +13,34 @@ import xml.etree.ElementTree as ET
 
 
 SKILLS = {
-    "wally-helper": "wally-helper@2026-08-18-v4.0-single-scope-bindings-v2",
+    "wally-helper": "wally-helper@2026-09-08-v4.1-bgm-request-template",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-08-18-v2.0-four-format-workflow-unification",
-    "wally-storyboard-designer": "wally-storyboard-designer@2026-08-19-v3.10-pollution-check",
-    "wally-static-asset-designer": "wally-static-asset-designer@2026-07-22-v2.6-prop-state-four-grid",
-    "wally-action-designer": "wally-action-designer@2026-07-29-v3.9-adaptive-camera-shot-grammar",
+    "wally-storyboard-designer": "wally-storyboard-designer@2026-09-08-v3.17-progressive-disclosure",
+    "wally-static-asset-designer": "wally-static-asset-designer@2026-09-08-v2.9-reference-cleanup",
+    "wally-action-designer": "wally-action-designer@2026-09-08-v3.21-example-cleanup",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-07-22-v1.6-boundary-evidence-ownership",
 }
 
 README_VERSIONS = {
-    "wally-helper": "V4.0",
+    "wally-helper": "V4.1",
     "wally-screenplay-writer": "V2.0",
-    "wally-storyboard-designer": "V3.10",
-    "wally-static-asset-designer": "V2.6",
-    "wally-action-designer": "V3.9",
+    "wally-storyboard-designer": "V3.17",
+    "wally-static-asset-designer": "V2.9",
+    "wally-action-designer": "V3.21",
     "wally-visual-style-extractor": "V1.6",
 }
 
 FROZEN_HASHES = {
     "wally-helper/templates/route-a-final-prompt.md": "9dc2b8ced5b8b4276c291d1b268ed546f0ee53fe08f2d6fe0e5a8b1d3d3b5188",
     "wally-helper/templates/route-b-final-prompt.md": "96ef1ffed75ab5bfc204f2f2ef4205cfe0e71c13a9671133d152a3e34d089ca6",
-    "wally-storyboard-designer/templates/storyboard-prompt-template.md": "2164c752ddd8086b4afd9429f76814bd358b959970ea06b9199dda98463bdcc4",
-    "wally-storyboard-designer/templates/shot-table-prompt-template.md": "a3708139bb78491b415fc40d1cd16b9ca8b349e5bda4c3a0c5736ab66379c1d6",
-    "wally-static-asset-designer/templates/preview-prompt.md": "cc1cf4dadc4a29a9f14eeb78244ae57327e8dca3fdcd7699d6d5bdaffba0b145",
-    "wally-static-asset-designer/templates/visual-direction-proposal.md": "125f3b1fdb2f56c510bd35a920a5de573f6e06bb04a51f49af2cce3a8e90619d",
-    "wally-static-asset-designer/types/multi-angle.md": "90203837a5ec2dd836f7fa6bd04c4f73b8f0b12930a990160510d4f7f439cfa7",
+    "wally-storyboard-designer/templates/storyboard-prompt-template.md": "de663576ce7998da223187aa9c182f8a4eaabd41312e1f92f2d1395da8b4efbc",
+    "wally-storyboard-designer/templates/shot-table-prompt-template.md": "4c1c0c0cbf2df85ff016f30665f2df2b69ab1e752bbe1dcbd71ac376b50126ea",
+    "wally-static-asset-designer/templates/preview-prompt.md": "f769c6cef613092ade3aa4c63e018844f378c59ed982fa55dbdbd9cc10f8fbad",
+    "wally-static-asset-designer/templates/visual-direction-proposal.md": "1d0ce70a97fa5404159ccf45d1f2376b3c70a2fbdca162ba6013b08253e59e65",
+    "wally-static-asset-designer/types/multi-angle.md": "639bb4ced779f8fb8de5459f477fa3063a9bc7ae6db1a8666528f385ad8ed1f0",
 }
 
-CANONICAL_STYLE_HASH = "7b09eff252af0861472ad7111eb1ff887950f22c345bdd39b0a3c0f885dc630d"
+CANONICAL_STYLE_HASH = "863d0b9b259dbb1a1c56788c29f0138c7d178d82bbb78a3669cf9a56a21294aa"
 IGNORED_NAMES = {".DS_Store", ".git", "__pycache__"}
 RETIRED_UNIT_FRAGMENT = "".join(("s", "e", "g"))
 TEXT_SUFFIXES = {
@@ -211,13 +211,17 @@ def check_frozen(skills: Path, errors: list[str]) -> None:
             fail(errors, f"frozen surface changed: {relative}")
 
     template = (skills / "wally-storyboard-designer/templates/storyboard-prompt-template.md").read_text(encoding="utf-8")
-    match = re.search(r"(使用极其简单的.*?将宽高比设为 16:9。\n)", template, re.DOTALL)
+    match = re.search(
+        r"(粗略的导演分镜手稿，不是概念艺术：\n.*?将每一格的宽高比设为 16:9。\n)",
+        template,
+        re.DOTALL,
+    )
     if not match:
         fail(errors, "canonical storyboard style block not found in the fixed template")
     else:
         block_hash = hashlib.sha256((match.group(1)).encode("utf-8")).hexdigest()
         if block_hash != CANONICAL_STYLE_HASH:
-            fail(errors, "canonical storyboard 15-line block changed")
+            fail(errors, "canonical storyboard style block changed")
 
 
 def check_module_contracts(skills: Path, errors: list[str]) -> None:
@@ -497,18 +501,16 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fail(errors, "Screenplay lacks the 1-3 / 3-5 minute narrative clarification rule")
 
     action = (skills / "wally-action-designer/SKILL.md").read_text(encoding="utf-8")
-    action_craft = (skills / "wally-action-designer/references/craft.md").read_text(encoding="utf-8")
-    if "已批准台词" not in action:
-        fail(errors, "Action frontmatter/body does not limit dialogue to approved wording")
-    if "Propose new wording" in action_craft:
-        fail(errors, "Action still proposes original dialogue wording")
+    action_contract = (skills / "wally-action-designer/references/contract.md").read_text(encoding="utf-8")
+    if "approved dialogue" not in action or "Preserve approved wording" not in action_contract:
+        fail(errors, "Action does not limit dialogue to approved wording")
     for phrase in (
-        "compose Camera and each Shot from only the conditional controls the task needs",
-        "Capture physics",
-        "Fit the action, camera response, contact, settling, dialogue, and listener registration",
+        "Build the frame-zero setup adaptively from:",
+        "Every action, camera response, path, contact, state change, landing",
+        "Budget duration for action preparation, camera response, contact, settling, spoken delivery, and listener registration",
     ):
-        if phrase not in f"{action}\n{action_craft}":
-            fail(errors, f"Action V3.9 adaptive camera/Shot contract is missing: {phrase}")
+        if phrase not in action_contract:
+            fail(errors, f"Action current director contract is missing: {phrase}")
 
     storyboard_root = skills / "wally-storyboard-designer"
     storyboard = (storyboard_root / "SKILL.md").read_text(encoding="utf-8")
@@ -535,13 +537,20 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
     for phrase in (
         "Provide on-demand storyboard-domain functions",
         "Preserve the latest explicit or approved `作品定义`",
-        "Copy the source screenplay's `## 作品定义` block verbatim",
         "Keep the fixed storyboard and shot-table prompt templates verbatim",
     ):
         if phrase not in storyboard:
             fail(errors, f"Storyboard work-definition inheritance is missing: {phrase}")
     director_contract = (storyboard_root / "references/director-script-output-contract.md").read_text(encoding="utf-8")
-    for phrase in ("## 作品定义", "## Targeted Revision", "## Shot format"):
+    for phrase in (
+        "Copy the source screenplay's `## 作品定义` block verbatim",
+        "## 作品定义",
+        "## Targeted Revision",
+        "## Shot format",
+        "## 画面内容合同",
+        "默认只写一个主要主体和一个核心可见动作或状态",
+        "前景、背景和道具都不是必填项",
+    ):
         if phrase not in director_contract:
             fail(errors, f"Storyboard director-script contract is missing: {phrase}")
     for retired in (
@@ -560,17 +569,13 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
             fail(errors, f"Storyboard still references retired guide {phrase}")
     for phrase in (
         "This skill is the test layer",
-        "### 分镜脚本 (processed director script)",
         "Do not offer returned-board review as a product",
     ):
         if phrase not in storyboard:
             fail(errors, f"Storyboard test-layer contract is missing: {phrase}")
     for phrase in (
-        "Leave `【源场景标题】` unchanged for a generic reusable prompt",
-        "exact original source scene heading",
         "Never split, merge, rename, normalize, or renumber",
-        "output only its stored, labeled",
-        "There is no rough/formal grade",
+        "Do not insert a scene title or make any other runtime substitution",
     ):
         if phrase not in storyboard:
             fail(errors, f"Storyboard fixed-prompt contract is missing: {phrase}")
@@ -585,13 +590,12 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fixed = "参考场景资产图，生成这个XX场景不同角度不同景别的2×2四宫格场景图。"
         if not blocks or blocks[0].strip() != fixed or blocks[0].count("XX") != 1:
             fail(errors, "Static 2x2 fixed block must contain only the exact one-XX sentence")
-        for phrase in ("九宫格", "用户可以直接点名", "无法保持场景身份", "不附标题"):
+        for phrase in ("九宫格", "用户可以直接点名", "无法保持场景身份", "用户选择后再执行"):
             if phrase not in four_text:
                 fail(errors, f"Static 2x2 routing/output contract is missing: {phrase}")
-    static_skill = (skills / "wally-static-asset-designer/SKILL.md").read_text(encoding="utf-8")
-    for phrase in ("This nine-grid remains the default", "explicitly requests a 2x2 four-grid", "do not append the fallback prompt"):
-        if phrase not in static_skill:
-            fail(errors, f"Static nine-grid/fallback contract is missing: {phrase}")
+    nine_text = (skills / "wally-static-asset-designer/types/multi-angle.md").read_text(encoding="utf-8")
+    if "九宫格是地点多角度参考的默认产物" not in nine_text:
+        fail(errors, "Static nine-grid type must retain the default scene-reference route")
     if not prop_state.is_file():
         fail(errors, "Static Pxx-state contract is missing")
     else:

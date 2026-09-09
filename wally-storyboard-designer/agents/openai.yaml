@@ -1,4 +1,4 @@
 interface:
   display_name: "Wally Storyboard Designer"
-  short_description: "Design the shot script and issue storyboard test prompts"
-  default_prompt: "Use $wally-storyboard-designer to turn this supplied material into the 分镜脚本, scene-layout SVG, or fixed storyboard / shot-table prompt I request."
+  short_description: "Design shots and run native-image storyboard tests"
+  default_prompt: "Use $wally-storyboard-designer to create the requested shot-design product or run its storyboard / shot-table visual test through ChatGPT Web."

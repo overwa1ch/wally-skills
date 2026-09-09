@@ -1,39 +1,41 @@
-# Preview Visual Test
+# Preview 全局视觉方向测试
 
-Preview tests the combined visual system before production asset prompts are written.
+Preview 决定后续资产共同继承的视觉效果。候选数量以 [SKILL.md](../SKILL.md) 的“候选版本与选择”为准；每套提示词探索一个有实质差异、符合剧本整体调性的方向。
 
-## Entry condition
+## 先确定共同依据
 
-Enter immediately after the user confirms:
+- 读取当前剧本或用户提供的故事材料、作品定义、参考图和明确视觉约束。提取整体情绪、类型、叙事态度、人物处境、地域、时代及真实感要求，写成简短的共同调性依据。
+- 保留用户已限定的媒介、年代、身份和世界事实。媒介尚未锁定时可探索不同媒介；已限定实拍、二维或其他形式时，在该形式内部探索不同方向。
+- 确认当前资产范围和 `regional_anchor`；已有明确决策不重复询问。不要求先锁定唯一 `style_aesthetic` 才能进行 Preview。
+- 没有完整剧本也可使用当前材料中的明确调性；只有调性缺失或冲突到会实质改变候选方向时，询问具体缺失项，不自行编写故事或决定调性。
 
-- the static asset plan;
-- the provisional `regional_anchor`;
-- the provisional `style_aesthetic`.
+## 设计有比较价值的方向
 
-If the user explicitly supplied these as locked decisions, proceed without repeating the discussion.
+先为整组候选准备一张内部方向表：版本号、方向名、关键视觉差异、符合剧本调性的依据、保持不变的事实、完整提示词位置。
 
-## Build one representative effect image
+- 每个方向形成自洽的媒介表现、造型、色彩、明暗、光线、材质与纹理组合。只变化有辨识度且仍符合调性的维度；不用固定八种风格名单套所有剧本。
+- 先逐项检查候选是否背离剧本情绪、人物处境、地域或时代；不合适的方向在生成前改掉，不为凑数量加入不相干的风格。
+- 使用同一代表性人物、同一场景、同一自然动作和大致相同的取景范围作为比较底稿；这些内容来自当前材料。让用户主要比较风格，不被换人物、换剧情或改构图干扰。
+- 每张仍为以人物为主体的单幅效果图，兼顾人物、环境与整体氛围；不生成分镜序列或在一张图里拼装多个风格版本。
+- 每套都是独立完整提示词：包含共同依据的可见转译和本方向的具体视觉选择。只改形容词、重复生成同一提示词或仅更换编号，不算方向差异。
+- 若用户已锁定全局风格且只需生产资产，继承该选定结果；只有用户要求重新探索 Preview 时才重新打开方向选择。
 
-- Make a person the visual subject.
-- Choose the confirmed visual medium: live-action photography, 2D animation, 3D animation, stop motion, illustration, picture-book art, game cinematic, or another approved form.
-- Combine representative character appearance, action, environment, regional facts, aesthetic treatment, light, color, materials, atmosphere, and a few credible imperfections.
-- Test the overall visual direction, not plot coverage, storyboard layout, or a sequence of shots.
-- Use one representative direction by default. Provide variants only when the user asks or when a named unresolved choice requires comparison.
+## 依次生成与比较
 
-## Give the prompt for user testing
+使用 [Preview 模板](../templates/preview-prompt.md)，按 [craft.md](craft.md) 写出整组完整提示词，再按 [browser-execution.md](browser-execution.md) 在本项目专属 Preview 聊天中依次提交。每次只生成一个独立版本，保留共同依据，不继承前一张候选的风格为默认。
 
-Return one copy-ready prompt using the recommended order in `craft.md`. Do not generate the image unless the user separately requests image generation.
+每版检查：
 
-Translate the anchors into visible language. Do not paste abstract `regional_anchor` or `style_aesthetic` blocks into the prompt unchanged.
+- 是否符合剧本整体调性，人物是否属于该世界；
+- 是否保留地域、历史、材质与社会事实；
+- 是否实现本方向的媒介、造型、色彩、光线与纹理；
+- 不同候选之间是否存在可见的风格差异；
+- 是否有提示词污染、无关框外细节、泛化美化或图像缺陷。
 
-## Review the returned Preview
+按版本号展示所有候选原图，附方向名、简短差异和必要问题；可另附比较表。提示词与生成证据按浏览器流程归档，默认不把大段提示词当交付主体。
 
-Check:
+## 用户选择与全局继承
 
-- whether the person appears to belong in the world;
-- whether style preserves regional, historical, material, and social truth;
-- whether medium, stylization, palette, light, texture, and atmosphere match the decision;
-- whether visible imperfections support authenticity or craft;
-- whether prompt pollution introduced competing objects, full-body detail outside frame, generic polish, or AI artifacts.
+用户选定某一候选后，保存选定版本、原图、提示词和用户选择依据，把实际选定效果归纳为当前 `style_aesthetic`；随后正式资产共同继承该参考与风格规则，不能各自重新发明全局风格。
 
-Name the smallest change needed in the anchor, aesthetic, character direction, or Preview prompt. Continue to production prompts only after user confirmation.
+用户不满意时按反馈开启新的候选轮次，保留旧记录；用户要求融合若干方向时生成新的验证结果并再次让用户选定，不把未经验证的混合效果当成已确认方向。技术评审或批量执行授权都不替代用户选图。选择与归档格式见 [候选生成记录](../templates/generation-record.md)。

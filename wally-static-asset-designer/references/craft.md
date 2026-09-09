@@ -28,14 +28,12 @@ Production asset sheets follow the drafting order in their `types/<asset>.md` fi
 - Remove synonyms, repeated quality claims, and decorative detail that competes with the main target.
 - Avoid empty stacks such as `extremely detailed`, `4K`, and `ultra-realistic` when they make skin, hair, light, or materials hard and artificial.
 
-## Strong/weak pairs
+## 关键短例
 
-- Weak: 一位美丽的中年女售货员，极致细节，4K高清，超写实。
-- Strong: 45岁女售货员，深蓝的确良工作服袖口磨出毛边，齐耳短发别黑色发卡，指关节粗大，神态温和带倦意。
-- Weak: 一个充满年代感的供销社，氛围感拉满。
-- Strong: 水磨石地面，L形玻璃木柜台，到顶的木货架摆着搪瓷缸和暖水瓶，双管日光灯的垂线缠着胶布，墙面绿漆起皮。
+以下仅示范局部写法，不是完整提示词或候选包；示例事实不带入其他项目。
 
-The strong version names visible nouns, materials, and wear; the weak version stacks judgments the model cannot see.
+- 可见性：近景只拍上半身时，把“全套服装精致、鞋子沾泥”改为材料支持的“领口向外翻起，右肩有一道浅色擦痕”；不写画外鞋子。
+- 风格转译：材料允许剪纸方向时，把“有艺术感”改为“人物用大块平面色形概括，纸边有轻微手工切割起伏，纸层投下薄而清楚的阴影”；不顺手增加年代、职业或剧情。
 
 ## Separate durable structure from model routing
 

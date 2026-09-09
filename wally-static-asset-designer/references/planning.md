@@ -1,67 +1,42 @@
-# Static Asset Planning and Design
+# 静态资产规划
 
-Use this guide to decide which reusable static assets the project needs and what each asset must lock.
+用于决定项目需要哪些可复用静态资产、各自锁定什么。具体依赖与生产要求到所选类型文件中读取。
 
-## Read the evidence
+## 读取证据
 
-- Extract stable identity, temporary state, material, scale, spatial, cultural, and continuity facts from any supplied format.
-- Separate explicit facts from inference. Surface contradictions that would change identity, structure, scale, location, or visual direction.
-- Convert abstract information into visible choices: silhouette, proportion, construction, surface history, climate traces, practical light, grip points, entrances, paths, or fixed structures.
-- Treat storyboards as evidence at their actual level of detail. Rough marks do not establish fine identity or texture.
+- 从已有材料中提取稳定身份、临时状态、材质、尺度、空间、文化和连续性事实。
+- 区分明确事实与推断；指出会改变身份、结构、尺度、地点或视觉方向的矛盾。
+- 把抽象信息转成轮廓、比例、构造、表面历史、气候痕迹、实用光源、握持点、入口、路径或固定结构等可见选择。
+- 故事板只提供其精细程度所支持的证据；粗略线条不证明精细身份或纹理。
 
-## Propose the smallest useful asset set
+## 提出最小有用资产集
 
-Plan an asset when it materially improves later consistency or reuse. For each proposed item, explain:
+只有能改善后续一致性或复用时才规划资产。每项说明：
 
-- what it locks;
-- where it will be reused;
-- which supplied facts support it;
-- which other asset or reference it depends on;
-- what remains unresolved.
+- 锁定内容；
+- 复用位置；
+- 来源依据；
+- 所需基础资产或参考；
+- 未决事项。
 
-Invite the user to add, remove, merge, split, or rename items.
+请用户按需要增加、删除、合并、拆分或改名。
 
-## Choose an asset family
+## 选择资产类型
 
-- **`Cxx`:** one stable named or continuity-critical identity.
-- **`Cxx-Lxx`:** one character's makeup, styling, condition, expressions, and key actions in one scene. Create one `Cxx-Lxx` per character per scene.
-- **`Gxx`:** one coherent anonymous social, occupational, or crowd pool of 6—8 people without named identities.
-- **`CSxx`:** relative scale and body-proportion comparison among relevant `Cxx` characters.
-- **`Pxx`:** one recurring, signature, or mechanism-critical prop in its base design and baseline state.
-- **`Pxx-state`:** one approved base `Pxx` in one production-critical changed condition, such as damaged, wet, depleted, opened, or activated.
-- **`Sxx location_reference`:** one stable location identity shown through one reusable wide establishing view.
+| 类型入口 | 规划用途 |
+| --- | --- |
+| [Cxx 基础角色](../types/cxx.md) | 保存稳定身份、形体比例、基准妆造与生活痕迹。 |
+| [Cxx-Lxx 场景角色状态](../types/cxx-lxx.md) | 保存某角色在某场景中的妆造变化、身体状态、关键表情与动作。 |
+| [Gxx 匿名群体](../types/gxx.md) | 保存连贯的社会、职业或群体功能对应的匿名人群池。 |
+| [CSxx 角色比例](../types/csxx.md) | 比较相关角色的相对尺度与身体比例。 |
+| [Pxx 基础道具](../types/pxx.md) | 保存复用、标志性或机制关键道具的结构、材质与基准状态。 |
+| [Pxx-state 道具状态](../types/pxx-state.md) | 锁定剧情关键改变态，如损坏、浸湿、耗尽、开启或激活。 |
+| [Sxx 地点参考](../types/sxx.md) | 保存稳定空间身份、结构、材质与可见使用痕迹。 |
 
-Use these labels for traceability only. Natural asset names are valid.
+这些标签用于追踪，资产也可使用自然名称。共享世界事实进入 `regional_anchor`；全局视觉处理的探索与选定按 `style_aesthetic` 指南执行，仅把相关可见效果带入各资产。
 
-## Separate stable and variable information
+## 按复用用途确定信息范围
 
-- Put stable face, bone structure, body proportion, baseline hair, wardrobe logic, shoes, accessories, and life traces in the base character.
-- Put one scene's makeup and styling changes, dirt, wetness, fatigue, injury, carried objects, expressions, key actions, and physical state in that scene's character-state asset.
-- Put recurring prop structure, scale, mechanism, material, markings, wear, and baseline state in `Pxx`. Put one story-critical damaged, wet, depleted, opened, activated, or otherwise changed condition in one `Pxx-state` when it must be locked visually.
-- Put stable spatial identity, structure, materials, and visible use traces in the location asset.
-- Put shared world facts in `regional_anchor` and shared treatment in `style_aesthetic`. Translate only their relevant visible effects into each prompt.
+选定类型模板负责视图、布局、背景、光影和输出形态。规划只提出影响复用的身份、结构、比例、材质、状态、尺度关系和防漂移需求。
 
-## Design for the intended use
-
-Identify the views, scale, state, and relationships required for reuse. The selected production template owns layout, background, light, and output form.
-
-For every asset, lock only useful dimensions:
-
-- identity or object definition;
-- stable structure and proportions;
-- materials and surface history;
-- current state when relevant;
-- views needed for downstream reuse;
-- scale or spatial relationships;
-- prohibited drift.
-
-Do not describe details outside the selected view. Do not add action, scene dressing, mood, or visible body parts that the output format cannot show.
-
-## Preserve intrinsic dependencies
-
-- A production `Cxx-Lxx` should use the relevant base identity image. Without it, provide a draft and mark identity lock unresolved.
-- Do not merge one character's multiple scenes into one `Cxx-Lxx`, even when the makeup and styling are unchanged. Do not split one scene by individual actions; collect that scene's state progression and key actions on one sheet.
-- A production `CSxx` should use the relevant `Cxx` images. Use one shared image scale, one shared ground line, and confirmed relative proportions; do not derive a new character design from narrative importance.
-- Use one `Gxx` for one coherent group function. Split groups when occupation, class, age function, or social role requires a materially different makeup and styling system; do not crowd unrelated people onto one sheet.
-- Use one `Pxx` for one prop design. Keep its base asset free of story staging and alternate-state panels. A production `Pxx-state` must use the approved base `Pxx` image, show one changed condition consistently across all views, and remain free of before/after comparison panels. Without the base image, name the missing input and stop; provide an identity-unresolved draft only when the user explicitly requests one.
-- Use one `Sxx location_reference` for one stable location. Describe only the spatial, architectural, furnishing, material, sign, light, and atmosphere facts that materially establish its identity and reuse.
+不描写所选视图之外的细节；不增加该产物无法呈现的动作、场景陈设、情绪或身体部位。
