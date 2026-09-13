@@ -515,6 +515,7 @@ def load_font(size: int) -> ImageFont.ImageFont:
     candidates = (
         "/System/Library/Fonts/STHeiti Light.ttc",
         "/System/Library/Fonts/Supplemental/Arial Unicode.ttf",
+        "/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc",
         "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
         "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
     )
@@ -676,6 +677,7 @@ def pdf_font():
     candidates = (
         Path("/System/Library/Fonts/STHeiti Light.ttc"),
         Path("/System/Library/Fonts/Supplemental/Arial Unicode.ttf"),
+        Path("/usr/share/fonts/truetype/wqy/wqy-zenhei.ttc"),
         Path("/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc"),
     )
     font = next((path for path in candidates if path.is_file()), None)

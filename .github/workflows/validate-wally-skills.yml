@@ -22,6 +22,11 @@ jobs:
       - name: Install storyboard pipeline dependencies
         run: python -m pip install Pillow reportlab
 
+      - name: Install Chinese TrueType font for review artifacts
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends fonts-wqy-zenhei
+
       - name: Validate skill contracts and frozen surfaces
         run: python scripts/validate_wally_skills.py --skills-root .
 
