@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Prepare, record, validate, split, and assemble Wally visual tests."""
+"""Record scene-based generation and assemble confirmed storyboard deliverables."""
 
 from __future__ import annotations
 
 import argparse
+import base64
+import html
 from collections import defaultdict
 from datetime import date, datetime
 import hashlib
@@ -24,9 +26,9 @@ MODE = {
     "storyboard": {"columns": 3, "rows": 3, "label": "故事板"},
     "shot-table": {"columns": 2, "rows": 2, "label": "分镜表"},
 }
-SCENE_RE = re.compile(r"(?m)^## 场景(\d+)[：:]([^\n]+)\n")
-SHOT_RE = re.compile(r"(?m)^(?:### )?分镜(\d+)｜[^\n]*\n")
-TABLE_SHOT_RE = re.compile(r"(?m)^\|\s*(?:镜)?(\d+)\s*\|[^\n]*\n")
+SCENE_RE = re.compile(r"(?m)^#{1,6} 场景\s*(\d+)\s*[：:｜|—-]([^\r\n]+)(?:\r?\n|\Z)")
+SHOT_RE = re.compile(r"(?mi)^(?:#{1,6} )?(?:\*\*)?(?:分镜|镜头|Shot)\s*(\d+)\b[^\r\n]*(?:\r?\n|\Z)")
+TABLE_SHOT_RE = re.compile(r"(?m)^\|\s*(?:镜)?(\d+)\s*\|[^\r\n]*(?:\r?\n|\Z)")
 
 
 def sha256(path: Path) -> str:
@@ -44,7 +46,7 @@ def atomic_json(path: Path, payload: dict) -> None:
 
 def load_manifest(path: Path) -> dict:
     payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("schema") != "wally-visual-test-run/v1":
+    if payload.get("schema") not in {"wally-visual-test-run/v1", "wally-visual-test-run/v2"}:
         raise ValueError("unsupported manifest schema")
     return payload
 
@@ -77,9 +79,6 @@ def scene_records(source_text: str) -> tuple[str, list[dict]]:
     for index, scene in enumerate(scenes):
         end = scenes[index + 1].start() if index + 1 < len(scenes) else len(source_text)
         region = source_text[scene.start():end]
-        trailing_h2 = re.search(r"(?m)^## (?!场景\d+[：:])", region[scene.end() - scene.start():])
-        if trailing_h2:
-            region = region[: scene.end() - scene.start() + trailing_h2.start()]
         shots = list(SHOT_RE.finditer(region))
         source_format = "blocks"
         if not shots:
@@ -87,6 +86,8 @@ def scene_records(source_text: str) -> tuple[str, list[dict]]:
             source_format = "table"
         if not shots:
             raise ValueError(f"场景{scene.group(1)} has no recognized shot blocks or table rows")
+        if source_format == "blocks" and TABLE_SHOT_RE.search(region):
+            raise ValueError(f"场景{scene.group(1)} mixes shot blocks and table rows; inspect the source without rewriting it")
         scene_id = f"S{int(scene.group(1)):02d}"
         if scene_id in seen_scene_ids:
             raise ValueError(f"duplicate scene: {scene_id}")
@@ -95,6 +96,8 @@ def scene_records(source_text: str) -> tuple[str, list[dict]]:
         shot_ids = []
         for shot_index, shot in enumerate(shots):
             if source_format == "table":
+                if shot_index + 1 < len(shots) and region[shot.end():shots[shot_index + 1].start()].strip():
+                    raise ValueError(f"{scene_id}: interleaved table text requires source-aware composition")
                 shot_end = shot.end()
             else:
                 shot_end = shots[shot_index + 1].start() if shot_index + 1 < len(shots) else len(region)
@@ -109,7 +112,9 @@ def scene_records(source_text: str) -> tuple[str, list[dict]]:
             "scene_title": scene.group(2).strip(),
             "scene_heading": region[: scene.end() - scene.start()],
             "source_format": source_format,
+            "scene_text": region,
             "prefix": region[: shots[0].start()],
+            "suffix": region[shots[-1].end():] if source_format == "table" else "",
             "shot_ids": shot_ids,
             "shot_blocks": shot_blocks,
         })
@@ -146,9 +151,9 @@ def load_assets(path: Path | None, scenes: list[dict], mode: str) -> dict:
 def project_instructions(mode: str, versions: int) -> str:
     grid = "3×3" if mode == "storyboard" else "2×2"
     return (
-        f"只使用当前聊天或分支明确上传的材料。每张图使用规则{grid}，一个镜头对应一个画格，按原镜号排列；不足一页的格子留白。\n"
-        "只绘制渲染包内实际存在的镜头块，不根据其他元数据补画镜头。整张成图使用16:9横版画布，等分网格后每格仍为16:9。\n"
-        f"本渲染包需要{versions}个版本。每次回复只调用一次原生生图并生成1张独立图像；后续版本等待下一条消息，不得把多个版本拼在一张图里。\n"
+        f"使用当前聊天上传或从静态资产基础聊天继承的材料。每张图使用规则{grid}，一个镜头对应一个画格，按原镜号排列；不足一页的格子留白。\n"
+        "完整场景和适用的全局设定始终作为上下文，保留灯光、声音、台词和参考绑定。只绘制本次指定镜号，其余内容用于理解连续性。整张成图使用16:9横版画布，等分网格后每格仍为16:9。\n"
+        f"每页需要{versions}个版本。每次回复只调用一次原生生图并生成1张独立图像；后续版本等待下一条消息，不得把多个版本拼在一张图里。\n"
         "不要使用Python、代码解释器、SVG、canvas或普通文件附件制作替代图。\n"
     )
 
@@ -159,12 +164,23 @@ def init_run(args: argparse.Namespace) -> None:
     manifest_path = output / "manifest.json"
     if manifest_path.exists():
         raise FileExistsError(f"refusing to overwrite existing run: {manifest_path}")
-    text = source.read_text(encoding="utf-8")
+    text = source.read_bytes().decode("utf-8")
     preamble, scenes = scene_records(text)
+    context_path = getattr(args, "context", None)
+    context = context_path.read_bytes().decode("utf-8") if context_path else ""
     assets = load_assets(args.assets_json, scenes, args.mode)
     spec = MODE[args.mode]
     capacity = spec["columns"] * spec["rows"]
-    output.mkdir(parents=True, exist_ok=True)
+    # Resolve all inputs before writing an incomplete run.
+    unique_assets = {}
+    asset_ids = {}
+    for scene_assets in assets.values():
+        for asset in scene_assets:
+            identity = (asset["name"], asset["path"])
+            if asset["id"] in asset_ids and asset_ids[asset["id"]] != identity:
+                raise ValueError(f"conflicting asset binding: {asset['id']}")
+            asset_ids[asset["id"]] = identity
+            unique_assets.setdefault(asset["path"], asset)
     prompts_dir = output / "prompts"
     prompts_dir.mkdir(parents=True, exist_ok=True)
     for label, content in zip(("short", "template"), prompt_blocks(args.mode)):
@@ -172,40 +188,42 @@ def init_run(args: argparse.Namespace) -> None:
     browser_dir = output / "browser"
     browser_dir.mkdir(parents=True, exist_ok=True)
     (browser_dir / "project-instructions.txt").write_text(project_instructions(args.mode, args.versions), encoding="utf-8")
+    inputs = output / "inputs"
+    inputs.mkdir(parents=True, exist_ok=True)
+    shutil.copyfile(source, inputs / "source-original.md")
+    if context_path:
+        shutil.copyfile(context_path, inputs / "context-original.md")
+    if assets:
+        lines = ["核对以下对象与全部已上传文件的绑定，完成后按场景创建分支：", ""]
+        for scene_id, scene_assets in assets.items():
+            lines.extend(f"{scene_id}｜{a['id']}｜{a['name']} → {Path(a['path']).name}" for a in scene_assets)
+        (browser_dir / "asset-mapping.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
     jobs = []
     for scene in scenes:
-        scene_assets = assets.get(scene["scene_id"], [])
-        if scene_assets:
-            lines = ["请确认以下名称与上传文件一一对应，不要开始绘制：", ""]
-            lines.extend(f"{a['id']}｜{a['name']} → {Path(a['path']).name}" for a in scene_assets)
-            (browser_dir / f"asset-mapping-{scene['scene_id']}.txt").write_text("\n".join(lines) + "\n", encoding="utf-8")
+        packet = inputs / f"{scene['scene_id']}.md"
+        packet.write_bytes((preamble + context + ("\n\n" if context else "") + scene["scene_text"]).encode("utf-8"))
+        scene.update({
+            "chat_name": f"{spec['label']}｜{scene['scene_heading'].lstrip('# ').strip()}",
+            "chat_url": None,
+            "packet": relative_to_run(packet, output), "packet_sha256": sha256(packet),
+        })
         for page_index, offset in enumerate(range(0, len(scene["shot_ids"]), capacity), start=1):
             ids = scene["shot_ids"][offset:offset + capacity]
-            blocks = scene["shot_blocks"][offset:offset + capacity]
-            packet_dir = output / "packets" / scene["scene_id"]
-            packet_dir.mkdir(parents=True, exist_ok=True)
-            packet = packet_dir / f"P{page_index:02d}-SH{ids[0]:03d}-{ids[-1]:03d}.md"
-            # A page packet contains only the exact source scene heading and the
-            # exact shot blocks assigned to that page. Full-work preambles and
-            # scene-level metadata often mention the scene's total shot count;
-            # carrying those lines into a partial page makes image models invent
-            # off-page panels. Removing them is mechanical packaging, not a
-            # rewrite of the authoritative scene or shot text.
-            packet.write_text(scene["scene_heading"].rstrip("\n") + "\n\n" + "".join(blocks), encoding="utf-8")
             job_id = f"{'SB' if args.mode == 'storyboard' else 'ST'}-{scene['scene_id']}-P{page_index:02d}"
+            page_request = browser_dir / f"{job_id}-selection.txt"
+            page_request.write_text(
+                f"以本场导演脚本／表演设计为镜头依据，本张图只绘制以下镜头：\n"
+                f"{scene['scene_heading'].rstrip()}\n"
+                f"镜号：{'、'.join(map(str, ids))}。按此顺序放入画格，其余格子留白。\n"
+                "本场完整材料、全局设定及资产绑定继续适用。\n", encoding="utf-8",
+            )
             jobs.append({
-                "job_id": job_id,
-                "mode": args.mode,
-                "scene_id": scene["scene_id"],
-                "scene_order": scene["scene_order"],
-                "scene_title": scene["scene_title"],
-                "page": page_index,
-                "shot_ids": ids,
-                "packet": relative_to_run(packet, output),
-                "packet_sha256": sha256(packet),
-                "chat_url": None,
-                "branch_url": None,
-                "status": "prepared",
+                "job_id": job_id, "mode": args.mode, "scene_id": scene["scene_id"],
+                "scene_order": scene["scene_order"], "scene_title": scene["scene_title"],
+                "page": page_index, "shot_ids": ids,
+                "packet": scene["packet"], "packet_sha256": scene["packet_sha256"],
+                "page_request": relative_to_run(page_request, output), "page_request_sha256": sha256(page_request),
+                "chat_url": None, "branch_url": None, "status": "prepared",
                 "versions": [{
                     "version": f"V{version:02d}", "status": "pending", "artifact_origin": None,
                     "native_card_evidence": None, "chat_url": None, "download_url": None,
@@ -213,25 +231,25 @@ def init_run(args: argparse.Namespace) -> None:
                 } for version in range(1, args.versions + 1)],
             })
     manifest = {
-        "schema": "wally-visual-test-run/v1", "run_id": args.run_id, "work": args.work,
+        "schema": "wally-visual-test-run/v2", "run_id": args.run_id, "work": args.work,
         "created": date.today().isoformat(), "mode": args.mode, "status": "prepared",
-        "source": {"path": str(source), "sha256": sha256(source)},
+        "source": {"path": str(source), "sha256": sha256(source), "copy": "inputs/source-original.md"},
+        "preamble": preamble, "context": context, "scenes": scenes,
         "grid": {"columns": spec["columns"], "rows": spec["rows"], "panel_aspect": "16:9"},
         "versions_per_page": args.versions,
-        "project": {"name": args.project_name or f"WALLY｜{args.work}｜{spec['label']}测试｜{args.run_id}", "url": None},
+        "project": {"name": args.project_name or args.work, "url": None},
         "assets_by_scene": assets,
         "asset_bases": [{
-            "scene_id": scene["scene_id"], "chat_name": f"ASSET-{scene['scene_id']}",
-            "chat_url": None, "mapping_prompt": f"browser/asset-mapping-{scene['scene_id']}.txt",
-            "status": "pending",
-        } for scene in scenes if args.mode == "shot-table"],
+            "chat_name": f"分镜表｜{args.work}｜静态资产", "chat_url": None,
+            "mapping_prompt": "browser/asset-mapping.txt", "status": "pending",
+            "upload_files": list(unique_assets.values()),
+        }] if assets else [],
         "prompts": {name: {"path": f"prompts/{name}.txt", "sha256": sha256(prompts_dir / f"{name}.txt")} for name in ("short", "template")},
-        "project_instructions": {"path": "browser/project-instructions.txt", "sha256": sha256(browser_dir / "project-instructions.txt")},
         "jobs": jobs, "errors": [], "deliverables": {},
     }
     atomic_json(manifest_path, manifest)
     print(f"created {manifest_path}")
-    print(f"scenes={len(scenes)} jobs={len(jobs)} versions={sum(len(j['versions']) for j in jobs)}")
+    print(f"scene_chats={len(scenes)} pages={len(jobs)} asset_bases={len(manifest['asset_bases'])}")
 
 
 def find_job(manifest: dict, job_id: str) -> dict:
@@ -255,6 +273,8 @@ def record_native(args: argparse.Namespace) -> None:
     version = find_version(job, args.version)
     if version["status"] != "pending" and not args.replace:
         raise ValueError(f"{args.job}/{args.version} is {version['status']}; use --replace only after reviewing the prior record")
+    if manifest.get("scenes"):
+        assign_scene_url(manifest, job["scene_id"], args.chat_url)
     source = args.file.expanduser().resolve()
     with Image.open(source) as image:
         image.verify()
@@ -300,23 +320,55 @@ def set_project(args: argparse.Namespace) -> None:
     atomic_json(manifest_path, manifest)
 
 
+def assign_scene_url(manifest: dict, scene_id: str, url: str) -> None:
+    scene = next((scene for scene in manifest.get("scenes", []) if scene["scene_id"] == scene_id), None)
+    if scene is None:
+        raise ValueError(f"unknown scene: {scene_id}")
+    recorded_urls = {v["chat_url"] for job in manifest["jobs"] if job["scene_id"] == scene_id
+                     for v in job["versions"] if v.get("chat_url")}
+    if recorded_urls and recorded_urls != {url}:
+        raise ValueError(f"{scene_id}: recorded images belong to another scene chat")
+    scene["chat_url"] = url
+    key = "chat_url" if manifest["mode"] == "storyboard" else "branch_url"
+    for job in manifest["jobs"]:
+        if job["scene_id"] == scene_id:
+            job[key] = url
+
+
+def set_scene(args: argparse.Namespace) -> None:
+    manifest_path = args.manifest.expanduser().resolve()
+    manifest = load_manifest(manifest_path)
+    assign_scene_url(manifest, args.scene, args.url)
+    atomic_json(manifest_path, manifest)
+
+
 def set_job(args: argparse.Namespace) -> None:
     manifest_path = args.manifest.expanduser().resolve()
     manifest = load_manifest(manifest_path)
     job = find_job(manifest, args.job)
-    if args.chat_url:
-        job["chat_url"] = args.chat_url
-    if args.branch_url:
-        job["branch_url"] = args.branch_url
+    if manifest.get("scenes"):
+        url = args.chat_url if manifest["mode"] == "storyboard" else args.branch_url
+        if not url:
+            raise ValueError("provide the scene chat or branch URL")
+        assign_scene_url(manifest, job["scene_id"], url)
+    else:
+        if args.chat_url:
+            job["chat_url"] = args.chat_url
+        if args.branch_url:
+            job["branch_url"] = args.branch_url
     atomic_json(manifest_path, manifest)
 
 
 def set_asset_base(args: argparse.Namespace) -> None:
     manifest_path = args.manifest.expanduser().resolve()
     manifest = load_manifest(manifest_path)
-    matches = [base for base in manifest.get("asset_bases", []) if base["scene_id"] == args.scene]
+    bases = manifest.get("asset_bases", [])
+    if manifest.get("scenes"):
+        matches = bases
+    else:
+        matches = [base for base in bases if base["scene_id"] == getattr(args, "scene", None)]
     if len(matches) != 1:
-        raise ValueError(f"expected one asset base for {args.scene}, found {len(matches)}")
+        raise ValueError("expected one shared asset base")
     matches[0].update({"chat_url": args.url, "status": "confirmed"})
     atomic_json(manifest_path, manifest)
 
@@ -474,12 +526,26 @@ def load_font(size: int) -> ImageFont.ImageFont:
 
 def validate_ready(manifest_path: Path, manifest: dict) -> None:
     failures = []
-    if not manifest.get("project", {}).get("url"):
+    if not manifest.get("scenes") and not manifest.get("project", {}).get("url"):
         failures.append("project: missing URL")
+    scene_map = {scene["scene_id"]: scene for scene in manifest.get("scenes", [])}
+    if scene_map:
+        source_copy = run_path(manifest_path, manifest["source"]["copy"])
+        if not source_copy.is_file() or sha256(source_copy) != manifest["source"]["sha256"]:
+            failures.append("source original missing or changed")
+        urls = [scene.get("chat_url") for scene in scene_map.values()]
+        if None in urls or len(set(urls)) != len(urls):
+            failures.append("each scene requires its own chat or branch URL")
+        for scene_id, scene in scene_map.items():
+            actual = [shot for job in manifest["jobs"] if job["scene_id"] == scene_id for shot in job["shot_ids"]]
+            if actual != scene["shot_ids"]:
+                failures.append(f"{scene_id}: missing, duplicated or reordered shots")
     if manifest["mode"] == "shot-table":
         for base in manifest.get("asset_bases", []):
             if base.get("status") != "confirmed" or not base.get("chat_url"):
-                failures.append(f"{base['scene_id']}: asset base is not confirmed with a URL")
+                failures.append("asset base is not confirmed with a URL")
+            if scene_map and base.get("chat_url") in {s.get("chat_url") for s in scene_map.values()}:
+                failures.append("scene branch must differ from asset base")
         for scene_id, assets in manifest.get("assets_by_scene", {}).items():
             for asset in assets:
                 path = Path(asset["path"])
@@ -488,13 +554,25 @@ def validate_ready(manifest_path: Path, manifest: dict) -> None:
                 elif sha256(path) != asset["sha256"]:
                     failures.append(f"{scene_id}/{asset['id']}: asset hash mismatch")
     for job in manifest["jobs"]:
+        if job.get("page_request"):
+            for path_key, hash_key in (("packet", "packet_sha256"), ("page_request", "page_request_sha256")):
+                path = run_path(manifest_path, job[path_key])
+                if not path.is_file() or sha256(path) != job.get(hash_key):
+                    failures.append(f"{job['job_id']}: {path_key} missing or changed")
+            scene = scene_map.get(job["scene_id"])
+            if scene and (job["packet"] != scene["packet"] or job["packet_sha256"] != scene["packet_sha256"]):
+                failures.append(f"{job['job_id']}: input differs from complete scene")
         location_key = "chat_url" if manifest["mode"] == "storyboard" else "branch_url"
         if not job.get(location_key):
             failures.append(f"{job['job_id']}: missing {location_key}")
+        if scene_map and job.get(location_key) != scene_map[job["scene_id"]].get("chat_url"):
+            failures.append(f"{job['job_id']}: page is outside its scene chat")
         if len(job["versions"]) != manifest["versions_per_page"]:
             failures.append(f"{job['job_id']}: wrong version count")
         for version in job["versions"]:
             label = f"{job['job_id']}/{version['version']}"
+            if scene_map and version.get("chat_url") != scene_map[job["scene_id"]].get("chat_url"):
+                failures.append(f"{label}: image is outside its scene chat")
             if version.get("status") not in {"recorded-native", "split"}:
                 failures.append(f"{label}: status={version.get('status')}")
             if version.get("artifact_origin") != "chatgpt-native-image-card":
@@ -537,6 +615,7 @@ def split_native(manifest_path: Path, manifest: dict) -> list[dict]:
                     records.append({
                         "scene_id": job["scene_id"], "scene_order": job["scene_order"],
                         "scene_title": job["scene_title"], "page": job["page"], "shot_id": shot_id,
+                        "shot_order": next((scene["shot_ids"].index(shot_id) for scene in manifest.get("scenes", []) if scene["scene_id"] == job["scene_id"]), shot_id),
                         "version": version["version"], "panel": recorded, "source_raw": version["raw_image"],
                         "source_sha256": version["raw_sha256"], "crop_box": box,
                         "content_size": content.size, "paste_offset": paste_offset,
@@ -549,7 +628,7 @@ def split_native(manifest_path: Path, manifest: dict) -> list[dict]:
 
 def grouped_scenes(records: list[dict]) -> list[list[dict]]:
     groups: dict[str, list[dict]] = {}
-    for record in sorted(records, key=lambda r: (r["scene_order"], r["shot_id"])):
+    for record in sorted(records, key=lambda r: (r["scene_order"], r.get("shot_order", r["shot_id"]))):
         groups.setdefault(record["scene_id"], []).append(record)
     return list(groups.values())
 
@@ -645,35 +724,92 @@ def assemble_pdf(manifest_path: Path, manifest: dict, by_version: dict[str, list
     doc.save()
 
 
+def assemble_html(manifest_path: Path, manifest: dict, records: list[dict], target: Path) -> None:
+    """One portable file: original scene/shot text alongside each cropped panel."""
+    scenes = manifest.get("scenes")
+    if not scenes:
+        raise ValueError("HTML composition requires a v2 run with original shot text")
+    parts = ["<!doctype html><html lang='zh-CN'><meta charset='utf-8'>",
+             "<meta name='viewport' content='width=device-width,initial-scale=1'>",
+             f"<title>{html.escape(manifest['work'])}</title>",
+             "<style>body{max-width:1200px;margin:32px auto;padding:0 24px;color:#202124;font:16px/1.65 system-ui,sans-serif}"
+             "h1{font-size:28px}h2{margin-top:40px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;margin:0}"
+             ".context{padding:20px;background:#f5f5f3;border-radius:8px;margin:20px 0}"
+             ".shot{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;padding:24px 0;border-bottom:1px solid #ddd;break-inside:avoid}"
+             ".shot img{width:100%;height:auto;align-self:start}.shot p{margin:0}"
+             "@media(max-width:650px){.shot{grid-template-columns:1fr}}"
+             "@media print{body{margin:0;padding:0;max-width:none}.shot{gap:16px}h2{break-after:avoid}}"
+             "</style><body>", f"<h1>{html.escape(manifest['work'])}</h1>"]
+    for text in (manifest.get("preamble", ""), manifest.get("context", "")):
+        if text.strip():
+            parts.append(f"<div class='context'><pre>{html.escape(text)}</pre></div>")
+    versions = sorted({record["version"] for record in records})
+    for version in versions:
+        if len(versions) > 1:
+            parts.append(f"<h2>{html.escape(version)}</h2>")
+        index = {(r["scene_id"], r["shot_id"]): r for r in records if r["version"] == version}
+        for scene in scenes:
+            parts.append(f"<section data-scene='{html.escape(scene['scene_id'])}'>")
+            # Preserve headers, scene notes and table column labels as supplied.
+            parts.append(f"<div class='context'><pre>{html.escape(scene['prefix'])}</pre></div>")
+            for shot_id, text in zip(scene["shot_ids"], scene["shot_blocks"]):
+                record = index[(scene["scene_id"], shot_id)]
+                encoded = base64.b64encode(run_path(manifest_path, record["panel"]).read_bytes()).decode("ascii")
+                parts.append(f"<article class='shot' data-scene='{scene['scene_id']}' data-shot='{shot_id}'>"
+                             f"<pre>{html.escape(text)}</pre>"
+                             f"<img alt='镜头 {shot_id}' src='data:image/png;base64,{encoded}'></article>")
+            if scene.get("suffix", "").strip():
+                parts.append(f"<div class='context'><pre>{html.escape(scene['suffix'])}</pre></div>")
+            parts.append("</section>")
+    parts.append("</body></html>")
+    target.write_text("\n".join(parts), encoding="utf-8")
+
+
 def assemble_run(args: argparse.Namespace) -> None:
+    approval = getattr(args, "approval_note", "")
+    if not approval or not approval.strip():
+        raise ValueError("user confirmation required before cropping or composition")
+    output_format = getattr(args, "format", None)
+    if output_format not in {"panels", "html", "review-pdf"}:
+        raise ValueError("choose the confirmed output format: panels, html or review-pdf")
     manifest_path = args.manifest.expanduser().resolve()
     manifest = load_manifest(manifest_path)
+    if output_format == "html" and not manifest.get("scenes"):
+        raise ValueError("HTML composition requires a v2 run with original shot text")
     validate_ready(manifest_path, manifest)
     records = split_native(manifest_path, manifest)
     by_version = defaultdict(list)
     for record in records:
         by_version[record["version"]].append(record)
     output = manifest_path.parent / "assembled"
-    deliverables = {}
-    for version, version_records in sorted(by_version.items()):
-        target = output / f"{manifest['mode']}-{version}.png"
-        assemble_long(manifest_path, manifest, version_records, version, target)
-        deliverables[version] = relative_to_run(target, manifest_path.parent)
-    pdf = output / "review.pdf"
     output.mkdir(parents=True, exist_ok=True)
-    assemble_pdf(manifest_path, manifest, by_version, pdf)
-    deliverables["review_pdf"] = relative_to_run(pdf, manifest_path.parent)
+    deliverables = {}
+    if output_format == "html":
+        target = output / "storyboard.html"
+        assemble_html(manifest_path, manifest, records, target)
+        deliverables["document"] = relative_to_run(target, manifest_path.parent)
+    elif output_format == "review-pdf":
+        for version, version_records in sorted(by_version.items()):
+            target = output / f"{manifest['mode']}-{version}.png"
+            assemble_long(manifest_path, manifest, version_records, version, target)
+            deliverables[version] = relative_to_run(target, manifest_path.parent)
+        pdf = output / "review.pdf"
+        assemble_pdf(manifest_path, manifest, by_version, pdf)
+        deliverables["review_pdf"] = relative_to_run(pdf, manifest_path.parent)
+    else:
+        deliverables["panels"] = [record["panel"] for record in records]
     report = {
         "run_id": manifest["run_id"], "status": "assembled-awaiting-human-review",
         "source_manifest_sha256_before_assembly": sha256(manifest_path),
-        "validation_scope": "Native provenance, file hashes, version count, shot order, and equal-cell 16:9 proportions. Content approval remains human.",
+        "approval_note": approval, "format": output_format,
+        "validation_scope": "Native provenance, hashes, scene chat identity, shot coverage and ordering. Visual review remains required.",
         "panel_count": len(records), "panels": records, "deliverables": deliverables,
     }
     atomic_json(output / "assembly-report.json", report)
     manifest["deliverables"] = deliverables
     manifest["status"] = "assembled-awaiting-human-review"
     atomic_json(manifest_path, manifest)
-    print(f"assembled panels={len(records)} versions={len(by_version)} pdf={pdf}")
+    print(f"assembled panels={len(records)} format={output_format}")
 
 
 def show_status(args: argparse.Namespace) -> None:
@@ -699,9 +835,10 @@ def parser() -> argparse.ArgumentParser:
     init.add_argument("--mode", choices=tuple(MODE), required=True)
     init.add_argument("--run-id", required=True)
     init.add_argument("--work", required=True)
-    init.add_argument("--versions", type=int, default=2)
+    init.add_argument("--versions", type=int, default=1)
     init.add_argument("--project-name")
     init.add_argument("--assets-json", type=Path)
+    init.add_argument("--context", type=Path, help="additional supplied global context retained in every scene")
     init.set_defaults(function=init_run)
 
     record = commands.add_parser("record-native")
@@ -737,9 +874,15 @@ def parser() -> argparse.ArgumentParser:
 
     asset = commands.add_parser("set-asset-base")
     asset.add_argument("--manifest", type=Path, required=True)
-    asset.add_argument("--scene", required=True)
+    asset.add_argument("--scene", help="legacy v1 scene asset base only")
     asset.add_argument("--url", required=True)
     asset.set_defaults(function=set_asset_base)
+
+    scene = commands.add_parser("set-scene")
+    scene.add_argument("--manifest", type=Path, required=True)
+    scene.add_argument("--scene", required=True)
+    scene.add_argument("--url", required=True)
+    scene.set_defaults(function=set_scene)
 
     blocked = commands.add_parser("block")
     blocked.add_argument("--manifest", type=Path, required=True)
@@ -749,6 +892,8 @@ def parser() -> argparse.ArgumentParser:
 
     assemble = commands.add_parser("assemble")
     assemble.add_argument("--manifest", type=Path, required=True)
+    assemble.add_argument("--format", choices=("panels", "html", "review-pdf"), required=True)
+    assemble.add_argument("--approval-note", required=True, help="record the user's actual authorization for this deliverable")
     assemble.set_defaults(function=assemble_run)
 
     status = commands.add_parser("status")

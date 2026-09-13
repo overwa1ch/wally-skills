@@ -273,7 +273,7 @@ class SkillContractTests(unittest.TestCase):
         frontmatter = re.match(r"\A---\n(.*?)\n---\n", skill, re.DOTALL)
         self.assertIsNotNone(frontmatter)
         self.assertIn(
-            "wally-screenplay-writer@2026-08-18-v2.0-four-format-workflow-unification",
+            "wally-screenplay-writer@2026-09-12-v2.1-adaptive-writing",
             skill,
         )
         for phrase in ("原创对白", "台词写作", "对白改写", "对白诊断"):
@@ -551,7 +551,6 @@ class SkillContractTests(unittest.TestCase):
 2.每一格分镜的宽高比为 16:9。""",
             ],
         )
-        self.assertIn("Never split, merge, rename, normalize, or renumber", skill)
         self.assertNotIn("READY_FOR_FIXED_STORYBOARD_PROMPT", tree)
         self.assertNotIn("handoff-to-storyboard.md", tree)
         self.assertIsNone(
@@ -678,19 +677,6 @@ class SkillContractTests(unittest.TestCase):
         self.assertIn('"camera": "<user-supplied camera value, or reusable placeholder>"', templates)
         self.assertNotIn("repeated style tendency", templates)
 
-    def test_action_owns_only_approved_dialogue_execution_and_three_audio_modes(self) -> None:
-        skill = self.read("wally-action-designer/SKILL.md")
-        contract = self.read("wally-action-designer/references/contract.md")
-        self.assertIn("Preserve the supplied story, approved dialogue", skill)
-        self.assertIn("wally-screenplay-writer", skill)
-        self.assertIn("Preserve approved wording", contract)
-        self.assertIn("do not create alternatives", contract)
-        self.assertIn("Music unspecified: start with `无BGM。`", contract)
-        self.assertIn("Music explicitly supplied or requested", contract)
-        self.assertIn("Absolute silence explicitly required", contract)
-        self.assertIn("Build the frame-zero setup adaptively from:", contract)
-        self.assertIn("Every action, camera response, path, contact, state change, landing", contract)
-        self.assertIn("Budget duration for action preparation", contract)
 
 
 if __name__ == "__main__":

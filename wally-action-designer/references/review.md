@@ -1,50 +1,19 @@
-# Returned-Video Review（回片评审）
+# 回片审查
 
-Use when a generated video returns for acceptance or needs a rerun, targeted edit, or extension. During generation the director body was a cinematography brief and could yield variants; once delivered, it becomes the acceptance baseline. If the body deviated from the user's explicit requirements, record that as a body defect and use those requirements to guide correction.
+只在用户请求审查生成视频时读取。以交付的设计和用户明确要求为依据；设计本身遗漏或违背要求时，先识别稿件问题。
 
-## Procedure
+## 读取与比较
 
-Review text-first: ask the user to watch and report observations. Do not inspect frames by default; inspect a named moment only when the user explicitly requests it.
+接受用户对回片的观察，按其请求检查相应视频或时刻。证据只覆盖部分内容时，说明未核验范围。
 
-Choose the checklist unit from the body actually delivered:
+沿原场景、原镜号和动作顺序比较：表情与互动、动作因果、摄影、参考对应、灯光、台词、声音及前后状态是否按设计发生。使用稿件已有的场景时间戳定位，不要求镜头内部重新从零计时，也不以缺少某个栏目或模板作为失败依据。
 
-- Shot blocks present: review Shot by Shot; review each direct Shot-local timecode line on that Shot's local timeline, then check declared cross-shot invariants.
-- `Timing/beats` present: review beat by beat, then check the landing.
-- `Action` only: review the complete continuous action from initial state through landing.
+## 修订判断
 
-Accept partial evidence and state what remains unverified. Do not mark an omitted field as a failure. A missing field is a body defect only when the current generation needed that control and the omission made execution ambiguous or contradictory.
+- 对实质问题说明位置、观察、影响与最小修订。区分稿件遗漏或矛盾、生成偏差和有证据的平台限制。
+- 生成偏差不自动改写有效设计；可按用户当前要求重试或修订。新增限制须针对已观察到的问题，避免积累泛化负面清单。
+- 修订保留所有未受影响的内容。需要改稿时读取 [交付约定](contract.md)，重新设计表演或摄影时再读 [设计方法](craft.md)。
+- 延长片段时保留进入动作、机位方向、人物路径、光照与声音衔接，按用户指定范围补充后续内容。
+- 用户已确认的动作和摄影决定出现冲突时，指出具体冲突；不固定采用“先冻结摄影、再删动作”等删减顺序。
 
-## Checks to apply when declared or materially required
-
-1. **Duration and order:** declared duration and beats fit; direct Shot-local timecode lines reset to `0.0s`, stay sequential, and end at the Shot duration; cause precedes response; the landing registers.
-2. **Subject and scene:** visible subjects, setting, spatial facts, and frame-zero scene condition match the body. Where `Reference` supplies appearance or scene bindings, compare each named object against its assigned material; where the result depends on a before-state, its relevant physical condition, extent, and location are readable before action begins.
-3. **Action fidelity:** the primary process, useful response, and landing occur as written; no unsupported choreography appears.
-4. **Continuity:** when declared or required across cuts/states, identity, wardrobe, props, positions, and states remain invariant.
-5. **Physics:** when declared, contact, deformation, fluid, cloth, collision, reflection, transformation, or occlusion behaves causally.
-6. **Visible text:** every string in `“……”` renders verbatim at its declared moment; no conflicting text appears.
-7. **Dialogue and acting:** approved wording, speaker, order, delivery, listener behavior, and lip sync hold where controlled; voice references apply to their named speakers.
-8. **Camera, style, light, and color:** only the controls actually declared in these fields or Shots are acceptance criteria; no contradiction or unplanned camera move breaks execution.
-9. **Audio:** the declared branch holds—default no BGM with designed ambience/SFX, explicitly requested music, or explicit absolute silence—and the controlled foley, causal triggers, voice acoustics, spatial behavior, and transitions occur as written.
-10. **Constraints:** the single consolidated field's positive invariants hold and its specific negative failure modes do not occur.
-
-## Findings and revision
-
-For every material issue, report the execution unit and time when known, the observation, its impact, and the smallest concrete revision.
-
-- Classify it before changing anything:
-  - **body defect:** the brief omitted, contradicted, or ambiguously placed control information that this task needed;
-  - **generation variance:** the body was sufficient, but this render missed or drifted from it;
-  - **platform limit:** the requested behavior exceeds a known execution capability or cannot be repaired reliably through prompt wording.
-- For generation variance, prefer another variant or rerun before rewriting a sufficient body. Do not overfit the prompt to one miss.
-- For a targeted edit, change exactly one owning field or execution unit per iteration when possible, state `same shot` or the equivalent preservation intent, and repeat every invariant needed to keep unaffected content stable.
-- For an extension, describe only the next beat. Preserve the entering motion, camera direction, subject trajectory, lighting logic, and sound continuity; use only the invariants needed to prevent drift rather than freezing the continuation.
-- Add `Continuity`, `Physics`, or `Constraints` only when the observed problem proves that information is independently needed.
-- Tighten the negative clause inside `Constraints` with a recurring high-risk failure, not a cumulative history or a separate `Avoid` field.
-- Preserve every unaffected field, beat, Shot, dialogue line, timing, and outcome.
-- If the result is close, let the user approve it as the new baseline and describe only the remaining tweak in the next edit.
-- If the result is chaotic or repeatedly misfires, simplify in this order: freeze or reduce camera motion, reduce the action, clear the background; then restore one required control at a time.
-- Report a platform limit with the affected requirement and the available revision options.
-
-## Verdict
-
-Return one verdict: **usable**, **usable with minor revisions**, or **revise and return**. For conflicts involving explicit user requirements, identify the conflicting requirements and the decision needed to resolve them.
+给出与证据相符的可用性判断。生成完成、局部可用及用户接受分别记录，不把未观看或未确认的结果当成验收通过。

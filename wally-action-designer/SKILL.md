@@ -1,35 +1,24 @@
 ---
 name: wally-action-designer
-description: Design AI-video performance, blocking, camera, lighting, sound, and object-to-reference bindings from supplied materials. Use for 表演设计, 动作设计, 视频导演提示词, 参考素材与对象绑定, 提示词修改, or 回片审查. Preserve approved story and dialogue while developing their execution.
+description: Use only when explicitly requested by name. 按场景设计或修订 AI 视频的表演、互动、摄影、灯光、声音及参考绑定，也可按要求审查回片。
 ---
 
 # Wally Action Designer
 
-Turn the user's current materials into an executable director-design prompt body for one video scope, and review returned videos against the delivered body.
+根据当前材料完成用户指定范围的表演设计。一个场景是一场完整的戏；镜头数量服务于该场设计。
 
-Version: `wally-action-designer@2026-09-08-v3.21-example-cleanup`
+Version: `wally-action-designer@2026-09-13-v3.23-scene-performance`
 
-## Tasks
+## 按任务读取
 
-Complete the task the user names. Ask for missing information only when it is required for the dependent work.
+| 当前任务 | 读取入口 |
+| --- | --- |
+| 新写表演设计 | [交付约定](references/contract.md)；涉及的表演与视听选择见 [设计方法](references/craft.md)。 |
+| 修改或检查已有设计 | 先读 [交付约定](references/contract.md)，保留原稿；只有需要重新设计表演与视听时才读设计方法。 |
+| 审查生成视频 | 读 [回片审查](references/review.md)；需要改稿时再读交付约定。 |
 
-### A. Design a director body
+## 内容边界
 
-1. Identify the requested scope, supplied duration and format, story, dialogue, reference materials, and explicit execution decisions.
-2. Read [craft.md](references/craft.md) for performance and filmmaking decisions, and [contract.md](references/contract.md) for output structure.
-3. Develop performance, action, camera, timing, lighting, and sound. Return the finished prompt body directly.
-
-### B. Review a prompt body
-
-Read [contract.md](references/contract.md). Identify omissions or contradictions that affect execution and correct them in the relevant field. Read `craft.md` when reviewing performance or filmmaking choices.
-
-### C. Review a returned video
-
-Read [review.md](references/review.md) for comparison with the delivered body, findings, and rerun, edit, or extension decisions.
-
-## Responsibilities and handoffs
-
-- Preserve the supplied story, approved dialogue, and the user's explicit execution decisions. Develop the remaining performance and filmmaking choices.
-- When spoken wording requires creation or revision, resolve it through `wally-screenplay-writer` before writing its performance.
-- When a required visual anchor is missing, describe the needed image for `wally-static-asset-designer` before continuing the dependent design.
-- `wally-helper` handles final Route A/B assembly when requested.
+- 保留故事、已确认台词及用户明确的执行决定，设计它们如何发生。
+- 原创或改写台词属于 `wally-screenplay-writer`；静态资产制作属于 `wally-static-asset-designer`。仅在当前工作确实依赖缺失内容时指出缺口，不自动扩展任务。
+- 表演设计可直接作为分镜表生成的导演脚本依据。用户要求最终 Route A/B 组装时，再检查 `wally-helper` 的专用输入合同；其格式不前置为本 skill 的默认模板。

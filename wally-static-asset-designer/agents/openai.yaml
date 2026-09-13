@@ -2,3 +2,6 @@ interface:
   display_name: "Wally Static Asset Designer"
   short_description: "Generate visual-style and asset candidates for user selection"
   default_prompt: "Use $wally-static-asset-designer to generate distinct Preview or static-asset candidates through ChatGPT Web in named project chats and let me choose the version."
+
+policy:
+  allow_implicit_invocation: false

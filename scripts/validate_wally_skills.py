@@ -14,19 +14,19 @@ import xml.etree.ElementTree as ET
 
 SKILLS = {
     "wally-helper": "wally-helper@2026-09-08-v4.1-bgm-request-template",
-    "wally-screenplay-writer": "wally-screenplay-writer@2026-08-18-v2.0-four-format-workflow-unification",
-    "wally-storyboard-designer": "wally-storyboard-designer@2026-09-08-v3.17-progressive-disclosure",
+    "wally-screenplay-writer": "wally-screenplay-writer@2026-09-12-v2.1-adaptive-writing",
+    "wally-storyboard-designer": "wally-storyboard-designer@2026-09-13-v3.19-scene-chats",
     "wally-static-asset-designer": "wally-static-asset-designer@2026-09-08-v2.9-reference-cleanup",
-    "wally-action-designer": "wally-action-designer@2026-09-08-v3.21-example-cleanup",
+    "wally-action-designer": "wally-action-designer@2026-09-13-v3.23-scene-performance",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-07-22-v1.6-boundary-evidence-ownership",
 }
 
 README_VERSIONS = {
     "wally-helper": "V4.1",
-    "wally-screenplay-writer": "V2.0",
-    "wally-storyboard-designer": "V3.17",
+    "wally-screenplay-writer": "V2.1",
+    "wally-storyboard-designer": "V3.19",
     "wally-static-asset-designer": "V2.9",
-    "wally-action-designer": "V3.21",
+    "wally-action-designer": "V3.23",
     "wally-visual-style-extractor": "V1.6",
 }
 
@@ -500,17 +500,13 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
     ):
         fail(errors, "Screenplay lacks the 1-3 / 3-5 minute narrative clarification rule")
 
-    action = (skills / "wally-action-designer/SKILL.md").read_text(encoding="utf-8")
-    action_contract = (skills / "wally-action-designer/references/contract.md").read_text(encoding="utf-8")
-    if "approved dialogue" not in action or "Preserve approved wording" not in action_contract:
-        fail(errors, "Action does not limit dialogue to approved wording")
-    for phrase in (
-        "Build the frame-zero setup adaptively from:",
-        "Every action, camera response, path, contact, state change, landing",
-        "Budget duration for action preparation, camera response, contact, settling, spoken delivery, and listener registration",
-    ):
-        if phrase not in action_contract:
-            fail(errors, f"Action current director contract is missing: {phrase}")
+    # Prose health is reviewed semantically. Retired output templates must not
+    # be kept alive by checks for their exact field or timecode sentences.
+    action_root = skills / "wally-action-designer"
+    action_entry = (action_root / "SKILL.md").read_text(encoding="utf-8")
+    for reference in ("contract.md", "craft.md", "review.md"):
+        if f"references/{reference}" not in action_entry:
+            fail(errors, f"Action task reference is not discoverable: {reference}")
 
     storyboard_root = skills / "wally-storyboard-designer"
     storyboard = (storyboard_root / "SKILL.md").read_text(encoding="utf-8")
@@ -574,7 +570,6 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         if phrase not in storyboard:
             fail(errors, f"Storyboard test-layer contract is missing: {phrase}")
     for phrase in (
-        "Never split, merge, rename, normalize, or renumber",
         "Do not insert a scene title or make any other runtime substitution",
     ):
         if phrase not in storyboard:

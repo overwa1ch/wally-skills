@@ -1,6 +1,6 @@
 ---
 name: wally-static-asset-designer
-description: Plan, generate through ChatGPT Web in the in-app Browser, revise, archive, and review reusable static visual assets. Use for asset lists, regional_anchor, style_aesthetic, person-led Preview, Cxx, Cxx-Lxx, Gxx, CSxx, Pxx, Pxx-state, Sxx, multi-angle nine-grid and 2x2 four-grid references, or returned-asset review. Generate multiple distinct prompt-and-image candidates for user selection in named project chats; keep screenplay, storyboard, performance, dialogue, audio, and final video prompts outside this skill.
+description: Use only when the user explicitly requests wally-static-asset-designer or $wally-static-asset-designer by name. Plan, generate through ChatGPT Web in the in-app Browser, revise, archive, and review reusable static visual assets. Use for asset lists, regional_anchor, style_aesthetic, person-led Preview, Cxx, Cxx-Lxx, Gxx, CSxx, Pxx, Pxx-state, Sxx, multi-angle nine-grid and 2x2 four-grid references, or returned-asset review. Generate multiple distinct prompt-and-image candidates for user selection in named project chats; keep screenplay, storyboard, performance, dialogue, audio, and final video prompts outside this skill.
 ---
 
 # Wally Static Asset Designer

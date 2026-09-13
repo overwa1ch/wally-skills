@@ -1,104 +1,39 @@
-# Director Design Craft
+# 表演与视听设计
 
-How to design the drama, visible specificity, motion, interaction, dialogue, timing, and sound of one executable AI-video prompt. Apply only the sections the current task needs. This file owns platform-independent generation craft; `contract.md` owns output syntax, and `review.md` owns returned-video iteration.
+按当前场景需要使用以下方法，不把这些条目作为输出栏目或必填清单。范围、保留规则和场景计时见 [交付约定](contract.md)。
 
-## 1. Treat The Body As A Cinematography Brief
+## 人物与互动
 
-- Treat the generation body as a cinematography brief. The same sufficient body can yield different variants; generation variance belongs to returned-video review.
-- When clip boundaries are open and precision matters, prefer shorter executable units while preserving durations, cuts, and actions explicitly specified by the user.
-- Start with the main subject, main action, camera behavior, and indispensable invariants. Add another control only when the material requires it or a returned result proves the omission matters.
+明确这一场中各人物的目标、阻碍和应对方式，把它们落实为可见或可听的行为。表情、目光、姿态、动作力度和说话方式随具体刺激变化，避免只写抽象情绪。
 
-## 2. Build The Dramatic Chain
+写清谁发起、什么触发、另一方如何回应，以及距离、位置、控制权或关系怎样变化。涉及交手、追逐、传递和共同接触道具时，说明必要的路径、接触与落点；保持前后因果和空间可读性。双人互动可以同时描写双方，不为凑单一主体而删去回应。
 
-Resolve these questions internally before writing cues:
+新场景先建立必要的初始位置、朝向、持物及人物状态。延续上一场的动作时，把进入本场的状态写清楚，并保留已确认的衔接。
 
-1. What does each performer want in the current beat?
-2. What blocks that action now?
-3. What is the playable tactic?
-4. What triggers the first visible change?
-5. Who initiates, who responds, and what visible state lands at the end?
+## 机位、构图与运镜
 
-Keep the chain continuous across the whole requested scope. Write each unit's current causal link.
+根据观众此刻需要看清的表情、动作或空间关系安排景别、机位、清晰范围和遮挡。摄影机开始时的位置与运动、随后因什么改变、沿什么路径到达哪里，应与人物表演共同发生。
 
-## 3. Choose And Keep The Execution Unit Executable
+让切镜和运镜对应目光、声音、动作、关系或信息变化；保留用户已确定的摄影选择。镜头型号、焦段、光圈、滤镜及数值只在提供具体控制且有技术依据时使用，等价参数不重复堆砌。参考片的视觉质感不自动成为故事年代或世界设定。
 
-- Keep one grammatically clear main subject and one main action per execution unit. Treat secondary people, props, background activity, and routine motion as subordinate unless they change the story outcome.
-- Identify the primary action and dominant camera behavior for each execution unit, preserving the actions and camera behavior explicitly specified by the user. Keep supplied continuous background processes low-weight.
-- Use plain visible nouns and verbs. Name materials when they affect appearance or physics; specify path, direction, timing, and landing where they clarify the action.
-- Divide beats at meaningful changes in action or response, according to the available duration.
-- Use counts or steps when supplied by the material or needed for synchronization.
+## 灯光、色彩与物理表现
 
-## 4. Specify Style, Camera, And Light Visibly
+灯光需要控制画面时，说明光源、方向、软硬、人物与背景的明暗关系，以及变化发生的时刻。连续空间沿用相容的光照逻辑；配色按场景需要描述，不规定色彩数量。
 
-- Describe the visible subject, relevant materials, setting, time of day, and atmosphere with concrete nouns and verbs, using the supplied facts and the choices that materially control the result.
+碰撞、布料、液体、烟雾或变形影响表演时，写清起因、接触、反应与最终状态。每项控制只适用于实际发生该事件的镜头，不把局部结果写成全场永久状态。
 
-### Choose Camera Treatment For The Scene
+## 台词、声音与节奏
 
-- Decide what the viewer needs to see first: a face, both performers, a prop detail, or their spatial relationship. Set focus and background legibility around that need.
-- Choose texture, color response, filtration, and highlight treatment for the scene's light, skin, materials, and atmosphere. Judge focal length and aperture together with capture format, working distance, and the depth that must remain readable; use the parameter-selection rule in `contract.md`.
-- Match frame cadence and shutter-motion rendering to the medium and action. Distinguish a locked-off camera from stabilized or handheld capture; `稳定手持` keeps composition controlled while allowing subtle irregular drift or micro-correction.
-- Motivate camera movement through performer action, gaze, sound, spatial reveal, or a change in relationship or attention. Match its speed, amplitude, and perspective change to the beat's emotional intensity. Describe the start, path, subject relation, and landing when those facts matter. Preserve the user's explicit movement decisions.
-- Let cuts follow changes in relationship, tactic, pressure, information, or focal ownership. For a J-cut or L-cut, identify which sound crosses the cut and what the viewer sees while hearing it; use the speaker's delivery and listener's response to determine the cut point.
+保留已确认台词的原文、说话人、顺序与声音方式。把说话、呼吸、停顿、打断、听者反应和可见动作连接起来；保留画外音、电话声、重叠说话等既定方式。
 
-- Prefer straight-on, stable framing for UI or exact on-screen text when the user leaves camera choices open.
-- When lighting matters, state its quality, motivated source, and direction. When color is independently controlled, name three to five palette anchors. Reuse the same lighting logic across visibly continuous Shots.
-- For a strict filmic look or continuity-critical task, add only the independently controlled detail among format/look, lens or filter, grade or palette, lighting direction, texture, and sound. More detail is not automatically more control.
+按场景设计必要的环境声、拟音、空间感和有意义的静默。精确音效写明触发动作及发生时刻；J-cut、L-cut 写清哪个声音跨过切点，以及此时观众看见什么。
 
-## 5. Stage Interaction As Relationship Change
+未要求配乐时不自行添加配乐；已给定音乐时保留其与对白、环境声的关系；明确要求绝对静音时，不添加对白、配乐或环境声。是否需要写出“无BGM”等控制由当前任务决定，不强制字段或固定开头。
 
-For two or more performers, establish only the spatial facts that affect the interaction:
+节奏容纳动作准备、摄影机反应、接触、落稳、台词和听者反应，按真实因果关系安排必要的同步或重叠。内容无法装进已定时长时，指出具体冲突，不自动删掉已确认表演。
 
-- initial relation: distance, gaze, orientation, visibility, occlusion, access, or route;
-- trigger: sound, look, line, prop, approach, interruption, or unexpected movement;
-- initiative: one performer acts with a readable tactic;
-- response: another performer changes attention, position, action, or refusal;
-- landing: someone changes another person's route, distance, control, access, or visible response.
+## 参考与可见文字
 
-Use observation, concealment, approach, pursuit, withdrawal, interception, yielding, blocking, passing, shared prop contact, or deliberate stillness when supported by the material.
+按指定用途使用参考：人物外观、声音、场景、道具或动作机制分别绑定对应对象。保持用户或平台的文件名与标识，避免把一种参考用途推断为另一种。
 
-In group scenes, give the primary action full clarity and compress the group into one shared low-weight response unless an individual response changes the story.
-
-## 6. Execute Approved Dialogue And Visible Text For Action
-
-- Check that each line fits the available duration with room for breath, pause, interruption, and listener response.
-- Attach dialogue to an action, withheld action, or change of tactic. Specify the speaker's delivery and the listener's response where they clarify the interaction.
-- Control lip movement only when sync, deliberate silence, closed-mouth listening, overlap, or off-screen delivery matters.
-- Preserve supported voiceover, off-screen speech, phone/radio speech, overlap, and silence when the task includes them; report technical conflicts instead of silently converting the mode.
-- Keep exact visible text short when the material allows it. Preserve its exact wording and specify its screen, surface, or frame position; use a stable, legible camera state when authority leaves that decision open.
-
-## 7. Use Timing Without False Precision
-
-When reliable timing exists and materially affects execution:
-
-- keep ranges ordered, continuous when the task requires continuity, and non-overlapping unless overlap is intentional;
-- budget spoken words, breath, action preparation, contact, reaction, and settling time;
-- place the cause before the response and allow the response to register;
-- shorten the action or flag a duration conflict when the beat cannot fit.
-
-When exact timing is unnecessary, describe the order and pauses inside `Action` with relative timing.
-
-## 8. Use Sound To Shape The Action
-
-Use sound when it changes action timing, attention, space, or relationship:
-
-- an approaching sound triggers a look or concealment;
-- a contact sound confirms impact, placement, release, or breakage;
-- a sound stops with the performer and makes the stop legible;
-- a door, object, device, or voice reveals new information;
-- a brief sound accent lands a relationship or emotional turn.
-
-Keep the shared sound state concise; move a sound into its beat or Shot only when the exact trigger changes action or editing.
-
-## 9. Read Initial Conditions And References
-
-When the result depends on a visible before-state, establish the relevant physical condition, extent, and location before the action. Preserve supplied conditions; develop open details only to the extent needed to make the intended change readable.
-
-Use each supplied reference for the evidence it can reliably carry:
-
-- character images: identity and visible state;
-- scene and prop images: environment, spatial features, and object appearance;
-- action video: mechanics, weight, rhythm, and contact;
-- audio: delivery, cadence, voice continuity, and sound timing;
-- scripts and notes: story authority, dialogue, intention, and constraints.
-
-The user may override this allocation. When references conflict, preserve the declared reference roles and record the unresolved execution risk briefly.
+画面需显示准确文字时，保留原文并写清载体、位置及出现时刻。清晰度与已定构图、运镜冲突时，指出冲突，不擅自改变摄影决定。

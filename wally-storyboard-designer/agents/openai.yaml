@@ -2,3 +2,6 @@ interface:
   display_name: "Wally Storyboard Designer"
   short_description: "Design shots and run native-image storyboard tests"
   default_prompt: "Use $wally-storyboard-designer to create the requested shot-design product or run its storyboard / shot-table visual test through ChatGPT Web."
+
+policy:
+  allow_implicit_invocation: false
