@@ -17,6 +17,7 @@ Changelog: v4.1 — adds the user-approved one-sentence BGM production request t
 
 我了解以下专业 skill：
 
+- **story-idea-generator**：生成可供挑选的故事灵感。
 - **wally-screenplay-writer**：创作、修改和诊断剧本。
 - **wally-storyboard-designer**：制作导演脚本、故事板和分镜。
 - **wally-static-asset-designer**：设计人物、商品、道具和场景等静态资产。
@@ -56,7 +57,7 @@ Use this beginner-facing handoff. Keep it short, fill only relevant fields, and 
 你现在在：[用自然语言说明当前状态]
 下一步只做：[一个专业结果]
 为什么先做它：[一句实际原因]
-交给：[对应 wally-* 技术名]
+交给：[对应 skill 技术名]
 你需要提供：[现有材料；没有就写“从你的口述开始”]
 直接复制这句话：[包含目标、材料、期望产物与未决选择的请求]
 完成标志：[用户将拿到什么]

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Deterministic health checks for the six public Wally skills."""
+"""Deterministic health checks for the public Wally skill collection."""
 
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ import xml.etree.ElementTree as ET
 
 
 SKILLS = {
+    "story-idea-generator": "story-idea-generator@2026-09-19-v1.0-story-method",
     "wally-helper": "wally-helper@2026-09-08-v4.1-bgm-request-template",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-12-v2.1-adaptive-writing",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-09-13-v3.19-scene-chats",
@@ -22,6 +23,7 @@ SKILLS = {
 }
 
 README_VERSIONS = {
+    "story-idea-generator": "V1.0",
     "wally-helper": "V4.1",
     "wally-screenplay-writer": "V2.1",
     "wally-storyboard-designer": "V3.19",
@@ -90,7 +92,7 @@ def skill_root(candidate: Path) -> Path:
     ):
         if all((nested / name).is_dir() for name in SKILLS):
             return nested
-    raise FileNotFoundError(f"cannot locate all six skill directories under {candidate}")
+    raise FileNotFoundError(f"cannot locate all {len(SKILLS)} skill directories under {candidate}")
 
 
 def iter_files(root: Path):
@@ -103,7 +105,7 @@ def iter_files(root: Path):
 
 
 def iter_skill_files(root: Path):
-    """Yield only the six managed skill trees from a collection or repo root."""
+    """Yield only the managed skill trees from a collection or repo root."""
     for name in SKILLS:
         yield from iter_files(root / name)
 
@@ -750,7 +752,7 @@ def main() -> int:
         print(f"FAIL: {len(errors)} issue(s)", file=sys.stderr)
         return 1
 
-    print(f"PASS: six Wally skills healthy at {skills}")
+    print(f"PASS: {len(SKILLS)} Wally skills healthy at {skills}")
     return 0
 
 

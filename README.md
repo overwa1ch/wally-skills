@@ -6,6 +6,7 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 
 | Skill | 当前版本 | 职责 |
 | --- | --- | --- |
+| `story-idea-generator` | V1.0 | 根据已有题材、世界观或零散想法生成候选故事灵感，供用户挑选；方法与电影案例按需读取。 |
 | `wally-helper` | V4.1 | Wally 用法与经验层；管理视觉测试状态，把专业修改交回对应 specialist，并以单一当前生成范围的 bindings v2 验证 Route A/B 合同和组装最终视频提示词；需要时原样返回固定的 BGM 制作请求。 |
 | `wally-screenplay-writer` | V2.1 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少。 |
 | `wally-storyboard-designer` | V3.19 | 按场景生成故事板或分镜表：故事板每场独立聊天；分镜表一次上传全部资产后逐场分支，同场多页共用聊天。先交付原图，确认后裁切并制作逐镜图文成品。 |
@@ -13,23 +14,28 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 | `wally-action-designer` | V3.23 | 按场景完成整场表演与视听设计，保留有效字段和原镜号；场景时间从 0.0s 起算，不强制单镜头、多镜头或统一 Shot 模板。 |
 | `wally-visual-style-extractor` | V1.6 | 检索既有风格并提取有证据的 style layer，不代做资产、镜头、动作或最终提示词。 |
 
+## 故事、剧本与脚本
+
+故事灵感由 `story-idea-generator` 生成，选定方向后由 `wally-screenplay-writer` 展开为剧本，再由 `wally-storyboard-designer` 设计分镜脚本。各阶段都需用户明确调用；已有材料可直接进入对应阶段。
+
 ## 安装
 
 ```bash
 git clone https://github.com/overwa1ch/wally-skills.git
 mkdir -p /path/to/repository/.agents/skills
-cp -R wally-skills/wally-* /path/to/repository/.agents/skills/
+cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository/.agents/skills/
 ```
 
 在该 repository 内新建 Codex 任务，让 Codex 只在这个项目作用域发现这些 skills。Wally 不再推荐安装到全局 user skill 目录。
 
-全部六个 skill 都采用明确点名调用：只有用户点名对应 skill 并要求使用时才启用，普通故事、分镜、动作、资产或风格请求按常规任务处理。六份 `agents/openai.yaml` 均设置 `policy.allow_implicit_invocation: false`，关闭 Codex 的隐式调用；使用 `$wally-screenplay-writer` 等完整名称可显式加载对应 skill。
+全部七个 skill 都采用明确点名调用：只有用户点名对应 skill 并要求使用时才启用，普通故事、分镜、动作、资产或风格请求按常规任务处理。七份 `agents/openai.yaml` 均设置 `policy.allow_implicit_invocation: false`，关闭 Codex 的隐式调用；使用 `$wally-screenplay-writer` 等完整名称可显式加载对应 skill。
 
 用户明确要求使用 `wally` / `wally-helper` 时加载 Helper；点名专业 skill 只启用被点名的 skill。Helper 可推荐专业 skill 并给出可复制的调用请求，由用户明确调用。
 
 ## 输出结构
 
 - 专业产物保留所属 skill 的模板或输出合同结构。
+- `story-idea-generator` 交付候选故事种子；默认十条，每条用简短钩子和两到四句话说明人物、行动与冲突，用户选择后再展开。
 - `wally-screenplay-writer` 按当前任务选择内容与方法；作品定义只写有依据且影响创作的项，缺项省略，整块无用时省略。四种格式按用户真实体量缩放，不强制改片长；已有稿整理和局部修改直接交付，只有用户选择分步开发或要求锁定时才使用审批菜单。原则：如果你不确定，就写得更少，而不是更多。
 - `wally-storyboard-designer` 是测试层：继承上游作品定义与剧本已有场景结构，保留源场景标题或编号，不再创建另一层故事分段；它设计分镜脚本并给出固定故事板 / 分镜表提示词供用户快速看图测试，只交付用户点名的功能，不做视觉优化改写和回图审查，跨模块流程判断和最终批准状态由 `wally-helper` 管理。
 - `wally-static-asset-designer` 以用户提供的参考图承载已清楚可见的规格；正式提示词保留字段名和相对顺序，不显示数字或字母序号，只补目标变化、布局、身份锚点与真实漂移风险。
@@ -47,6 +53,8 @@ cp -R wally-skills/wally-* /path/to/repository/.agents/skills/
 
 ## 当前推荐经验
 
+需要先挑选故事方向时，明确调用 `story-idea-generator` 获取候选；已有方向或剧本时从对应阶段继续。
+
 1. `wally-screenplay-writer` 完成可用的剧本初稿。
 2. `wally-storyboard-designer` 根据完整剧本和用户指定范围制作简单故事板草稿，低成本测试景别、运镜、动作和镜头顺序；故事问题交回 Screenplay，镜头问题交回 Storyboard，Helper 记录测试与批准状态。
 3. `wally-static-asset-designer` 先生成符合剧本整体调性的 Preview 候选，由用户选择全局效果；再生成各项资产候选，由用户逐项选定。场景九宫格一致性不足时，建议用户选择 `2×2` 四宫格。
@@ -58,7 +66,7 @@ cp -R wally-skills/wally-* /path/to/repository/.agents/skills/
 
 ## 健康检查
 
-仓库的 `validate-wally-skills` GitHub Actions job 会检查六项 frontmatter、引用完整性、跨模块合同、匿名 Route fixtures、公开安全和冻结提示词 hash。也可在本地运行：
+仓库的 `validate-wally-skills` GitHub Actions job 会检查七项 frontmatter、引用完整性、跨模块合同、匿名 Route fixtures、公开安全和冻结提示词 hash。也可在本地运行：
 
 ```bash
 python -m pip install Pillow reportlab

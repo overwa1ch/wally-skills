@@ -1,0 +1,7 @@
+interface:
+  display_name: "故事灵感生成器"
+  short_description: "沿用既有设定，以三要素八属性生成有共情、具体行动与冲突的故事灵感"
+  default_prompt: "用 $story-idea-generator，沿用当前已确认的设定，给我十个彼此不同的故事灵感。"
+
+policy:
+  allow_implicit_invocation: false

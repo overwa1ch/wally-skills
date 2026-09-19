@@ -1,4 +1,4 @@
-"""Anonymous, standard-library regression fixtures for the six Wally skills."""
+"""Anonymous, standard-library regression fixtures for the Wally skill collection."""
 
 from __future__ import annotations
 
