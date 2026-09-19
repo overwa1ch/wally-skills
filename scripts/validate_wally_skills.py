@@ -14,7 +14,7 @@ import xml.etree.ElementTree as ET
 
 SKILLS = {
     "story-idea-generator": "story-idea-generator@2026-09-19-v1.2-four-act-ten-sequences",
-    "wally-helper": "wally-helper@2026-09-08-v4.1-bgm-request-template",
+    "wally-helper": "wally-helper@2026-09-19-v4.3-workflow-guidance",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-12-v2.1-adaptive-writing",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-09-13-v3.19-scene-chats",
     "wally-static-asset-designer": "wally-static-asset-designer@2026-09-08-v2.9-reference-cleanup",
@@ -24,7 +24,7 @@ SKILLS = {
 
 README_VERSIONS = {
     "story-idea-generator": "V1.2",
-    "wally-helper": "V4.1",
+    "wally-helper": "V4.3",
     "wally-screenplay-writer": "V2.1",
     "wally-storyboard-designer": "V3.19",
     "wally-static-asset-designer": "V2.9",
@@ -33,8 +33,6 @@ README_VERSIONS = {
 }
 
 FROZEN_HASHES = {
-    "wally-helper/templates/route-a-final-prompt.md": "9dc2b8ced5b8b4276c291d1b268ed546f0ee53fe08f2d6fe0e5a8b1d3d3b5188",
-    "wally-helper/templates/route-b-final-prompt.md": "96ef1ffed75ab5bfc204f2f2ef4205cfe0e71c13a9671133d152a3e34d089ca6",
     "wally-storyboard-designer/templates/storyboard-prompt-template.md": "de663576ce7998da223187aa9c182f8a4eaabd41312e1f92f2d1395da8b4efbc",
     "wally-storyboard-designer/templates/shot-table-prompt-template.md": "4c1c0c0cbf2df85ff016f30665f2df2b69ab1e752bbe1dcbd71ac376b50126ea",
     "wally-static-asset-designer/templates/preview-prompt.md": "f769c6cef613092ade3aa4c63e018844f378c59ed982fa55dbdbd9cc10f8fbad",
@@ -228,20 +226,7 @@ def check_frozen(skills: Path, errors: list[str]) -> None:
 
 def check_module_contracts(skills: Path, errors: list[str]) -> None:
     helper = (skills / "wally-helper/SKILL.md").read_text(encoding="utf-8")
-    helper_contract = (skills / "wally-helper/references/artifact-compatibility.md").read_text(encoding="utf-8")
     helper_workflow = (skills / "wally-helper/references/workflow-guide.md").read_text(encoding="utf-8")
-    helper_parser = (skills / "wally-helper/scripts/prompt_validation_common.py").read_text(encoding="utf-8")
-    for relative in (
-        "wally-helper/scripts/prompt_validation_common.py",
-        "wally-helper/scripts/validate_route_a_prompt.py",
-        "wally-helper/scripts/validate_route_b_prompt.py",
-    ):
-        if not (skills / relative).is_file():
-            fail(errors, f"missing Helper validator {relative}")
-    if "default|music|silence" not in helper and "default / music / silence" not in helper:
-        fail(errors, "Helper does not declare all three Audio modes")
-    if "Confirm that `Audio: 无BGM。` exists" in helper_contract:
-        fail(errors, "Helper retains unconditional no-BGM compatibility rule")
     if "hand those revisions to `wally-storyboard-designer` for integration" not in helper_workflow:
         fail(errors, "Helper does not hand storyboard-exposed shot revisions to Storyboard Designer")
     if "When the updated director script returns" not in helper_workflow:
@@ -250,14 +235,6 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fail(errors, "Helper specialist-product boundary is missing")
     if "integrate every named shot-design revision" in helper_workflow:
         fail(errors, "Helper still claims specialist shot-design revision work")
-    for phrase in (
-        "exactly one current generation scope",
-        "wally-reference-bindings/v2",
-        "all five entry fields",
-    ):
-        if phrase not in f"{helper}\n{helper_contract}\n{helper_parser}":
-            fail(errors, f"Helper single-scope binding contract is missing: {phrase}")
-
     screenplay_root = skills / "wally-screenplay-writer"
     screenplay = (screenplay_root / "SKILL.md").read_text(encoding="utf-8")
     screenplay_frontmatter = re.match(r"\A---\n(.*?)\n---\n", screenplay, re.DOTALL)
@@ -662,7 +639,6 @@ def check_repository_metadata(root: Path, errors: list[str]) -> None:
     changelog_path = root / "CHANGELOG.md"
     workflow_path = root / ".github/workflows/validate-wally-skills.yml"
     test_path = root / "tests/test_wally_contracts.py"
-    fixtures = root / "tests/fixtures"
     if not readme_path.is_file():
         return
 
@@ -689,8 +665,6 @@ def check_repository_metadata(root: Path, errors: list[str]) -> None:
         fail(errors, "validate-wally-skills GitHub Actions job is missing")
     if not test_path.is_file():
         fail(errors, "anonymous contract unittest module is missing")
-    if not fixtures.is_dir() or not any(path.is_file() for path in fixtures.rglob("*")):
-        fail(errors, "anonymous contract fixtures are missing")
 
 
 def compare_trees(left: Path, right: Path, label: str, errors: list[str]) -> None:

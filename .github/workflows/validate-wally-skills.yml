@@ -30,8 +30,7 @@ jobs:
       - name: Validate skill contracts and frozen surfaces
         run: python scripts/validate_wally_skills.py --skills-root .
 
-      - name: Run anonymous contract fixtures
+      - name: Run contract and storyboard regressions
         run: |
-          python -m unittest discover -s wally-helper/tests -p 'test_*.py' -v
           python -m unittest discover -s tests -p 'test_*.py' -v
           python -m unittest discover -s wally-storyboard-designer/tests -p 'test_*.py' -v

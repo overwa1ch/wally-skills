@@ -21,4 +21,4 @@ Version: `wally-action-designer@2026-09-13-v3.23-scene-performance`
 
 - 保留故事、已确认台词及用户明确的执行决定，设计它们如何发生。
 - 原创或改写台词属于 `wally-screenplay-writer`；静态资产制作属于 `wally-static-asset-designer`。仅在当前工作确实依赖缺失内容时指出缺口，不自动扩展任务。
-- 表演设计可直接作为分镜表生成的导演脚本依据。用户要求最终 Route A/B 组装时，再检查 `wally-helper` 的专用输入合同；其格式不前置为本 skill 的默认模板。
+- 表演设计可直接作为分镜表生成的导演脚本依据。

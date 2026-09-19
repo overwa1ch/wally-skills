@@ -18,7 +18,7 @@ Current version: `wally-storyboard-designer@2026-09-13-v3.19-scene-chats`
 - 生成分镜表时，表演设计等同于导演脚本，直接作为镜头依据，无需转换格式或重写。
 - Keep the fixed storyboard and shot-table prompt templates verbatim. Do not insert a scene title or make any other runtime substitution. 场景与镜号范围另行说明；固定正文仅按明确的模板修改请求调整。
 - Do not offer returned-board review as a product. 用户审查故事与视觉质量；Agent 核对图像、镜号、资产和交付完整性，按用户观察定向修订。
-- 原创剧本、静态资产、表演与声音设计、最终视频提示词组装分别由对应专业 skill 处理；本 skill 保留并传递已有内容。
+- 原创剧本、静态资产、表演与声音设计、视频提示词分别由对应专业 skill 处理；本 skill 保留并传递已有内容。
 
 ## 按任务读取
 

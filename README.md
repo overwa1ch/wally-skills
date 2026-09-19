@@ -1,13 +1,13 @@
 # Wally Skills
 
-Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wally”后，`wally-helper` 会加载 Wally 助手身份，记录和应用跨模块制作经验，整理材料、判断下一步并组装最终视频提示词。它知道每个专业 skill 的用途，但不能替用户调用；专业工作必须由用户明确调用对应 skill。
+Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wally”后，`wally-helper` 会加载 Wally 助手身份，记录和应用跨模块制作经验，整理材料、判断下一步并检查专业产物之间是否衔接。它知道每个专业 skill 的用途，但不能替用户调用；专业工作必须由用户明确调用对应 skill。
 
 ## 当前模块
 
 | Skill | 当前版本 | 职责 |
 | --- | --- | --- |
 | `story-idea-generator` | V1.2 | 生成故事支点（灵感／创意），再以事件数轴与八要素展开万字纲；两阶段方法、案例和矩阵按需读取。 |
-| `wally-helper` | V4.1 | Wally 用法与经验层；管理视觉测试状态，把专业修改交回对应 specialist，并以单一当前生成范围的 bindings v2 验证 Route A/B 合同和组装最终视频提示词；需要时原样返回固定的 BGM 制作请求。 |
+| `wally-helper` | V4.3 | 整理材料、记录制作经验、建议下一步、检查跨产物兼容性，并提供专业 skill 的可复制调用请求；按需返回固定 BGM 制作请求。 |
 | `wally-screenplay-writer` | V2.1 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少。 |
 | `wally-storyboard-designer` | V3.19 | 按场景生成故事板或分镜表：故事板每场独立聊天；分镜表一次上传全部资产后逐场分支，同场多页共用聊天。先交付原图，确认后裁切并制作逐镜图文成品。 |
 | `wally-static-asset-designer` | V2.9 | 内置 Browser 建立命名的 ChatGPT 项目，每项资产独立聊天；Preview 至少 8 套不同风格提示词与图像，各项资产至少 4 套不同提示词与图像，逐版生成供用户选择，并继承已选全局效果。 |
@@ -44,8 +44,7 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 - Camera 和 Shot 只按任务需要选择 capture physics、光学、稳定性、运动动机、剪辑语法、视点、前景、焦点、空间层次与时长预算；这些控制不得覆盖已批准的镜头权威。
 - 原创或改写对白属于 `wally-screenplay-writer`；`wally-action-designer` 只保留已批准措辞并设计其表演、口型、停顿、声音与镜头内执行。
 - `wally-visual-style-extractor` 按请求选择 Style Lookup、Analysis Card、Three-Stage Brief、Reusable JSON Prompt 或 Transfer Validation；`subject`、`scene`、`camera` 只接受用户已有值或复用占位符。
-- `wally-helper` 同时消费旧版固定导演正文和新版弹性导演正文；每次组装只处理一个当前生成范围，bindings v2 只记录该范围实际使用的资产，不再保存额外的范围字段。Route A 保留外层 `Reference List`，Route B 保留外层 `Asset List / Prompt / Constraints`，两条路线均可用确定性脚本验证。
-- 未明确提供音乐时，每段导演正文默认使用无BGM的完整环境声与 SFX；明确提供音乐或要求绝对静音时按该声音状态执行。导演正文不写 `Reference:` 或平台绑定。
+- `wally-helper` 接受各专业产物的现有格式，按需指出材料冲突、缺件和下一步；视频提示词及参考绑定交给 `wally-action-designer`，直接使用其产物。
 
 ## 新手使用方式
 
@@ -60,18 +59,17 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 3. `wally-static-asset-designer` 先生成符合剧本整体调性的 Preview 候选，由用户选择全局效果；再生成各项资产候选，由用户逐项选定。场景九宫格一致性不足时，建议用户选择 `2×2` 四宫格。
 4. `wally-storyboard-designer` 用导演脚本／表演设计和静态资产生成分镜表：一次上传全部静态资产后，每场建一个分支。按当次图数与版本要求交付原图供用户审查；裁切与完整图文成品经确认后执行。
 5. `wally-action-designer` 设计动作、表演、摄影、光影和声音执行。
-6. `wally-helper` 检查产物兼容性并完成最终组装。
+6. 需要复核材料衔接或判断下一步时，返回 `wally-helper`。
 
 `wally-helper` 从开始到结束持续陪同；上面的顺序是当前经验建议，不是专业 skill 的调用前提。`wally-visual-style-extractor` 可在任何需要锁定或复核视觉风格的阶段按需使用。实际顺序以当前材料和交付目标为准。
 
 ## 健康检查
 
-仓库的 `validate-wally-skills` GitHub Actions job 会检查七项 frontmatter、引用完整性、跨模块合同、匿名 Route fixtures、公开安全和冻结提示词 hash。也可在本地运行：
+仓库的 `validate-wally-skills` GitHub Actions job 会检查七项 frontmatter、引用完整性、跨模块合同、公开安全和冻结提示词 hash。也可在本地运行：
 
 ```bash
 python -m pip install Pillow reportlab
 python scripts/validate_wally_skills.py --skills-root .
-python -m unittest discover -s wally-helper/tests -p 'test_*.py' -v
 python -m unittest discover -s tests -p 'test_*.py' -v
 python -m unittest discover -s wally-storyboard-designer/tests -p 'test_*.py' -v
 ```

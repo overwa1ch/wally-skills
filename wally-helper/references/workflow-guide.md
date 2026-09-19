@@ -20,7 +20,7 @@ When the user wants story ideas or a detailed story outline (万字纲), recomme
 4. Produce and approve the reusable static assets.
 5. Derive a multi-angle scene reference from every approved scene asset. Start with the nine-grid. If the nine-grid cannot keep the same scene identity, topology, furniture, equipment, or visual style across all cells, reduce the information load and switch to a `2×2` four-grid. Prefer four consistent views over nine drifting views.
 6. Upload the revised screenplay and approved static assets, then use the fixed shot-table prompt on each exact source scene. Review the complete numbered, no-text shot sequence for story coverage, rhythm, continuity, and shootability; revise the screenplay or shot design and regenerate when the table exposes a problem.
-7. Continue to `wally-action-designer`, then return to Helper for compatibility review, platform binding, and final assembly.
+7. When performance design, video prompts, or reference bindings need work, recommend `wally-action-designer`. Accept its current output directly; return to Helper when the user wants a compatibility review or guidance on the next step.
 
 In this path, storyboards and shot tables are two tests at different stages. The early storyboard cheaply tests proposed shot design while change is easy. The later asset-backed shot table tests the complete sequence after identity and space are visually grounded. A user may still request either product independently at any time.
 
@@ -49,9 +49,9 @@ Route by this registry: name a function, tell the user which skill to call, and 
 - 何时调用：任何身份需要跨镜头保持一致、或审查回图资产时。
 
 ### wally-action-designer — 动作与导演执行
-- 职责：把已批准的镜头决策和已批准台词编译为可执行的导演提示词正文；只设计台词的表演、口型、停顿、声学和时序执行，不发明或改写台词；回片验收归它。
-- 功能菜单：写导演设计正文（含逐镜独立生成的开场承接与已批准台词执行）、审查提示词正文、回片审查（文字审查；正文缺陷/生成方差/平台限制三分类）。
-- 何时调用：镜头决策已在、需要变成模型面执行文本时；或回片需要验收时。
+- 职责：按场景设计或修订表演、互动、摄影、灯光、声音、参考绑定和视频提示词；保留已批准台词，只设计其表演与视听执行。
+- 功能菜单：场景表演设计、视频提示词修订、参考绑定、回片审查；交付结构随当前材料与任务决定。
+- 何时调用：需要上述专业产物或修订时，由用户明确点名调用；现有完整产物可以直接使用。
 
 ### wally-visual-style-extractor — 风格提取
 - 职责：从复杂参考中识别既有视觉风格并提取可复用风格系统。
@@ -59,8 +59,8 @@ Route by this registry: name a function, tell the user which skill to call, and 
 - 何时调用：复杂参考需要系统化风格提取时；用户自管交接，结果作为普通材料返回。
 
 ### wally-helper — 用法、经验与流程陪跑（本 skill）
-- 职责：用户呼叫 Wally 后加载的助手身份；保存和应用跨模块用法与制作经验，整理材料、判断下一步并组装最终视频提示词。它知道专业 skill 的用途，但不能调用，必须请用户明确调用。
-- 功能菜单：使用经验、材料整理、下一步判断、能力查询（本注册表）、可复制的用户调用请求、跨产物兼容审查、平台参考绑定、Route A/B 最终组装与校验。
+- 职责：用户呼叫 Wally 后加载的助手身份；保存和应用跨模块用法与制作经验，整理材料、判断下一步并检查专业产物之间是否衔接。它知道专业 skill 的用途，但不能调用，必须请用户明确调用。
+- 功能菜单：使用经验、材料整理、下一步判断、能力查询（本注册表）、可复制的用户调用请求、跨产物兼容审查、测试证据与用户批准状态记录。
 
 ## Routing Judgment
 
@@ -94,7 +94,6 @@ Use the production stage to recommend the next visual test:
 3. An approved screenplay revision plus approved static assets: recommend the fixed shot-table prompt and use the returned table to validate full sequence coverage, rhythm, continuity, and shootability.
 4. An existing director script with no returned visual board: treat it as the rough shot design to visualize next. Do not lock it as the final director script from text review alone.
 5. A returned board that is usable but names shot-design revisions: hand those revisions to `wally-storyboard-designer` for integration. When the updated director script returns, record the visual test as passed and recommend final director-script approval. A faithful board that still feels slow, repetitive, unclear, or spatially weak has successfully exposed a rough-shot failure; route the shot-design revision to `wally-storyboard-designer` rather than approving it or merely redrawing the same design.
-6. Do not infer Route A/B during next-task routing. Route A eventually needs a storyboard as model-facing control. Route B does not make a storyboard model-facing and must not be forced through storyboard production unless the user wants that validation product.
 
 For the early storyboard test, use this handoff:
 
