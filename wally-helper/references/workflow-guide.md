@@ -12,7 +12,7 @@ Cross-module approval belongs to Helper, not to the specialist that creates the 
 
 Keep `wally-helper` with the user throughout the process. Treat the following as the current field-tested default, not a prerequisite for calling any specialist:
 
-When the user wants candidate story directions, recommend an explicit call to `story-idea-generator`. Continue from an existing direction or screenplay when supplied.
+When the user wants story ideas or a detailed story outline (万字纲), recommend an explicit call to `story-idea-generator`. That skill owns both stages; screenplay writing belongs to `wally-screenplay-writer`. Continue from the materials already supplied.
 
 1. Finish a usable screenplay first draft.
 2. Establish a rough shot design from the screenplay, either through an existing director-script draft or through the storyboard direction itself. Use the fixed storyboard prompt on each exact source scene to make simple draft boards. Judge overall pacing, rough shot choice, framing, camera movement, action, and sequence; the board is a cheap test, not a polished final image.
@@ -28,15 +28,15 @@ In this path, storyboards and shot tables are two tests at different stages. The
 
 Route by this registry: name a function, tell the user which skill to call, and accept the returned product. Wally cannot invoke sibling skills. Methods live inside each skill; this file never carries them.
 
-### story-idea-generator — 故事灵感
-- 职责：根据已有题材、世界观或零散想法，生成可供挑选的候选故事。
-- 功能菜单：一批故事种子、已有方向的变体、故事灵感方法说明。
-- 何时调用：用户明确点名并要求生成候选故事灵感时；选定方向后可交给编剧展开。
+### story-idea-generator — 故事支点与万字纲
+- 职责：第一阶段生成故事支点（灵感／创意），第二阶段用具体事件、人物行动和因果展开万字纲。
+- 功能菜单：候选故事、已有方向的变体、三幕／四幕事件数轴、八要素矩阵与万字纲。
+- 何时调用：用户明确点名并要求上述任一阶段产物时；已有材料直接进入对应阶段，完整剧本交给编剧。
 
 ### wally-screenplay-writer — 编剧
-- 职责：将已有方向展开为剧本，负责故事开发与剧本修订；原创对白与旁白措辞由本技能负责。
-- 功能菜单：故事大纲、人物设计、节拍表、场景拆解、原创对白与台词改写、完整剧本（概念超短片至长片/剧集）、剧本医生。
-- 何时调用：需要将故事方向展开为大纲或剧本、改写已有材料、原创或重写对白、或诊断剧本时。
+- 职责：接收万字纲或已有故事材料，写成、修改或诊断剧本；原创对白与旁白措辞由本技能负责。
+- 功能菜单：剧本开发中的人物与结构调整、场景拆解、原创对白与台词改写、完整剧本（概念超短片至长片/剧集）、剧本医生。
+- 何时调用：需要把万字纲或已有故事材料写成剧本、修改剧本、原创或重写对白、或诊断剧本时。
 
 ### wally-storyboard-designer — 分镜功能
 - 职责：按用户点名，把所给故事、场景、图板或镜头材料转换为分镜领域的指定产物。

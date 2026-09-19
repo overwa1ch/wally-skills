@@ -13,7 +13,7 @@ import xml.etree.ElementTree as ET
 
 
 SKILLS = {
-    "story-idea-generator": "story-idea-generator@2026-09-19-v1.0-story-method",
+    "story-idea-generator": "story-idea-generator@2026-09-19-v1.1-detailed-outline",
     "wally-helper": "wally-helper@2026-09-08-v4.1-bgm-request-template",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-12-v2.1-adaptive-writing",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-09-13-v3.19-scene-chats",
@@ -23,7 +23,7 @@ SKILLS = {
 }
 
 README_VERSIONS = {
-    "story-idea-generator": "V1.0",
+    "story-idea-generator": "V1.1",
     "wally-helper": "V4.1",
     "wally-screenplay-writer": "V2.1",
     "wally-storyboard-designer": "V3.19",

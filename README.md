@@ -6,7 +6,7 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 
 | Skill | 当前版本 | 职责 |
 | --- | --- | --- |
-| `story-idea-generator` | V1.0 | 根据已有题材、世界观或零散想法生成候选故事灵感，供用户挑选；方法与电影案例按需读取。 |
+| `story-idea-generator` | V1.1 | 生成故事支点（灵感／创意），再以事件数轴与八要素展开万字纲；两阶段方法、案例和矩阵按需读取。 |
 | `wally-helper` | V4.1 | Wally 用法与经验层；管理视觉测试状态，把专业修改交回对应 specialist，并以单一当前生成范围的 bindings v2 验证 Route A/B 合同和组装最终视频提示词；需要时原样返回固定的 BGM 制作请求。 |
 | `wally-screenplay-writer` | V2.1 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少。 |
 | `wally-storyboard-designer` | V3.19 | 按场景生成故事板或分镜表：故事板每场独立聊天；分镜表一次上传全部资产后逐场分支，同场多页共用聊天。先交付原图，确认后裁切并制作逐镜图文成品。 |
@@ -16,7 +16,7 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 
 ## 故事、剧本与脚本
 
-故事灵感由 `story-idea-generator` 生成，选定方向后由 `wally-screenplay-writer` 展开为剧本，再由 `wally-storyboard-designer` 设计分镜脚本。各阶段都需用户明确调用；已有材料可直接进入对应阶段。
+`story-idea-generator` 负责故事支点（灵感／创意）与万字纲两个阶段；万字纲用具体事件、行动和因果展开故事，随后由 `wally-screenplay-writer` 写成剧本，再由 `wally-storyboard-designer` 设计分镜脚本。各阶段都需用户明确调用；已有材料可直接进入对应阶段。
 
 ## 安装
 
@@ -35,7 +35,7 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 ## 输出结构
 
 - 专业产物保留所属 skill 的模板或输出合同结构。
-- `story-idea-generator` 交付候选故事种子；默认十条，每条用简短钩子和两到四句话说明人物、行动与冲突，用户选择后再展开。
+- `story-idea-generator` 按任务交付故事支点或万字纲。灵感默认十条；万字纲按三幕／四幕结构，把八要素填入五个事件点与四个段落，拿具体事件说明人物与主题。
 - `wally-screenplay-writer` 按当前任务选择内容与方法；作品定义只写有依据且影响创作的项，缺项省略，整块无用时省略。四种格式按用户真实体量缩放，不强制改片长；已有稿整理和局部修改直接交付，只有用户选择分步开发或要求锁定时才使用审批菜单。原则：如果你不确定，就写得更少，而不是更多。
 - `wally-storyboard-designer` 是测试层：继承上游作品定义与剧本已有场景结构，保留源场景标题或编号，不再创建另一层故事分段；它设计分镜脚本并给出固定故事板 / 分镜表提示词供用户快速看图测试，只交付用户点名的功能，不做视觉优化改写和回图审查，跨模块流程判断和最终批准状态由 `wally-helper` 管理。
 - `wally-static-asset-designer` 以用户提供的参考图承载已清楚可见的规格；正式提示词保留字段名和相对顺序，不显示数字或字母序号，只补目标变化、布局、身份锚点与真实漂移风险。
@@ -53,7 +53,7 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 
 ## 当前推荐经验
 
-需要先挑选故事方向时，明确调用 `story-idea-generator` 获取候选；已有方向或剧本时从对应阶段继续。
+需要挑选故事支点，或把选定方向展开成万字纲时，明确调用 `story-idea-generator`；已有万字纲或剧本时从对应阶段继续。
 
 1. `wally-screenplay-writer` 完成可用的剧本初稿。
 2. `wally-storyboard-designer` 根据完整剧本和用户指定范围制作简单故事板草稿，低成本测试景别、运镜、动作和镜头顺序；故事问题交回 Screenplay，镜头问题交回 Storyboard，Helper 记录测试与批准状态。

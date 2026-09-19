@@ -17,7 +17,7 @@ Changelog: v4.1 — adds the user-approved one-sentence BGM production request t
 
 我了解以下专业 skill：
 
-- **story-idea-generator**：生成可供挑选的故事灵感。
+- **story-idea-generator**：生成故事支点（灵感／创意），将选定方向展开为万字纲。
 - **wally-screenplay-writer**：创作、修改和诊断剧本。
 - **wally-storyboard-designer**：制作导演脚本、故事板和分镜。
 - **wally-static-asset-designer**：设计人物、商品、道具和场景等静态资产。
