@@ -30,7 +30,7 @@ Route by this registry: name a function, tell the user which skill to call, and 
 
 ### story-idea-generator — 故事支点与万字纲
 - 职责：第一阶段生成故事支点（灵感／创意），第二阶段用具体事件、人物行动和因果展开万字纲。
-- 功能菜单：候选故事、已有方向的变体、三幕／四幕事件数轴、八要素矩阵与万字纲。
+- 功能菜单：候选故事、已有方向的变体、四幕十序列、八要素矩阵与万字纲。
 - 何时调用：用户明确点名并要求上述任一阶段产物时；已有材料直接进入对应阶段，完整剧本交给编剧。
 
 ### wally-screenplay-writer — 编剧

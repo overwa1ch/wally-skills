@@ -8,7 +8,7 @@ description: >-
 
 # 故事灵感生成器
 
-Current version: `story-idea-generator@2026-09-19-v1.1-detailed-outline`
+Current version: `story-idea-generator@2026-09-19-v1.2-four-act-ten-sequences`
 
 负责两个阶段的产物：**故事支点（灵感／创意）**与**万字纲**。万字纲以具体事件、人物行动和后果展开故事，为后续剧本提供材料。
 
