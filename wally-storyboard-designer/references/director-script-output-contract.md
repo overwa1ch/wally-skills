@@ -4,22 +4,22 @@ Principle: 一切为了讲故事，内容是优先级最高的评判标准。Eve
 
 Core principle: 如果你不确定，就写得更少，而不是更多。
 
-思路：先找关键画面——单纯的画面，对故事最重要的画面，不是符合传统分镜的画面。每个关键画面当成一个镜头写，这就是主镜。找到之后，再去想怎么衔接，第二遍直接用下面的格式把分镜设计完。
-Approach: first find the key pictures — pure pictures, the ones that matter most to the story, not pictures shaped by storyboard convention. Write each key picture as a shot; these are the main shots (主镜). Then work out how they connect and, in the second pass, complete the shot design in the same format.
+思路：先找关键画面——单纯的画面，对故事最重要的画面，不是符合传统分镜的画面。每个关键画面当成一个镜头写，这就是主镜。找到之后，再去想怎么衔接，第二遍把分镜设计完。
+Approach: first find the key pictures — pure pictures, the ones that matter most to the story, not pictures shaped by storyboard convention. Write each key picture as a shot; these are the main shots (主镜). Then work out how they connect and complete the shot design in the second pass.
 
 The 分镜脚本 (processed director script) is read by the user and by the image model that draws the test boards; write for those two readers.
 
 ## Inherit the work definition
 
 - Copy the source screenplay's `## 作品定义` block verbatim into every complete 分镜脚本.
-- When the user states the definition directly but the source lacks a block, transcribe only those explicit decisions into the same field structure; do not infer unsupported classification.
+- When the source lacks a definition block, use the explicit decisions already supplied as context. Do not create a mandatory metadata block or infer unsupported classification.
 - Treat work type as upstream story authority. This skill may use `剧情短片`, `广告片`, `纪录片`, `MV或视觉片`, or `剧集内容` to control coverage and shot language, but it may not originate or doctor that choice.
 - For a complete 分镜脚本, surface a missing definition when the difference between advertisement, narrative film, documentary, MV/visual piece, or episodic content would materially change the result. Request the definition from the user or `wally-screenplay-writer`; do not silently guess.
 - Keep definition metadata outside source scene passages and shot blocks. Do not turn labels such as commercial function, genre, or audiovisual position into visible objects, dialogue, or per-shot prompt detail.
 
 ## Shot format
 
-Group shots under the original source scene headings, in source order. Each shot:
+Preserve the fields and format of an existing draft during revision. For a new shot-design draft, the following is an optional writing aid; use only what the requested product needs. Group shots under the original source scene headings, in source order:
 
 ```text
 分镜XX｜镜头类型：…

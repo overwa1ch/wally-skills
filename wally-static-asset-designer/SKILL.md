@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-static-asset-desig
 
 规划静态资产，先用 Preview 选择全局视觉效果，再生成各项资产的候选版本，由用户逐项选择并归档。
 
-Version: `wally-static-asset-designer@2026-09-08-v2.9-reference-cleanup`
+Version: `wally-static-asset-designer@2026-09-14-v2.10-prompt-scope`
 
 ## 共用边界
 
@@ -34,7 +34,7 @@ Version: `wally-static-asset-designer@2026-09-08-v2.9-reference-cleanup`
 ## 默认执行方式
 
 - 图片产物默认内部起草提示词，通过内置 Browser 操控 ChatGPT Web，生成、检查、下载并交付候选图，不要求用户搬运提示词。
-- 用户只说“给我提示词”仍默认执行生成；明确要求只给文本、查看或修改提示词、不要生成时，仅交付相应文本。
+- 用户要求提示词、查看或修改提示词时，仅交付相应文本；要求制作或生成图片时执行网页生成。
 - 建立新一轮制作项目、项目与聊天命名、逐版提交、原图验收、重试和归档统一遵循 [browser-execution.md](references/browser-execution.md)。每项资产独立聊天，各版本在该资产聊天内依次生成。
 
 ## 按任务读取

@@ -37,10 +37,12 @@ python3 scripts/visual_test_pipeline.py status --manifest RUN_DIR/manifest.json
 
 ### 裁切与输出
 
+每页只有一个版本时直接采用；有多个候选时，按用户选择用 `--select JOB_ID=VERSION` 逐页指定，其他候选不阻塞成品，也不混入输出。不同页可以选不同版本。只有明确需要比较全部候选时才用 `--all-versions`。授权说明只记录确认，不解析为选图指令。
+
 执行前确认授权范围。`--approval-note` 记录用户真实的裁切／成品授权，不由 Agent 编造；它只记录已有确认，不替代确认。
 
 ```bash
-python3 scripts/visual_test_pipeline.py assemble --manifest RUN_DIR/manifest.json --format html --approval-note '用户已明确确认的裁切与图文成品要求'
+python3 scripts/visual_test_pipeline.py assemble --manifest RUN_DIR/manifest.json --format html --select JOB_ID=V01 --approval-note '用户已明确确认的裁切与图文成品要求'
 ```
 
 `--format panels` 仅裁切；`html` 在每镜原文旁嵌入切图，形成一个自包含文件；`review-pdf` 输出仅图片的审查拼图与 PDF，只有用户明确要该形式时使用。其他格式由相应文档工具完成，沿用已核对的切图、原文和镜头对应关系。

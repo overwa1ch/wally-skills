@@ -8,7 +8,7 @@ description: Use only when explicitly requested by name. 设计或修订分镜�
 Provide on-demand storyboard-domain functions for the user's supplied story, scene, or shot material.
 This skill is the test layer of the Wally pipeline；按用户当前要求设计、生成或修订，用户审查叙事与视觉效果。
 
-Current version: `wally-storyboard-designer@2026-09-13-v3.19-scene-chats`
+Current version: `wally-storyboard-designer@2026-09-14-v3.20-selected-versions`
 
 ## 共用规则
 

@@ -279,6 +279,85 @@ class VisualTestPipelineTests(unittest.TestCase):
                     download_url=None, replace=True))
             self.assertEqual(before, path.read_bytes())
 
+    def test_selected_candidates_make_one_complete_document(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            source = root / "director.md"
+            source.write_text("Style: 日光。\n## 场景1：院子 / 日\n" + "".join(
+                f"### 分镜{n}｜原镜\n动作：保持原文{n}。\n" for n in range(1, 11)
+            ) + "## 场景2：门口 / 日\n### 分镜11｜原镜\n动作：走出门。\n", encoding="utf-8")
+            pipeline.init_run(SimpleNamespace(source=source, output=root / "run", mode="storyboard",
+                run_id="selection", work="选定图文", versions=2, project_name=None, assets_json=None))
+            path = root / "run/manifest.json"
+            manifest = pipeline.load_manifest(path)
+            choices = {}
+            for index, job in enumerate(manifest["jobs"]):
+                version = "V02" if index == 1 else "V01"
+                choices[job["job_id"]] = version
+                original = root / f"candidate-{index}.png"
+                Image.new("RGB", (960, 540), (50 + index * 60, 100, 150)).save(original)
+                pipeline.record_native(SimpleNamespace(manifest=path, job=job["job_id"], version=version,
+                    file=original, chat_url=f"https://chatgpt.com/c/{job['scene_id']}",
+                    native_card_evidence="synthetic fixture", download_url=None, replace=False))
+            # The rejected alternative and other pending alternatives are not selected.
+            pipeline.reject_version(SimpleNamespace(manifest=path, job=manifest["jobs"][1]["job_id"],
+                version="V01", origin="chatgpt-native-image-card", reason="用户未采用此候选"))
+            pipeline.assemble_run(SimpleNamespace(manifest=path, format="html",
+                select=[f"{job}={version}" for job, version in choices.items()],
+                approval_note="合成测试：按逐页选择制作完整图文"))
+            report = json.loads((path.parent / "assembled/assembly-report.json").read_text())
+            self.assertEqual(report["selected_versions"], choices)
+            self.assertEqual(report["panel_count"], 11)
+            self.assertEqual([r["shot_id"] for r in report["panels"]], list(range(1, 12)))
+            self.assertEqual([r["version"] for r in report["panels"]], ["V01"] * 9 + ["V02", "V01"])
+            document = (path.parent / "assembled/storyboard.html").read_text()
+            self.assertEqual(document.count("<article "), 11)
+            self.assertEqual(document.count("<img "), 11)
+            for record in report["panels"]:
+                with Image.open(pipeline.run_path(path, record["source_raw"])) as original, Image.open(pipeline.run_path(path, record["panel"])) as panel:
+                    self.assertIsNone(ImageChops.difference(original.crop(record["crop_box"]), panel).getbbox())
+            self.assertFalse((path.parent / "panels/S01/P02/V01").exists())
+            self.assertEqual(pipeline.load_manifest(path)["jobs"][1]["versions"][0]["status"], "rejected")
+
+    def test_ambiguous_or_invalid_selection_does_not_write_outputs(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            path = self.init_storyboard(Path(temporary), versions=2)
+            before = path.read_bytes()
+            cases = [([], False), (["unknown=V01"], False), (["SB-S01-P01=V99"], False),
+                     (["SB-S01-P01=V01", "SB-S01-P01=V02"], False), (["SB-S01-P01=V01"], True)]
+            for choices, all_versions in cases:
+                with self.subTest(choices=choices, all_versions=all_versions), self.assertRaises(ValueError):
+                    pipeline.assemble_run(SimpleNamespace(manifest=path, format="html", select=choices,
+                        all_versions=all_versions, approval_note="合成测试：制作图文"))
+                self.assertEqual(path.read_bytes(), before)
+                self.assertFalse((path.parent / "assembled").exists())
+                self.assertFalse((path.parent / "panels").exists())
+
+    def test_selected_rejected_or_corrupt_original_still_blocks_output(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            path = self.init_storyboard(root, versions=2)
+            original = root / "original.png"
+            Image.new("RGB", (960, 540), "white").save(original)
+            pipeline.record_native(SimpleNamespace(manifest=path, job="SB-S01-P01", version="V01",
+                file=original, chat_url="https://chatgpt.com/c/scene-1", native_card_evidence="fixture",
+                download_url=None, replace=False))
+            args = SimpleNamespace(manifest=path, format="panels", select=["SB-S01-P01=V01"],
+                approval_note="合成测试：只采用 V01")
+            manifest = pipeline.load_manifest(path)
+            raw = pipeline.run_path(path, manifest["jobs"][0]["versions"][0]["raw_image"])
+            raw.write_bytes(b"corrupted image")
+            before = path.read_bytes()
+            with self.assertRaisesRegex(ValueError, "raw hash mismatch"):
+                pipeline.assemble_run(args)
+            self.assertEqual(path.read_bytes(), before)
+            pipeline.reject_version(SimpleNamespace(manifest=path, job="SB-S01-P01", version="V01",
+                origin="chatgpt-native-image-card", reason="不可用"))
+            with self.assertRaisesRegex(ValueError, "status=rejected"):
+                pipeline.assemble_run(args)
+            self.assertFalse((path.parent / "assembled").exists())
+            self.assertFalse((path.parent / "panels").exists())
+
     def test_native_record_split_and_pdf_are_reproducible(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -296,7 +375,7 @@ class VisualTestPipelineTests(unittest.TestCase):
                 ))
             manifest = pipeline.load_manifest(manifest_path)
             pipeline.validate_ready(manifest_path, manifest)
-            pipeline.assemble_run(SimpleNamespace(manifest=manifest_path, format="review-pdf", approval_note="测试夹具授权审查 PDF"))
+            pipeline.assemble_run(SimpleNamespace(manifest=manifest_path, format="review-pdf", all_versions=True, approval_note="测试夹具授权比较全部版本的审查 PDF"))
             finished = pipeline.load_manifest(manifest_path)
             self.assertEqual(finished["status"], "assembled-awaiting-human-review")
             self.assertTrue((manifest_path.parent / finished["deliverables"]["V01"]).is_file())

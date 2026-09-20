@@ -5,7 +5,7 @@ description: "Use only when the user explicitly requests wally-visual-style-extr
 
 # Wally Visual Style Extractor
 
-Current version: `wally-visual-style-extractor@2026-07-22-v1.6-boundary-evidence-ownership` (keeps visual-style work separate from asset, shot, action, audio, and final-prompt design; one top-level Evidence strength block owns evidence confidence). | v1.5 choose the smallest matching structured artifact and output only evidence-backed or task-required fields. | v1.4 every deliverable uses the matching structured template. | v1.3 professional-intent-trigger. | v1.2 wally-only-trigger superseded. | v1.1 existing-style-lookup-first.
+Current version: `wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts`
 
 ## Core Principle
 
@@ -27,7 +27,7 @@ Before assigning a style name:
 3. Separate the canonical style or movement from supporting styles, medium or genre, period cues, and descriptive modifiers.
 4. Use a combination of established terms when no single term covers the reference.
 
-Do not turn a descriptive phrase into a canonical style name. Do not confirm a canonical or supporting established term from unaided memory when lookup is unavailable or the sources do not support it. In `Style Lookup Result`, report `Canonical match: none confirmed`; in another selected artifact, use its matching canonical-status field. Disclose the limitation in `Uncertainties` and give sourced near-matches when available. Coin a new name only when the user explicitly asks for naming or branding. Otherwise label unmatched wording as a non-canonical working description.
+Do not turn a descriptive phrase into a canonical style name. Do not confirm a canonical or supporting established term from unaided memory when lookup is unavailable or the sources do not support it. For an ordinary answer, state that limitation directly. In a structured `Style Lookup Result`, report `Canonical match: none confirmed`; in another selected artifact, use its matching canonical-status field and `Uncertainties`. Give sourced near-matches when available. Coin a new name only when the user explicitly asks for naming or branding. Otherwise label unmatched wording as a non-canonical working description.
 
 ## Three-Stage Extraction Workflow
 
@@ -56,7 +56,9 @@ Validate by transfer. Apply the system to a new subject; if it only works on the
 
 ## Artifact routing
 
-Choose the smallest artifact that directly answers the request:
+For an ordinary explanation or short style question, answer directly in the user's requested form. Keep the same evidence and established-term checks.
+
+When the user wants a structured product, choose the smallest matching artifact:
 
 - Style name or classification lookup only: `Style Lookup Result`.
 - Full evidence-backed extraction: `Analysis Card`.
@@ -64,11 +66,11 @@ Choose the smallest artifact that directly answers the request:
 - Reusable style-layer generation structure: `Reusable JSON Prompt`, or the user's specified structure.
 - Cross-subject portability test: `Transfer Validation`.
 
-Do not append the other artifacts unless requested. Read `references/style-extraction-templates.md`, use the matching structure, and keep its populated fields in relative order. Preserve the selected template's exact field labels; do not translate, rename, bold, or replace them with improvised headings.
+Do not append the other artifacts unless requested. Read only the matching section of `references/style-extraction-templates.md`, use the selected structure, and keep its populated fields in relative order. Preserve the selected template's exact field labels; do not translate, rename, bold, or replace them with improvised headings.
 
 `Reusable JSON Prompt` remains a style-layer artifact. Copy `subject`, `scene`, and `camera` values from the user's material or leave reusable placeholders when the user asks for a fillable template; do not author missing story action, production design, shot design, camera setup, or camera movement. Repeated composition or camera evidence may be recorded in the owning style-analysis or style-rule fields, but it does not authorize filling those three JSON keys.
 
-Within the selected artifact:
+For the selected structured artifact:
 
 - Output a field only when evidence exists or the current task genuinely needs it.
 - Omit empty headings, empty lists, empty JSON keys, standalone `无` or `不适用` values, and filler inferred only to complete the template. Preserve a placeholder only when the user explicitly requests a reusable fillable template.
@@ -100,4 +102,4 @@ Likewise, do not convert a visible-choice summary into a new `-ism`, `-core`, mo
 
 ## References
 
-For every deliverable, read `references/style-extraction-templates.md` and use only the smallest matching structured template.
+For a structured product, locate the named section in `references/style-extraction-templates.md` and read only that section. Ordinary explanations do not require the template library.

@@ -16,10 +16,12 @@ class SkillContractTests(unittest.TestCase):
 
     def test_screenplay_v2_four_format_routes_and_dialogue_triggers(self) -> None:
         skill = self.read("wally-screenplay-writer/SKILL.md")
+        self.assertIn("references/development-workflow.md", skill)
+        skill += "\n" + self.read("wally-screenplay-writer/references/development-workflow.md")
         frontmatter = re.match(r"\A---\n(.*?)\n---\n", skill, re.DOTALL)
         self.assertIsNotNone(frontmatter)
         self.assertIn(
-            "wally-screenplay-writer@2026-09-12-v2.1-adaptive-writing",
+            "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
             skill,
         )
         for phrase in ("原创对白", "台词写作", "对白改写", "对白诊断"):
@@ -62,6 +64,8 @@ class SkillContractTests(unittest.TestCase):
 
     def test_screenplay_narrative_eight_steps_and_concept_three_step_exception(self) -> None:
         skill = self.read("wally-screenplay-writer/SKILL.md")
+        self.assertIn("references/development-workflow.md", skill)
+        skill += "\n" + self.read("wally-screenplay-writer/references/development-workflow.md")
         canonical = re.search(
             r"(?ms)^#{2,3} (?:(?:叙事类)?通用八步流程|Workflow)\s*\n(?P<body>.*?)(?=^#{2,3} |^---\s*$|\Z)",
             skill,
@@ -169,6 +173,8 @@ class SkillContractTests(unittest.TestCase):
 
     def test_screenplay_current_stage_work_definition_dialogue_owner_and_single_menu(self) -> None:
         skill = self.read("wally-screenplay-writer/SKILL.md")
+        self.assertIn("references/development-workflow.md", skill)
+        skill += "\n" + self.read("wally-screenplay-writer/references/development-workflow.md")
         self.assertIn("已有材料", skill)
         self.assertTrue(
             any(
@@ -219,6 +225,7 @@ class SkillContractTests(unittest.TestCase):
         references = "\n".join(
             path.read_text(encoding="utf-8")
             for path in sorted((REPO / "wally-screenplay-writer/references").glob("*.md"))
+            if path.name != "development-workflow.md"
         )
         for phrase in (
             "请选择：回复",

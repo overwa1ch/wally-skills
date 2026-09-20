@@ -15,21 +15,21 @@ import xml.etree.ElementTree as ET
 SKILLS = {
     "story-idea-generator": "story-idea-generator@2026-09-19-v1.2-four-act-ten-sequences",
     "wally-helper": "wally-helper@2026-09-19-v4.3-workflow-guidance",
-    "wally-screenplay-writer": "wally-screenplay-writer@2026-09-12-v2.1-adaptive-writing",
-    "wally-storyboard-designer": "wally-storyboard-designer@2026-09-13-v3.19-scene-chats",
-    "wally-static-asset-designer": "wally-static-asset-designer@2026-09-08-v2.9-reference-cleanup",
+    "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
+    "wally-storyboard-designer": "wally-storyboard-designer@2026-09-14-v3.20-selected-versions",
+    "wally-static-asset-designer": "wally-static-asset-designer@2026-09-14-v2.10-prompt-scope",
     "wally-action-designer": "wally-action-designer@2026-09-13-v3.23-scene-performance",
-    "wally-visual-style-extractor": "wally-visual-style-extractor@2026-07-22-v1.6-boundary-evidence-ownership",
+    "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
 
 README_VERSIONS = {
     "story-idea-generator": "V1.2",
     "wally-helper": "V4.3",
-    "wally-screenplay-writer": "V2.1",
-    "wally-storyboard-designer": "V3.19",
-    "wally-static-asset-designer": "V2.9",
+    "wally-screenplay-writer": "V2.2",
+    "wally-storyboard-designer": "V3.20",
+    "wally-static-asset-designer": "V2.10",
     "wally-action-designer": "V3.23",
-    "wally-visual-style-extractor": "V1.6",
+    "wally-visual-style-extractor": "V1.7",
 }
 
 FROZEN_HASHES = {
@@ -237,6 +237,11 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fail(errors, "Helper still claims specialist shot-design revision work")
     screenplay_root = skills / "wally-screenplay-writer"
     screenplay = (screenplay_root / "SKILL.md").read_text(encoding="utf-8")
+    development_path = screenplay_root / "references/development-workflow.md"
+    if "references/development-workflow.md" not in screenplay or not development_path.is_file():
+        fail(errors, "Screenplay conditional development reference is not discoverable")
+    else:
+        screenplay += "\n" + development_path.read_text(encoding="utf-8")
     screenplay_frontmatter = re.match(r"\A---\n(.*?)\n---\n", screenplay, re.DOTALL)
     frontmatter_text = screenplay_frontmatter.group(1) if screenplay_frontmatter else ""
     for trigger in ("原创对白", "台词写作", "对白改写", "对白诊断"):
@@ -366,7 +371,7 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
     screenplay_references = "\n".join(
         path.read_text(encoding="utf-8")
         for path in iter_files(screenplay_root / "references")
-        if path.suffix == ".md"
+        if path.suffix == ".md" and path.name != "development-workflow.md"
     )
     for phrase in (
         "请选择：回复",

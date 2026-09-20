@@ -525,7 +525,35 @@ def load_font(size: int) -> ImageFont.ImageFont:
     return ImageFont.load_default()
 
 
-def validate_ready(manifest_path: Path, manifest: dict) -> None:
+def assembly_selection(manifest: dict, choices: list[str], all_versions: bool) -> dict[str, str] | None:
+    """Select one approved original per page; compare all candidates only on request."""
+    if all_versions:
+        if choices:
+            raise ValueError("use either --select or --all-versions")
+        return None
+    selected = {}
+    for choice in choices:
+        job_id, separator, version = choice.partition("=")
+        if not separator or not version:
+            raise ValueError("--select requires JOB_ID=VERSION")
+        if job_id in selected:
+            raise ValueError(f"duplicate selection for {job_id}")
+        job = find_job(manifest, job_id)
+        find_version(job, version)
+        selected[job_id] = version
+    for job in manifest["jobs"]:
+        if job["job_id"] not in selected:
+            if len(job["versions"]) != 1:
+                raise ValueError(f"select the approved version for {job['job_id']} with --select JOB_ID=VERSION")
+            selected[job["job_id"]] = job["versions"][0]["version"]
+    return selected
+
+
+def versions_for(job: dict, selected: dict[str, str] | None) -> list[dict]:
+    return job["versions"] if selected is None else [find_version(job, selected[job["job_id"]])]
+
+
+def validate_ready(manifest_path: Path, manifest: dict, selected: dict[str, str] | None = None) -> None:
     failures = []
     if not manifest.get("scenes") and not manifest.get("project", {}).get("url"):
         failures.append("project: missing URL")
@@ -570,7 +598,7 @@ def validate_ready(manifest_path: Path, manifest: dict) -> None:
             failures.append(f"{job['job_id']}: page is outside its scene chat")
         if len(job["versions"]) != manifest["versions_per_page"]:
             failures.append(f"{job['job_id']}: wrong version count")
-        for version in job["versions"]:
+        for version in versions_for(job, selected):
             label = f"{job['job_id']}/{version['version']}"
             if scene_map and version.get("chat_url") != scene_map[job["scene_id"]].get("chat_url"):
                 failures.append(f"{label}: image is outside its scene chat")
@@ -588,18 +616,18 @@ def validate_ready(manifest_path: Path, manifest: dict) -> None:
         raise ValueError("run is not ready:\n- " + "\n- ".join(failures))
 
 
-def split_native(manifest_path: Path, manifest: dict) -> list[dict]:
+def split_native(manifest_path: Path, manifest: dict, selected: dict[str, str] | None = None) -> list[dict]:
     records = []
     columns, rows = manifest["grid"]["columns"], manifest["grid"]["rows"]
     for job in manifest["jobs"]:
-        for version in job["versions"]:
+        for version in versions_for(job, selected):
             raw = run_path(manifest_path, version["raw_image"])
             with Image.open(raw) as source:
                 boxes = detected_grid_boxes(source, columns, rows)
             if len(job["shot_ids"]) > len(boxes):
                 raise ValueError(f"{job['job_id']} has more shots than cells")
     for job in manifest["jobs"]:
-        for version in job["versions"]:
+        for version in versions_for(job, selected):
             raw = run_path(manifest_path, version["raw_image"])
             with Image.open(raw) as source:
                 image = source.convert("RGB")
@@ -650,7 +678,8 @@ def assemble_long(manifest_path: Path, manifest: dict, records: list[dict], vers
     height = header + 2 * margin + rows * (panel_h + label_h + gap) + len(scenes) * (scene_h + margin)
     canvas = Image.new("RGB", (width, height), "white")
     draw = ImageDraw.Draw(canvas)
-    draw.text((margin, 24), f"{manifest['work']}｜{MODE[manifest['mode']]['label']}｜{version}", fill="black", font=load_font(38))
+    title = f"{manifest['work']}｜{MODE[manifest['mode']]['label']}" + (f"｜{version}" if version else "")
+    draw.text((margin, 24), title, fill="black", font=load_font(38))
     draw.text((margin, 76), "原生图片无损切格后重组｜待人工审查", fill="#555555", font=load_font(25))
     y = header + margin
     for scene in scenes:
@@ -703,7 +732,8 @@ def assemble_pdf(manifest_path: Path, manifest: dict, by_version: dict[str, list
                 page_number += 1
                 page = scene[offset:offset + capacity]
                 doc.setFont(font, 18)
-                doc.drawString(36, height - 36, f"{manifest['work']}｜{MODE[manifest['mode']]['label']}｜{version}")
+                title = f"{manifest['work']}｜{MODE[manifest['mode']]['label']}" + (f"｜{version}" if version else "")
+                doc.drawString(36, height - 36, title)
                 doc.setFont(font, 11)
                 doc.drawString(36, height - 58, f"{page[0]['scene_id']}｜{page[0]['scene_title']}")
                 margin_x, top, bottom, gx, gy, label_h = 36, height - 76, 34, 12, 16, 18
@@ -726,7 +756,7 @@ def assemble_pdf(manifest_path: Path, manifest: dict, by_version: dict[str, list
     doc.save()
 
 
-def assemble_html(manifest_path: Path, manifest: dict, records: list[dict], target: Path) -> None:
+def assemble_html(manifest_path: Path, manifest: dict, records: list[dict], target: Path, *, selected: bool = False) -> None:
     """One portable file: original scene/shot text alongside each cropped panel."""
     scenes = manifest.get("scenes")
     if not scenes:
@@ -745,11 +775,14 @@ def assemble_html(manifest_path: Path, manifest: dict, records: list[dict], targ
     for text in (manifest.get("preamble", ""), manifest.get("context", "")):
         if text.strip():
             parts.append(f"<div class='context'><pre>{html.escape(text)}</pre></div>")
-    versions = sorted({record["version"] for record in records})
-    for version in versions:
-        if len(versions) > 1:
+    groups = {"": records} if selected else {
+        version: [r for r in records if r["version"] == version]
+        for version in sorted({record["version"] for record in records})
+    }
+    for version, chosen in groups.items():
+        if len(groups) > 1:
             parts.append(f"<h2>{html.escape(version)}</h2>")
-        index = {(r["scene_id"], r["shot_id"]): r for r in records if r["version"] == version}
+        index = {(r["scene_id"], r["shot_id"]): r for r in chosen}
         for scene in scenes:
             parts.append(f"<section data-scene='{html.escape(scene['scene_id'])}'>")
             # Preserve headers, scene notes and table column labels as supplied.
@@ -778,23 +811,24 @@ def assemble_run(args: argparse.Namespace) -> None:
     manifest = load_manifest(manifest_path)
     if output_format == "html" and not manifest.get("scenes"):
         raise ValueError("HTML composition requires a v2 run with original shot text")
-    validate_ready(manifest_path, manifest)
-    records = split_native(manifest_path, manifest)
+    selected = assembly_selection(manifest, getattr(args, "select", None) or [], getattr(args, "all_versions", False))
+    validate_ready(manifest_path, manifest, selected)
+    records = split_native(manifest_path, manifest, selected)
     by_version = defaultdict(list)
     for record in records:
-        by_version[record["version"]].append(record)
+        by_version["" if selected is not None else record["version"]].append(record)
     output = manifest_path.parent / "assembled"
     output.mkdir(parents=True, exist_ok=True)
     deliverables = {}
     if output_format == "html":
         target = output / "storyboard.html"
-        assemble_html(manifest_path, manifest, records, target)
+        assemble_html(manifest_path, manifest, records, target, selected=selected is not None)
         deliverables["document"] = relative_to_run(target, manifest_path.parent)
     elif output_format == "review-pdf":
         for version, version_records in sorted(by_version.items()):
-            target = output / f"{manifest['mode']}-{version}.png"
+            target = output / (f"{manifest['mode']}-{version}.png" if version else f"{manifest['mode']}.png")
             assemble_long(manifest_path, manifest, version_records, version, target)
-            deliverables[version] = relative_to_run(target, manifest_path.parent)
+            deliverables[version or "review_image"] = relative_to_run(target, manifest_path.parent)
         pdf = output / "review.pdf"
         assemble_pdf(manifest_path, manifest, by_version, pdf)
         deliverables["review_pdf"] = relative_to_run(pdf, manifest_path.parent)
@@ -804,6 +838,7 @@ def assemble_run(args: argparse.Namespace) -> None:
         "run_id": manifest["run_id"], "status": "assembled-awaiting-human-review",
         "source_manifest_sha256_before_assembly": sha256(manifest_path),
         "approval_note": approval, "format": output_format,
+        "selected_versions": selected, "all_versions": selected is None,
         "validation_scope": "Native provenance, hashes, scene chat identity, shot coverage and ordering. Visual review remains required.",
         "panel_count": len(records), "panels": records, "deliverables": deliverables,
     }
@@ -895,6 +930,8 @@ def parser() -> argparse.ArgumentParser:
     assemble = commands.add_parser("assemble")
     assemble.add_argument("--manifest", type=Path, required=True)
     assemble.add_argument("--format", choices=("panels", "html", "review-pdf"), required=True)
+    assemble.add_argument("--select", action="append", metavar="JOB_ID=VERSION", help="Approved candidate per page; repeat for each multi-version page")
+    assemble.add_argument("--all-versions", action="store_true", help="Explicitly include every candidate for comparison")
     assemble.add_argument("--approval-note", required=True, help="record the user's actual authorization for this deliverable")
     assemble.set_defaults(function=assemble_run)
 
