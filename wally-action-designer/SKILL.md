@@ -7,7 +7,9 @@ description: Use only when explicitly requested by name. 按场景设计或修�
 
 根据当前材料完成用户指定范围的表演设计。一个场景是一场完整的戏；镜头数量服务于该场设计。
 
-Version: `wally-action-designer@2026-09-13-v3.23-scene-performance`
+交付沿用 `Style:`、`Reference:`、`Camera:`、`Acting:` 等英文标签和 `Shot` 正文写法，字段按需选用。通过连续文字写清画面与表演的发生过程，具体组织见交付约定。
+
+Version: `wally-action-designer@2026-09-21-v3.24-established-prompt-structure`
 
 ## 按任务读取
 

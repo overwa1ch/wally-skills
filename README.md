@@ -11,7 +11,7 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 | `wally-screenplay-writer` | V2.2 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少，分步开发细则按需读取。 |
 | `wally-storyboard-designer` | V3.20 | 按场景生成故事板或分镜表：故事板每场独立聊天；分镜表一次上传全部资产后逐场分支，同场多页共用聊天。先交付原图，确认后按逐页选定版本裁切并制作逐镜图文成品。 |
 | `wally-static-asset-designer` | V2.10 | 提示词请求交付文本；需要图片时通过内置 Browser 建立命名聊天，每项资产独立聊天；Preview 至少 8 套不同风格提示词与图像，各项资产至少 4 套不同提示词与图像，逐版生成供用户选择，并继承已选全局效果。 |
-| `wally-action-designer` | V3.23 | 按场景完成整场表演与视听设计，保留有效字段和原镜号；场景时间从 0.0s 起算，不强制单镜头、多镜头或统一 Shot 模板。 |
+| `wally-action-designer` | V3.24 | 按场景完成整场表演与视听设计，沿用英文标签与 Shot 连续正文，字段按需选用；保留原镜号，场景时间从 0.0s 接续。 |
 | `wally-visual-style-extractor` | V1.7 | 检索既有风格并提取有证据的 style layer；普通解释直接回答，结构化任务只读对应模板章节。 |
 
 ## 故事、剧本与脚本
@@ -40,7 +40,7 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 - `wally-storyboard-designer` 继承上游已有作品定义与场景结构，保留源场景标题或编号；按请求设计分镜脚本、交付固定绘图提示词或生成故事板／分镜表原图，确认后裁切及制作成品。用户审查创作结果，`wally-helper` 记录测试证据和批准状态。
 - `wally-static-asset-designer` 以用户提供的参考图承载已清楚可见的规格；正式提示词保留字段名和相对顺序，不显示数字或字母序号，只补目标变化、布局、身份锚点与真实漂移风险。
 - `wally-static-asset-designer` 为一个已批准基础 Pxx 的单一关键改变态提供 `Pxx-state`；场景覆盖默认九宫格，九格一致性不足或用户明确要求时可改用 `2×2` 四宫格。
-- `wally-action-designer` 按已有场景拆分，一个场景完整做一场戏；每场从 `0.0s` 起算，场内接续计时，原镜号保留。输入、字段和交付结构随当前材料决定，单镜测试与合并按用户要求执行。表演设计在分镜表生成中等同于导演脚本。
+- `wally-action-designer` 按已有场景拆分，一个场景完整做一场戏；每场从 `0.0s` 起算，场内接续计时，原镜号保留。沿用 `Style:`、`Reference:`、`Camera:`、`Acting:` 等英文标签与 Shot 连续正文，字段按需选用；单镜测试与合并按用户要求执行。表演设计在分镜表生成中等同于导演脚本。
 - Camera 和 Shot 只按任务需要选择 capture physics、光学、稳定性、运动动机、剪辑语法、视点、前景、焦点、空间层次与时长预算；这些控制不得覆盖已批准的镜头权威。
 - 原创或改写对白属于 `wally-screenplay-writer`；`wally-action-designer` 只保留已批准措辞并设计其表演、口型、停顿、声音与镜头内执行。
 - `wally-visual-style-extractor` 普通解释直接回答；结构化请求按需选择 Style Lookup、Analysis Card、Three-Stage Brief、Reusable JSON Prompt 或 Transfer Validation。`subject`、`scene`、`camera` 只接受用户已有值或复用占位符。
