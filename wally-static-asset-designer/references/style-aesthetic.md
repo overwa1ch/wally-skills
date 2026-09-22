@@ -6,6 +6,8 @@ Use `style_aesthetic` to define how the confirmed world and subjects are visuall
 
 Preview 前保留剧本整体调性、世界事实和用户明确锁定的媒介边界，在这些条件内提出多个不同的风格方向，不提前把一个候选当成全局定稿。候选设计与数量见 [preview.md](preview.md) 和 [SKILL.md](../SKILL.md)。
 
+Preview 正文使用图片类型定义、文化锚点、视觉风格参照、画面描述四部分；直接用参照名称测试整体效果，不将下方处理维度展开成额外的提示词清单。
+
 Preview 选图后，将用户选定图像实际呈现的媒介、造型、色彩、光线、材质与纹理提炼为当前 `style_aesthetic`，并引用该选定原图。后续正式资产共同继承；未选候选保留在生成记录中，不混入全局规则。
 
 ## Define the treatment

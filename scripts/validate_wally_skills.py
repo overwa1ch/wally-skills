@@ -17,7 +17,7 @@ SKILLS = {
     "wally-helper": "wally-helper@2026-09-19-v4.3-workflow-guidance",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-09-14-v3.20-selected-versions",
-    "wally-static-asset-designer": "wally-static-asset-designer@2026-09-22-v2.11-preview-definition",
+    "wally-static-asset-designer": "wally-static-asset-designer@2026-09-22-v2.12-preview-style-reference",
     "wally-action-designer": "wally-action-designer@2026-09-22-v3.25-shot-audio-reference",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
@@ -27,7 +27,7 @@ README_VERSIONS = {
     "wally-helper": "V4.3",
     "wally-screenplay-writer": "V2.2",
     "wally-storyboard-designer": "V3.20",
-    "wally-static-asset-designer": "V2.11",
+    "wally-static-asset-designer": "V2.12",
     "wally-action-designer": "V3.25",
     "wally-visual-style-extractor": "V1.7",
 }
@@ -35,8 +35,8 @@ README_VERSIONS = {
 FROZEN_HASHES = {
     "wally-storyboard-designer/templates/storyboard-prompt-template.md": "de663576ce7998da223187aa9c182f8a4eaabd41312e1f92f2d1395da8b4efbc",
     "wally-storyboard-designer/templates/shot-table-prompt-template.md": "4c1c0c0cbf2df85ff016f30665f2df2b69ab1e752bbe1dcbd71ac376b50126ea",
-    "wally-static-asset-designer/templates/preview-prompt.md": "f120a6547d4ac1c4b877229ed90af7a098edd4aad7285fbc838d395c0f33b479",
-    "wally-static-asset-designer/templates/visual-direction-proposal.md": "fd8e8aaa01923854ae8798f1370b5f5b2cc36c39cd1c917c8a5ac7ec9b857a35",
+    "wally-static-asset-designer/templates/preview-prompt.md": "c5808b60a3b449874171ccb4d244cdd4ac7c84cbdde62487836057532274f384",
+    "wally-static-asset-designer/templates/visual-direction-proposal.md": "b28cb2fb747d0385a4f895866ccb698a5384a7a03e0aa787d752749be48fec9c",
     "wally-static-asset-designer/types/multi-angle.md": "639bb4ced779f8fb8de5459f477fa3063a9bc7ae6db1a8666528f385ad8ed1f0",
 }
 
