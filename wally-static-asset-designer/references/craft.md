@@ -2,9 +2,11 @@
 
 Write prompts as efficient visible instructions, not essays.
 
+Preview 使用 [preview.md](preview.md) 的单段写法与[专用模板](../templates/preview-prompt.md)。本页下述展开顺序、瑕疵建议和细节示例用于其他图像，不应用到 Preview。
+
 ## Use ordered blocks
 
-For a natural effect image or Preview, use this order:
+For a natural effect image other than Preview, use this order:
 
 1. generated object and core style;
 2. main subject;

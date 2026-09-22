@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-static-asset-desig
 
 规划静态资产，先用 Preview 选择全局视觉效果，再生成各项资产的候选版本，由用户逐项选择并归档。
 
-Version: `wally-static-asset-designer@2026-09-14-v2.10-prompt-scope`
+Version: `wally-static-asset-designer@2026-09-22-v2.11-preview-definition`
 
 ## 共用边界
 
@@ -44,7 +44,7 @@ Version: `wally-static-asset-designer@2026-09-14-v2.10-prompt-scope`
 | 当前任务 | 读取入口与交付范围 |
 | --- | --- |
 | 资产规划与视觉边界 | [planning.md](references/planning.md)、[regional-anchor.md](references/regional-anchor.md)、[style-aesthetic.md](references/style-aesthetic.md)，使用 [方案模板](templates/visual-direction-proposal.md)；确认资产范围、剧本调性和不可变事实，风格方向留待 Preview 看图选择。 |
-| Preview 候选与选定 | [preview.md](references/preview.md)、[craft.md](references/craft.md) 与 [Preview 模板](templates/preview-prompt.md)；要图时再读浏览器流程。 |
+| Preview 候选与选定 | [preview.md](references/preview.md) 与 [Preview 模板](templates/preview-prompt.md)：先定义图片类型，以具体年代、地域为文化锚点，写成精简的一段话；要图时再读浏览器流程。 |
 | 单项正式资产候选 | [contracts.md](references/contracts.md) 与所选 `types/<asset>.md`；类型对应关系见 planning，字段、几何和呈现按类型合同保留；要图时再读浏览器流程。 |
 | 九宫格 / 四宫格候选 | 默认使用 [multi-angle.md](types/multi-angle.md)；用户直接要求或选择 fallback 时使用 [multi-angle-2x2.md](types/multi-angle-2x2.md)。基础地点须已选定；审查九宫格时不擅自追加或执行四宫格。 |
 | 已有资产或候选审查 | [review-protocol.md](references/review-protocol.md) 和相关类型清单；Preview 还使用 preview 的调性与方向检查。 |
