@@ -23,7 +23,7 @@ Then run the type checklist in the asset's `types/<asset>.md`.
 
 ## 候选包与用户选择
 
-- 生成任务按 [SKILL.md](../SKILL.md) 的数量要求逐版检查，再横向比较：每个方向须有不同的完整提示词和可见设计差异，不能用重复文案、随机重画或技术重试充数。
+- 生成任务按 [SKILL.md](../SKILL.md) 的数量要求逐版检查，再横向比较：每个方向须有不同的完整生成输入（正文与所需参考）和可见设计差异，不能用重复输入、随机重画或技术重试充数。
 - Preview 各方向都要符合剧本整体调性；正式资产各版本都要继承已选全局风格和基础参考。指出差异和客观问题，不把个人审美偏好写成技术失败。
 - 版本号、原图、提示词和评审一一对应；缺图、失败和不足数量明确保留。不得只展示 Agent 喜欢的一版，也不把未下载原图的结果计为已交付候选。
 - 每版技术 verdict 与用户选择分别记录。用户自行选满意的版本；没有明确选择时保持未选定，不向依赖它的下一阶段传播“已批准”状态。
@@ -32,7 +32,7 @@ Then run the type checklist in the asset's `types/<asset>.md`.
 
 - **regional_anchor:** concise visible cues for geography, climate, era, social conditions, architecture, materials, daily life, practical light, and avoidances; world truth without prescribing an image finish. Flag plot summary, biography, abstract theme, unsupported place names, tourist landmarks, brand invention, or per-asset repetition.
 - **style_aesthetic:** visible rules for medium, stylization, shape, color, light, material rendering, texture, atmosphere, imperfection, and avoidances that preserve locked regional, historical, material, and social facts. Flag empty prestige language, contradictory cleanliness or saturation, generic genre replacement, or style rules that erase the world.
-- **Preview:** follow [preview.md](preview.md). Each prompt uses exactly four parts in order: image type, cultural anchor with a specific story era and region, visual style reference, and picture description. Form one concise paragraph without field labels; do not require expansion of the reference into camera, lighting, color, or texture/shadow microdetail. Changing only the reference name is a valid test direction; assess visible differences after generation. Each candidate is one person-led image sharing the representative content baseline and preserving user-locked composition. Flag prompt pollution, irrelevant off-frame detail, conflicting world facts, tonal drift, generic AI polish, or a result that cannot guide production assets.
+- **Preview:** each candidate is one person-led effect image, sharing the same image type, cultural context, and composition while testing a visibly grounded style reference and any necessary supporting style name or verified cinematography parameter. Review against [craft.md](craft.md) and [style-aesthetic.md](style-aesthetic.md). Verify the actual reference binding and visible differences; names or equipment lists alone do not establish style fidelity or stability. Flag an invented style or parameter, missing source or screenplay fit, film-title style labels, missing concrete visual-style definitions, or definitions not reflected in the generated image, missing or drifting cultural context, background exposition in composition, fixed image treatment that suppresses candidate differences, prompt pollution, conflicting world facts, or a result that cannot guide production assets.
 - **Production prompt:** one copy-ready prompt containing both the design specification and the generation instruction, with only relevant anchor effects translated in. Flag a detached duplicate design report, missing presentation instructions, or abstract anchor text pasted without translation.
 
 ## Findings and verdict

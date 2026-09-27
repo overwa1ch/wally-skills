@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-static-asset-desig
 
 规划静态资产，先用 Preview 选择全局视觉效果，再生成各项资产的候选版本，由用户逐项选择并归档。
 
-Version: `wally-static-asset-designer@2026-09-22-v2.12-preview-style-reference`
+Version: `wally-static-asset-designer@2026-09-27-v2.13-defined-visual-style`
 
 ## 共用边界
 
@@ -15,18 +15,19 @@ Version: `wally-static-asset-designer@2026-09-22-v2.12-preview-style-reference`
 - 保留剧本事实、整体调性与用户已确认的视觉约束。故事板只作为状态、构图、空间与道具的证据，不修改镜头序列。
 - 有参考图时先看图，以图中可见事实为依据；缺少的必要依据明确指出，不凭空补齐。具体生产依赖由所选类型文件维护。
 - 只交付用户点名的产品。完整流程仅在用户要求建立整套资产系统或完成全流程时运行；已有选定的 Preview 或基础资产直接继承。
+- Preview 与自然效果图使用“整体风格＋构图描述”。整体风格包含图片类型、文化语境和视觉风格。Agent 结合剧本与真实参考，将决定画面质感的关键可见特征明确写入视觉风格，提供模型可执行的生成依据；名称仅作概括，效果以回图验证。用户看画面判断适配性，具体提炼与实现由 Agent 负责；内容范围见 [style-aesthetic.md](references/style-aesthetic.md)，正文边界见 [craft.md](references/craft.md)。正式资产板式仍遵循对应类型合同。完整写法见[纪实摄影示例](examples/preview-documentary.md)。
 - 不创作剧本、分镜、表演、对白、时序或声音，不编写视频提示词。
 
 ## 候选版本与选择
 
 本节统一维护每轮候选包的最低数量，适用于提示词准备与对应图像生成：
 
-| 产品 | 不同完整提示词 | 独立图像版本 | 变化范围 |
+| 产品 | 不同完整生成输入（正文与所需参考） | 独立图像版本 | 变化范围 |
 | --- | --- | --- | --- |
 | Preview | 至少 8 套 | 至少 8 版 | 符合剧本整体调性的不同全局视觉风格方向。 |
 | 每项静态资产，包括九宫格、四宫格 | 至少 4 套 | 至少 4 版 | 继承已选全局风格与基础参考，在当前资产允许的范围内形成不同候选。 |
 
-- 一套提示词对应一个候选版本；提示词之间须有可见、可解释的设计差异。重复相同提示词、只改编号或依赖随机结果，不构成不同方案。
+- 一套完整生成输入对应一个候选版本；各版须有可见、可解释的设计差异。风格参考不同的版本可以共用正文，但必须记录并实际接入各自参考。重复相同正文与参考、只改编号或依赖随机结果，不构成不同方案。
 - 用户看完整候选包后自行选择。Agent 负责说明差异、剧本调性适配和技术问题，不替用户选定，不把 `usable` 当成批准。
 - 用户选定后记录版本与原图，依赖它的生产才能继续。批量执行授权只覆盖生成候选，不替代选图；用户明确指定采用已有版本时直接记录，不重复询问。
 - 只做审查、解释或归档时不自动补生成候选包。用户针对一个候选要求技术修正时，只修该候选；新一轮方向探索才重新形成候选包。
@@ -44,7 +45,7 @@ Version: `wally-static-asset-designer@2026-09-22-v2.12-preview-style-reference`
 | 当前任务 | 读取入口与交付范围 |
 | --- | --- |
 | 资产规划与视觉边界 | [planning.md](references/planning.md)、[regional-anchor.md](references/regional-anchor.md)、[style-aesthetic.md](references/style-aesthetic.md)，使用 [方案模板](templates/visual-direction-proposal.md)；确认资产范围、剧本调性和不可变事实，风格方向留待 Preview 看图选择。 |
-| Preview 候选与选定 | [preview.md](references/preview.md) 与 [Preview 模板](templates/preview-prompt.md)：图片类型定义＋文化锚点＋视觉风格参照＋画面描述，依次写成一个简短自然段；参照来源和写法按需读取，要图时再读浏览器流程。 |
+| Preview 候选与选定 | [preview.md](references/preview.md)、[craft.md](references/craft.md) 与 [Preview 模板](templates/preview-prompt.md)；要图时再读浏览器流程。 |
 | 单项正式资产候选 | [contracts.md](references/contracts.md) 与所选 `types/<asset>.md`；类型对应关系见 planning，字段、几何和呈现按类型合同保留；要图时再读浏览器流程。 |
 | 九宫格 / 四宫格候选 | 默认使用 [multi-angle.md](types/multi-angle.md)；用户直接要求或选择 fallback 时使用 [multi-angle-2x2.md](types/multi-angle-2x2.md)。基础地点须已选定；审查九宫格时不擅自追加或执行四宫格。 |
 | 已有资产或候选审查 | [review-protocol.md](references/review-protocol.md) 和相关类型清单；Preview 还使用 preview 的调性与方向检查。 |
