@@ -9,7 +9,7 @@ description: Use only when explicitly requested by name. 按场景设计或修�
 
 交付沿用 `Style:`、`Reference:`、`Camera:`、`Acting:` 等英文标签和 `Shot` 正文写法，字段按需选用。通过连续文字写清画面与表演的发生过程，具体组织见交付约定。
 
-Version: `wally-action-designer@2026-09-28-v3.26-reference-format`
+Version: `wally-action-designer@2026-09-28-v3.27-visual-reference-style`
 
 ## 按任务读取
 

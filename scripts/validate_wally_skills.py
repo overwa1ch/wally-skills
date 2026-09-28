@@ -17,8 +17,8 @@ SKILLS = {
     "wally-helper": "wally-helper@2026-09-19-v4.3-workflow-guidance",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-09-14-v3.20-selected-versions",
-    "wally-static-asset-designer": "wally-static-asset-designer@2026-09-28-v2.14-representative-preview",
-    "wally-action-designer": "wally-action-designer@2026-09-28-v3.26-reference-format",
+    "wally-static-asset-designer": "wally-static-asset-designer@2026-09-28-v2.15-visual-reference-style",
+    "wally-action-designer": "wally-action-designer@2026-09-28-v3.27-visual-reference-style",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
 
@@ -27,16 +27,16 @@ README_VERSIONS = {
     "wally-helper": "V4.3",
     "wally-screenplay-writer": "V2.2",
     "wally-storyboard-designer": "V3.20",
-    "wally-static-asset-designer": "V2.14",
-    "wally-action-designer": "V3.26",
+    "wally-static-asset-designer": "V2.15",
+    "wally-action-designer": "V3.27",
     "wally-visual-style-extractor": "V1.7",
 }
 
 FROZEN_HASHES = {
     "wally-storyboard-designer/templates/storyboard-prompt-template.md": "de663576ce7998da223187aa9c182f8a4eaabd41312e1f92f2d1395da8b4efbc",
     "wally-storyboard-designer/templates/shot-table-prompt-template.md": "4c1c0c0cbf2df85ff016f30665f2df2b69ab1e752bbe1dcbd71ac376b50126ea",
-    "wally-static-asset-designer/templates/preview-prompt.md": "367bb5a645552ac91548728b965dd3ee28b901d7b2460764d700a4e06a20a724",
-    "wally-static-asset-designer/templates/visual-direction-proposal.md": "a24dd73aa5d320a57c74f90b3541906b51e4f7de58898f1d53d47a8cdbba53ba",
+    "wally-static-asset-designer/templates/preview-prompt.md": "9f2eb6b3c08ba712706f4c1ddc6033096f149c08d2b3209277fc72c377232574",
+    "wally-static-asset-designer/templates/visual-direction-proposal.md": "eb2b8e7b2a82d29954787a79b646cd7e16245f748a4f512faecb908e6efa7365",
     "wally-static-asset-designer/types/multi-angle.md": "639bb4ced779f8fb8de5459f477fa3063a9bc7ae6db1a8666528f385ad8ed1f0",
 }
 

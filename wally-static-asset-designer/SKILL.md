@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-static-asset-desig
 
 规划静态资产，先用 Preview 选择全局视觉效果，再生成各项资产的候选版本，由用户逐项选择并归档。
 
-Version: `wally-static-asset-designer@2026-09-28-v2.14-representative-preview`
+Version: `wally-static-asset-designer@2026-09-28-v2.15-visual-reference-style`
 
 ## 共用边界
 
@@ -15,7 +15,7 @@ Version: `wally-static-asset-designer@2026-09-28-v2.14-representative-preview`
 - 保留剧本事实、整体调性与用户已确认的视觉约束。故事板只作为状态、构图、空间与道具的证据，不修改镜头序列。
 - 有参考图时先看图，以图中可见事实为依据；缺少的必要依据明确指出，不凭空补齐。具体生产依赖由所选类型文件维护。
 - 只交付用户点名的产品。完整流程仅在用户要求建立整套资产系统或完成全流程时运行；已有选定的 Preview 或基础资产直接继承。
-- Preview 与自然效果图使用“整体风格＋构图描述”。主要精力用于整体风格：图片类型、文化语境和视觉风格的关键可见定义。先从剧本提炼要验证的表现目标，再选覆盖这些目标的一组代表画面；同轮各风格复用这一组。每张独立剧照简写前景、主体、背景。选帧与比较见 [preview.md](references/preview.md)，风格定义见 [style-aesthetic.md](references/style-aesthetic.md)，正文边界见 [craft.md](references/craft.md)。正式资产板式仍遵循对应类型合同；单帧完整写法见[纪实摄影示例](examples/preview-documentary.md)。
+- Preview 与自然效果图使用“整体风格＋构图描述”：保留图片类型与文化锚点；有视觉风格参考图时直接引用图片，省略风格词，没有参考图时才写关键视觉定义。先从剧本提炼要验证的表现目标，再选覆盖这些目标的一组代表画面；同轮各风格复用这一组。每张独立剧照简写前景、主体、背景。选帧与比较见 [preview.md](references/preview.md)，风格引用规则见 [style-aesthetic.md](references/style-aesthetic.md)，正文边界见 [craft.md](references/craft.md)。正式资产板式仍遵循对应类型合同；无风格参考图的单帧写法见[纪实摄影示例](examples/preview-documentary.md)。
 - 不创作剧本、分镜、表演、对白、时序或声音，不编写视频提示词。
 
 ## 候选版本与选择
