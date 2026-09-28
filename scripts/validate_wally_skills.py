@@ -18,7 +18,7 @@ SKILLS = {
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-09-14-v3.20-selected-versions",
     "wally-static-asset-designer": "wally-static-asset-designer@2026-09-28-v2.14-representative-preview",
-    "wally-action-designer": "wally-action-designer@2026-09-22-v3.25-shot-audio-reference",
+    "wally-action-designer": "wally-action-designer@2026-09-28-v3.26-reference-format",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
 
@@ -28,7 +28,7 @@ README_VERSIONS = {
     "wally-screenplay-writer": "V2.2",
     "wally-storyboard-designer": "V3.20",
     "wally-static-asset-designer": "V2.14",
-    "wally-action-designer": "V3.25",
+    "wally-action-designer": "V3.26",
     "wally-visual-style-extractor": "V1.7",
 }
 
