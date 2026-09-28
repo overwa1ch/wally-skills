@@ -2,6 +2,8 @@
 
 本例展示整体风格与构图描述的两段写法。提示词已获用户认可，图像效果仍须生成验证；示例人物、地点和装备不自动成为其他项目设定。
 
+这是代表画面组中一帧的写法示例；实际选帧按 [Preview 表现目标](../references/preview.md) 覆盖当前剧本的重要内容。
+
 选型依据：军事行动发生在普通办公空间，人物与危险近距离相处，采用纪实摄影方向检验现场质感。自然光、现场光源与颗粒的研究依据见 [Barry Ackroyd 摄影访谈](https://filmmakermagazine.com/4677-cinematographer-barry-ackroyd-talks-the-hurt-locker-by-scott-macaulay/)。以下为结合本例内容的创作转译，未声称复刻具体镜头或摄影参数。
 
 ```text
