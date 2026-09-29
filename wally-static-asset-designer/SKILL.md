@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-static-asset-desig
 
 规划静态资产，先用 Preview 选择全局视觉效果，再生成各项资产的候选版本，由用户逐项选择并归档。
 
-Version: `wally-static-asset-designer@2026-09-28-v2.15-visual-reference-style`
+Version: `wally-static-asset-designer@2026-09-29-v2.16-character-reference-sheets`
 
 ## 共用边界
 
@@ -25,7 +25,7 @@ Version: `wally-static-asset-designer@2026-09-28-v2.15-visual-reference-style`
 | 产品 | 不同完整生成输入（正文与所需参考） | 独立图像版本 | 变化范围 |
 | --- | --- | --- | --- |
 | Preview 完整方向探索 | 至少 8 个风格方向，每个方向为同一组代表画面分别写完整输入 | 每个方向的每个代表画面至少 1 版 | 符合剧本整体调性的不同全局视觉风格方向。 |
-| 每项静态资产，包括九宫格、四宫格 | 至少 4 套 | 至少 4 版 | 继承已选全局风格与基础参考，在当前资产允许的范围内形成不同候选。 |
+| 每项静态资产，包括九宫格、四宫格 | 至少 4 套 | 至少 4 版 | 按类型合同继承已选图片类型与所需参考，在当前资产允许的范围内形成不同候选。 |
 
 - Preview 分别记录风格方向与代表画面；同一风格的多张画面共同验证该方向，不能充作多个风格方向。正式资产的一套完整生成输入对应一个候选版本。各方向或版本须有可见、可解释的设计差异；采用不同风格参考时可以共用正文，但须记录并实际接入各自参考。重复输入、只改编号或依赖随机结果不构成不同方案。
 - 用户看完整候选包后自行选择。Agent 负责说明差异、剧本调性适配和技术问题，不替用户选定，不把 `usable` 当成批准。

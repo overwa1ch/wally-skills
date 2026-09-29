@@ -6,7 +6,7 @@ Use `style_aesthetic` to define how the confirmed world and subjects are visuall
 
 Preview 前保留剧本整体调性、世界事实和用户明确锁定的媒介边界，在这些条件内提出多个不同的风格方向，不提前把一个候选当成全局定稿。候选设计与数量见 [preview.md](preview.md) 和 [SKILL.md](../SKILL.md)。
 
-Preview 选图后，当前 `style_aesthetic` 直接引用用户选定原图。媒介、造型、色彩、光线、材质与纹理的分析可留在内部审查记录中，后续提示词按下方规则引用图片。正式资产共同继承；未选候选保留在生成记录中，不混入全局规则。
+Preview 选图后，当前 `style_aesthetic` 直接引用用户选定原图。媒介、造型、色彩、光线、材质与纹理的分析可留在内部审查记录中。需要视觉风格的产物按下方规则引用图片；人物资产页按[共用契约](contracts.md#人物资产页)保留图片类型、人物设计与固定呈现要求。未选候选保留在生成记录中，不混入全局规则。
 
 ## 整体风格包括什么
 

@@ -10,7 +10,7 @@ Load this file plus the asset's `types/<asset>.md` checklist when reviewing a re
 
 ## Shared checks
 
-1. **Fidelity:** preserve explicit identity, object, setting, screenplay tone, `regional_anchor`, and world facts. Preview follows its declared candidate style; production assets follow the user-selected global `style_aesthetic`.
+1. **Fidelity:** preserve explicit identity, object, setting, screenplay tone, `regional_anchor`, and world facts. Preview follows its declared candidate style; production assets follow their type-specific reference and presentation requirements in [contracts.md](contracts.md).
 2. **Reuse value:** expose the views, structure, scale, state, and materials needed for consistent reuse.
 3. **Physical coherence:** keep anatomy, weight, joints, contact, construction, mechanisms, lighting, and surface behavior coherent with the established world and selected medium.
 4. **Readability:** make silhouettes, feet, hands, faces, edges, entrances, paths, contact points, and important details visible where relevant.
@@ -24,7 +24,7 @@ Then run the type checklist in the asset's `types/<asset>.md`.
 ## 候选包与用户选择
 
 - 生成任务按 [SKILL.md](../SKILL.md) 的数量要求逐版检查，再横向比较：每个方向须有不同的完整生成输入（正文与所需参考）和可见设计差异，不能用重复输入、随机重画或技术重试充数。
-- Preview 各方向都要符合剧本整体调性；正式资产各版本都要继承已选全局风格和基础参考。指出差异和客观问题，不把个人审美偏好写成技术失败。
+- Preview 各方向都要符合剧本整体调性；正式资产各版本都要继承当前类型要求的已选参考与呈现约束。指出差异和客观问题，不把个人审美偏好写成技术失败。
 - 版本号、图像结果、提示词和评审一一对应；缺图、失败和不足数量明确保留。不得只展示 Agent 喜欢的一版。用户要求只在网页核看时，记录网页结果及核看完成度，原图归档单独标记为未下载。
 - 每版技术 verdict 与用户选择分别记录。用户自行选满意的版本；没有明确选择时保持未选定，不向依赖它的下一阶段传播“已批准”状态。
 
