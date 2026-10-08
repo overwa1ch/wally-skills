@@ -17,7 +17,7 @@ SKILLS = {
     "wally-helper": "wally-helper@2026-09-19-v4.3-workflow-guidance",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-09-14-v3.20-selected-versions",
-    "wally-static-asset-designer": "wally-static-asset-designer@2026-09-29-v2.16-character-reference-sheets",
+    "wally-static-asset-designer": "wally-static-asset-designer@2026-10-08-v2.17-async-human-review",
     "wally-action-designer": "wally-action-designer@2026-09-29-v3.28-one-decimal-timestamps",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
@@ -27,7 +27,7 @@ README_VERSIONS = {
     "wally-helper": "V4.3",
     "wally-screenplay-writer": "V2.2",
     "wally-storyboard-designer": "V3.20",
-    "wally-static-asset-designer": "V2.16",
+    "wally-static-asset-designer": "V2.17",
     "wally-action-designer": "V3.28",
     "wally-visual-style-extractor": "V1.7",
 }
@@ -35,9 +35,9 @@ README_VERSIONS = {
 FROZEN_HASHES = {
     "wally-storyboard-designer/templates/storyboard-prompt-template.md": "de663576ce7998da223187aa9c182f8a4eaabd41312e1f92f2d1395da8b4efbc",
     "wally-storyboard-designer/templates/shot-table-prompt-template.md": "4c1c0c0cbf2df85ff016f30665f2df2b69ab1e752bbe1dcbd71ac376b50126ea",
-    "wally-static-asset-designer/templates/preview-prompt.md": "9f2eb6b3c08ba712706f4c1ddc6033096f149c08d2b3209277fc72c377232574",
+    "wally-static-asset-designer/templates/preview-prompt.md": "1fdc2c88e72aa29a1203c23499ddedc5a8ee5e0fb3bebc2466019a1d596adc74",
     "wally-static-asset-designer/templates/visual-direction-proposal.md": "eb2b8e7b2a82d29954787a79b646cd7e16245f748a4f512faecb908e6efa7365",
-    "wally-static-asset-designer/types/multi-angle.md": "639bb4ced779f8fb8de5459f477fa3063a9bc7ae6db1a8666528f385ad8ed1f0",
+    "wally-static-asset-designer/types/multi-angle.md": "afbec47b9d7f7151aafb18ab48816a3de9fc075119d85efde3009eac5e244f0e",
 }
 
 CANONICAL_STYLE_HASH = "863d0b9b259dbb1a1c56788c29f0138c7d178d82bbb78a3669cf9a56a21294aa"

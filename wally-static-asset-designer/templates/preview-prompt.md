@@ -1,6 +1,6 @@
 # Preview 候选提示词模板
 
-用于 [Preview 方向测试](../references/preview.md)。先确定表现目标与共用代表画面组；按 SKILL 规定的方向数量或用户限定范围，为每个方向的每帧分别填写完整提示词，按 [浏览器流程](../references/browser-execution.md) 依次执行。
+用于 [Preview 方向测试](../references/preview.md)。先确定表现目标与共用代表画面组；按 SKILL 规定的方向数量或用户限定范围，为每个方向的每帧分别填写完整提示词，按 [浏览器流程](../references/browser-execution.md) 在独立聊天中持续提交，整轮收集后交人审查。
 
 主要精力放在整体风格；每帧按前景、主体、背景简写。同轮各风格复用同一组构图，同一方向跨画面复用其视觉风格定义。
 
@@ -33,4 +33,4 @@
 
 景别、观察角度和确需看清的对象按需要融入构图，只呈现选定瞬间的可见内容。
 
-视觉风格的依据与实现由 [style-aesthetic.md](../references/style-aesthetic.md) 规定。参考选择、关键定义、必要参数和回图检查由 Agent 处理；给用户看具体写法及实际效果，不要求用户填写摄影或美术指标。
+视觉风格的依据与实现由 [style-aesthetic.md](../references/style-aesthetic.md) 规定。Agent 依据文字材料准备参考绑定与必要定义，并提交、收集结果；回图统一交人审查，不要求用户填写摄影或美术指标。
