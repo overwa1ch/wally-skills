@@ -10,8 +10,8 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 | `wally-helper` | V4.3 | 整理材料、记录制作经验、建议下一步、检查跨产物兼容性，并提供专业 skill 的可复制调用请求；按需返回固定 BGM 制作请求。 |
 | `wally-screenplay-writer` | V2.2 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少，分步开发细则按需读取。 |
 | `wally-storyboard-designer` | V3.20 | 按场景生成故事板或分镜表：故事板每场独立聊天；分镜表一次上传全部资产后逐场分支，同场多页共用聊天。先交付原图，确认后按逐页选定版本裁切并制作逐镜图文成品。 |
-| `wally-static-asset-designer` | V2.17 | 提示词请求交付文本；需要图片时生成候选。人物页保留图片类型、人物设计与固定呈现要求；需要视觉风格的产物有图时省略风格词，保留文化锚点。Preview 按全片表现目标选代表画面，完整探索至少 8 个风格方向，各方向复用同一组画面；用户限定的测试按范围执行。各项正式资产至少 4 套不同输入与图像。每条完整输入独立聊天，持续提交后收集整轮结果，由人审图与选定。 |
-| `wally-action-designer` | V3.28 | 按场景完成整场表演与视听设计，沿用英文标签与 Shot 连续正文，字段按需选用；保留原镜号，场景时间从 0.0s 接续，时间戳统一保留一位小数。Style 保留文化与时空信息，有风格参考图时直接引用。 |
+| `wally-static-asset-designer` | V2.18 | 提示词请求交付文本；需要图片时生成候选。按任务加载规则，定稿原文一次装载复用，网页只返回必要核验结果。人物页保留图片类型、人物设计与固定呈现要求；需要视觉风格的产物有图时省略风格词，保留文化锚点。Preview 按全片表现目标选代表画面，完整探索至少 8 个风格方向，各方向复用同一组画面；用户限定的测试按范围执行。各项正式资产至少 4 套不同输入与图像。每条完整输入独立聊天，持续提交后收集整轮结果，由人审图与选定。 |
+| `wally-action-designer` | V3.29 | 按场景完成整场表演与视听设计，沿用英文标签与 Shot 连续正文，字段按需选用；保留原镜号，场景时间从 0.0s 接续，时间戳统一保留一位小数。Style 保留文化与时空信息，有风格参考图时直接引用。 |
 | `wally-visual-style-extractor` | V1.7 | 检索既有风格并提取有证据的 style layer；普通解释直接回答，结构化任务只读对应模板章节。 |
 
 ## 故事、剧本与脚本
@@ -41,7 +41,7 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 - `wally-static-asset-designer` 的 Preview 使用“整体风格＋构图描述”，保留图片类型、文化锚点与构图；有视觉风格参考图时直接引用图片，省略风格词，没有参考图时才写关键视觉定义。按剧本表现目标选择一组代表画面，每张简写前景、主体、背景；各风格复用同一组以比较全片适配。模型与参数在开测时核实，回图效果由人审查；[无风格参考图的单帧示例](wally-static-asset-designer/examples/preview-documentary.md)按需查看。
 - `wally-static-asset-designer` 根据文字材料、用户说明和已选记录绑定参考图；正式提示词保留字段名和相对顺序，不显示数字或字母序号，只补目标变化、布局、身份锚点与有依据的漂移风险。Agent 核对任务回执、文件关联与元数据，图像内容和效果由人判断。
 - `wally-static-asset-designer` 为一个已批准基础 Pxx 的单一关键改变态提供 `Pxx-state`；场景覆盖默认九宫格，九格一致性不足或用户明确要求时可改用 `2×2` 四宫格。
-- `wally-action-designer` 按已有场景拆分，一个场景完整做一场戏；每场从 `0.0s` 起算，场内接续计时，原镜号保留。沿用 `Style:`、`Reference:`、`Camera:`、`Acting:` 等英文标签与 Shot 连续正文，字段按需选用；单镜测试与合并按用户要求执行。表演设计在分镜表生成中等同于导演脚本。
+- `wally-action-designer` 按已有场景拆分，一个场景完整做一场戏；每场从 `0.0s` 起算，场内接续计时，原镜号保留。沿用 `Style:`、`Reference:`、`Camera:`、`Action:` 等英文标签与 Shot 连续正文，字段按需选用；动作与表演统一写入 `Action`，有时间段或多镜头时写入对应时间段或 `Shot`，避免重复。单镜测试与合并按用户要求执行。表演设计在分镜表生成中等同于导演脚本。
 - Camera 和 Shot 只按任务需要选择 capture physics、光学、稳定性、运动动机、剪辑语法、视点、前景、焦点、空间层次与时长预算；这些控制不得覆盖已批准的镜头权威。
 - 原创或改写对白属于 `wally-screenplay-writer`；`wally-action-designer` 只保留已批准措辞并设计其表演、口型、停顿、声音与镜头内执行。
 - `wally-visual-style-extractor` 普通解释直接回答；结构化请求按需选择 Style Lookup、Analysis Card、Three-Stage Brief、Reusable JSON Prompt 或 Transfer Validation。`subject`、`scene`、`camera` 只接受用户已有值或复用占位符。
@@ -73,6 +73,7 @@ python -m pip install Pillow reportlab
 python scripts/validate_wally_skills.py --skills-root .
 python -m unittest discover -s tests -p 'test_*.py' -v
 python -m unittest discover -s wally-storyboard-designer/tests -p 'test_*.py' -v
+node --test wally-static-asset-designer/tests/test_cua_payload.cjs
 ```
 
 ## 仓库迁移

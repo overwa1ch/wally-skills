@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-static-asset-desig
 
 规划静态资产，先用 Preview 选择全局视觉效果，再生成各项资产的候选版本，由用户逐项选择并归档。
 
-Version: `wally-static-asset-designer@2026-10-08-v2.17-async-human-review`
+Version: `wally-static-asset-designer@2026-10-10-v2.18-lean-execution`
 
 ## 共用边界
 
@@ -16,7 +16,6 @@ Version: `wally-static-asset-designer@2026-10-08-v2.17-async-human-review`
 - Agent 根据文字材料、用户说明和已选关系准备输入，直接绑定所需参考图，不查看或评判图像内容。图片用途不清楚且影响输入时，只补问必要的用途说明。具体生产依赖由所选类型文件维护。
 - 图像内容、整体观感、风格差异和资产可用性统一由人审查。Agent 只核对提交回执、任务状态、文件关联及尺寸等元数据；类型清单用于起草提示词和供人审查，不作为 Agent 审图任务。
 - 只交付用户点名的产品。完整流程仅在用户要求建立整套资产系统或完成全流程时运行；已有选定的 Preview 或基础资产直接继承。
-- Preview 与自然效果图使用“整体风格＋构图描述”：保留图片类型与文化锚点；有视觉风格参考图时直接引用图片，省略风格词，没有参考图时才写关键视觉定义。先从剧本提炼要验证的表现目标，再选覆盖这些目标的一组代表画面；同轮各风格复用这一组。每张独立剧照简写前景、主体、背景。选帧与比较见 [preview.md](references/preview.md)，风格引用规则见 [style-aesthetic.md](references/style-aesthetic.md)，正文边界见 [craft.md](references/craft.md)。正式资产板式仍遵循对应类型合同；无风格参考图的单帧写法见[纪实摄影示例](examples/preview-documentary.md)。
 - 不创作剧本、分镜、表演、对白、时序或声音，不编写视频提示词。
 
 ## 候选版本与选择
@@ -34,22 +33,19 @@ Version: `wally-static-asset-designer@2026-10-08-v2.17-async-human-review`
 - 只整理人工审查意见、解释或归档时不自动补生成候选包。用户针对一个候选要求修正时，只修该候选；新一轮方向探索才重新形成候选包。
 - 用户限定单一风格、某个模型或某项表现验证时，按限定范围执行并记录为专项测试；完成该测试不等于完成全局风格选型。
 
-## 默认执行方式
-
-- 图片产物默认内部起草提示词，通过内置 Browser 操控 ChatGPT Web，持续提交、轮询状态、下载并交付完整候选包，由人审图，不要求用户搬运提示词。
-- 用户要求提示词、查看或修改提示词时，仅交付相应文本；要求制作或生成图片时执行网页生成。
-- 网页项目、聊天命名、异步提交、收集和恢复统一遵循 [browser-execution.md](references/browser-execution.md)。每条完整输入独立聊天；确认提交后立即创建下一任务的聊天并发送输入，出图与下载不阻塞后续无依赖任务的提交。
-
 ## 按任务读取
 
-只读当前任务对应文件；历史版本记录留在仓库 Changelog，不默认加载。
+只读当前任务对应入口，按表中触发条件读取其引用；历史版本留在 Changelog，不默认加载。用户只要提示词时交付文本；要图时默认内部准备输入，通过内置 Browser 操作 ChatGPT Web 提交、收集完整候选包并交人审图。
+
+**定稿执行**：核对范围、候选数和已选参考依赖，逐字沿用完整输入，加载浏览器流程与生成记录；定稿或记录不足以确认所需已选参考依赖时，只按需读取对应类型的依赖要求。交付时再加载人工审查流程；需起草、补充或修改输入时，转入对应起草入口读取 Preview、写作合同或类型细则。
 
 | 当前任务 | 读取入口与交付范围 |
 | --- | --- |
+| 生成、收集或恢复 | [browser-execution.md](references/browser-execution.md) 与 [候选生成记录](templates/generation-record.md)；执行完整的项目与聊天命名、独立聊天、异步提交核验、原图归档及恢复流程。 |
 | 资产规划与视觉边界 | [planning.md](references/planning.md)、[regional-anchor.md](references/regional-anchor.md)、[style-aesthetic.md](references/style-aesthetic.md)，使用 [方案模板](templates/visual-direction-proposal.md)；确认资产范围、剧本调性和不可变事实，风格方向留待 Preview 看图选择。 |
-| Preview 候选与选定 | [preview.md](references/preview.md)、[craft.md](references/craft.md) 与 [Preview 模板](templates/preview-prompt.md)；要图时再读浏览器流程。 |
-| 单项正式资产候选 | [contracts.md](references/contracts.md) 与所选 `types/<asset>.md`；类型对应关系见 planning，字段、几何和呈现按类型合同保留；要图时再读浏览器流程。 |
-| 九宫格 / 四宫格候选 | 默认使用 [multi-angle.md](types/multi-angle.md)；用户直接要求或选择 fallback 时使用 [multi-angle-2x2.md](types/multi-angle-2x2.md)。基础地点须已选定；审查九宫格时不擅自追加或执行四宫格。 |
-| 人工审查交付、反馈整理与修订 | [review-protocol.md](references/review-protocol.md) 和相关类型清单；Agent 按人的意见整理修改，不自行看图判断。 |
+| 起草或修改 Preview / 自然效果图 | [preview.md](references/preview.md)、[craft.md](references/craft.md) 与 [Preview 模板](templates/preview-prompt.md)；按它们引用的风格规则写作，无风格参考图的单帧写法见[纪实摄影示例](examples/preview-documentary.md)。 |
+| 起草或修改单项正式资产 | [contracts.md](references/contracts.md) 与所选 `types/<asset>.md`；类型对应关系见 planning，字段、几何和呈现按类型合同保留。 |
+| 起草或修改九宫格 / 四宫格 | 默认使用 [multi-angle.md](types/multi-angle.md)；用户直接要求或选择 fallback 时使用 [multi-angle-2x2.md](types/multi-angle-2x2.md)。基础地点须已选定；审查九宫格时不擅自追加或执行四宫格。 |
+| 人工审查交付、反馈整理与修订 | [review-protocol.md](references/review-protocol.md)；供人查阅类型要点或按反馈修改输入时再读相关类型清单，Agent 不自行看图判断。 |
 
 完整流程：资产范围与剧本调性 → Preview 候选 → 用户选择全局效果 → 各资产候选 → 用户逐项选择 → 按需制作依赖资产或多角度参考。一次产物是一项资产的一组可比较候选，不附重复设计报告。
