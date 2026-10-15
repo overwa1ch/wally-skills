@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-static-asset-desig
 
 规划静态资产，先用 Preview 选择全局视觉效果，再生成各项资产的候选版本，由用户逐项选择并归档。
 
-Version: `wally-static-asset-designer@2026-10-10-v2.18-lean-execution`
+Version: `wally-static-asset-designer@2026-10-15-v2.19-asset-templates`
 
 ## 共用边界
 
@@ -17,6 +17,7 @@ Version: `wally-static-asset-designer@2026-10-10-v2.18-lean-execution`
 - 图像内容、整体观感、风格差异和资产可用性统一由人审查。Agent 只核对提交回执、任务状态、文件关联及尺寸等元数据；类型清单用于起草提示词和供人审查，不作为 Agent 审图任务。
 - 只交付用户点名的产品。完整流程仅在用户要求建立整套资产系统或完成全流程时运行；已有选定的 Preview 或基础资产直接继承。
 - 不创作剧本、分镜、表演、对白、时序或声音，不编写视频提示词。
+- 不再规划或生成场景角色状态资产页。角色的霜冻、污渍、伤口等外观状态留给后期制作。
 
 ## 候选版本与选择
 

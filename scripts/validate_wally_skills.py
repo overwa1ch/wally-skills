@@ -17,7 +17,7 @@ SKILLS = {
     "wally-helper": "wally-helper@2026-09-19-v4.3-workflow-guidance",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-09-14-v3.20-selected-versions",
-    "wally-static-asset-designer": "wally-static-asset-designer@2026-10-10-v2.18-lean-execution",
+    "wally-static-asset-designer": "wally-static-asset-designer@2026-10-15-v2.19-asset-templates",
     "wally-action-designer": "wally-action-designer@2026-10-10-v3.29-unified-action",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
@@ -27,7 +27,7 @@ README_VERSIONS = {
     "wally-helper": "V4.3",
     "wally-screenplay-writer": "V2.2",
     "wally-storyboard-designer": "V3.20",
-    "wally-static-asset-designer": "V2.18",
+    "wally-static-asset-designer": "V2.19",
     "wally-action-designer": "V3.29",
     "wally-visual-style-extractor": "V1.7",
 }
@@ -581,15 +581,15 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         state_text = prop_state.read_text(encoding="utf-8")
         labels = (
             "**基础道具参考**", "**目标状态**", "**状态变化**",
-            "**保持不变**", "**材质与物理表现**", "**状态一致性**",
+            "**保持不变**", "**材质与物理表现**",
         )
         positions = [state_text.find(label) for label in labels]
         if any(position < 0 for position in positions) or positions != sorted(positions):
             fail(errors, "Static Pxx-state core fields are missing or out of order")
         for phrase in (
             "一个已批准基础 `Pxx`", "缺图时指出缺失并停止",
-            "只有用户明确要求草案", "不生成基准状态或前后对比",
-            "同一个目标状态",
+            "只有用户明确要求草案", "画面只呈现一个目标状态",
+            "每个目标状态单独制作一张主视图",
         ):
             if phrase not in state_text:
                 fail(errors, f"Static Pxx-state contract is missing: {phrase}")

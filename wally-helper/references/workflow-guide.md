@@ -45,7 +45,7 @@ Route by this registry: name a function, tell the user which skill to call, and 
 
 ### wally-static-asset-designer — 静态资产
 - 职责：跨镜头稳定的身份锚——人物、产品、场景、世界与风格。
-- 功能菜单：资产方案、regional_anchor、style_aesthetic、人物主导Preview提示词与审查、生产资产提示词（基础角色、`Cxx-Lxx` 场景角色状态、`Pxx-state` 道具状态、匿名群体、角色比例、道具、地点参考）、多角度九宫格、一致性不足时的 `2×2` 四宫格、回图资产审查。
+- 功能菜单：资产方案、regional_anchor、style_aesthetic、人物主导Preview提示词与审查、生产资产提示词（基础角色、`Pxx-state` 道具状态、匿名群体、角色比例、道具、地点参考）、多角度九宫格、一致性不足时的 `2×2` 四宫格、回图资产审查。
 - 何时调用：任何身份需要跨镜头保持一致、或审查回图资产时。
 
 ### wally-action-designer — 动作与导演执行

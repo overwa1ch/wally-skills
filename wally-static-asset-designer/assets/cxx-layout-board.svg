@@ -1,21 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
-  <!-- Cxx 基础角色资产页布局板：左=半身肖像区,右=A-pose 三视图三列。仅作构图参考,上传前转 PNG;平台操作见 references/browser-execution.md。 -->
+  <!-- Cxx 基础角色资产页布局板：左两列=无头正面、无头背面,右=大幅面部特写。仅作构图参考,上传前转 PNG;平台操作见 references/browser-execution.md。 -->
+  <defs>
+    <clipPath id="front-crop"><rect x="50" y="50" width="360" height="800"/></clipPath>
+    <clipPath id="back-crop"><rect x="440" y="50" width="360" height="800"/></clipPath>
+    <clipPath id="portrait-crop"><rect x="830" y="50" width="720" height="800"/></clipPath>
+    <g id="body" fill="#bdbdbd">
+      <path d="M -30 20 L 30 20 L 30 65 L 78 85 L 66 390 L 53 440 L 56 745 L 80 780 L 80 810 L 6 810 L 6 470 L -6 470 L -6 810 L -80 810 L -80 780 L -56 745 L -53 440 L -66 390 L -78 85 L -30 65 Z"/>
+      <path d="M -78 85 L -112 110 L -140 440 L -125 480 L -100 475 L -94 430 L -65 160 Z"/>
+      <path d="M 78 85 L 112 110 L 140 440 L 125 480 L 100 475 L 94 430 L 65 160 Z"/>
+    </g>
+  </defs>
   <rect width="1600" height="900" fill="#d4d4d4"/>
-  <!-- 左:半身肖像区 -->
-  <rect x="50" y="50" width="520" height="800" fill="#c7c7c7" stroke="#9a9a9a" stroke-width="4"/>
-  <ellipse cx="310" cy="330" rx="120" ry="150" fill="#bdbdbd"/>
-  <path d="M 160 850 Q 160 620 310 600 Q 460 620 460 850 Z" fill="#bdbdbd"/>
-  <!-- 右:三视图三列(正/侧/背),全身完整入画 -->
+  <!-- 左:两个等大身体区;右:面部特写区 -->
   <g fill="#c7c7c7" stroke="#9a9a9a" stroke-width="4">
-    <rect x="620" y="50" width="290" height="800"/>
-    <rect x="940" y="50" width="290" height="800"/>
-    <rect x="1260" y="50" width="290" height="800"/>
+    <rect x="50" y="50" width="360" height="800"/>
+    <rect x="440" y="50" width="360" height="800"/>
+    <rect x="830" y="50" width="720" height="800"/>
   </g>
-  <g fill="#bdbdbd">
-    <g transform="translate(765,0)"><circle cx="0" cy="160" r="45"/><path d="M -20 205 L 20 205 L 35 480 L 22 480 L 12 810 L -12 810 L -22 480 L -35 480 Z"/><path d="M -20 220 L -95 400 L -80 410 L -18 265 Z"/><path d="M 20 220 L 95 400 L 80 410 L 18 265 Z"/></g>
-    <g transform="translate(1085,0)"><circle cx="0" cy="160" r="45"/><path d="M -18 205 L 18 205 L 28 480 L 15 480 L 10 810 L -10 810 L -15 480 L -28 480 Z"/></g>
-    <g transform="translate(1405,0)"><circle cx="0" cy="160" r="45"/><path d="M -20 205 L 20 205 L 35 480 L 22 480 L 12 810 L -12 810 L -22 480 L -35 480 Z"/><path d="M -20 220 L -95 400 L -80 410 L -18 265 Z"/><path d="M 20 220 L 95 400 L 80 410 L 18 265 Z"/></g>
+  <!-- 身体在面板顶缘按颈部裁切,保留肩部和双脚 -->
+  <g clip-path="url(#front-crop)">
+    <use href="#body" transform="translate(230,0)"/>
+    <path d="M 200 65 Q 230 95 260 65 M 230 95 L 230 390" fill="none" stroke="#aaa" stroke-width="3"/>
   </g>
-  <!-- 共享地线 -->
-  <line x1="620" y1="812" x2="1550" y2="812" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="14 10"/>
+  <g clip-path="url(#back-crop)">
+    <use href="#body" transform="translate(620,0)"/>
+    <path d="M 590 65 Q 620 75 650 65" fill="none" stroke="#aaa" stroke-width="3"/>
+  </g>
+  <!-- 独立面部特写,完整头部占主要面积 -->
+  <g clip-path="url(#portrait-crop)">
+    <path d="M 870 900 Q 890 735 1090 710 L 1110 630 L 1270 630 L 1290 710 Q 1490 735 1510 900 Z" fill="#bdbdbd"/>
+    <ellipse cx="1190" cy="400" rx="215" ry="290" fill="#bdbdbd"/>
+    <path d="M 990 320 Q 1000 120 1190 110 Q 1380 120 1390 320 Q 1330 210 1190 215 Q 1050 210 990 320 Z" fill="#aaa"/>
+    <path d="M 1075 365 L 1145 365 M 1235 365 L 1305 365 M 1190 385 L 1170 475 L 1205 485 M 1115 555 L 1265 555" fill="none" stroke="#aaa" stroke-width="8" stroke-linecap="round"/>
+  </g>
+  <!-- 两个身体视图共享地线 -->
+  <line x1="50" y1="812" x2="800" y2="812" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="14 10"/>
 </svg>

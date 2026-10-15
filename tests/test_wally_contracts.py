@@ -402,13 +402,13 @@ class SkillContractTests(unittest.TestCase):
         state = self.read("wally-static-asset-designer/types/pxx-state.md")
         labels = (
             "**基础道具参考**", "**目标状态**", "**状态变化**",
-            "**保持不变**", "**材质与物理表现**", "**状态一致性**",
+            "**保持不变**", "**材质与物理表现**",
         )
         positions = [state.index(label) for label in labels]
         self.assertEqual(positions, sorted(positions))
         self.assertIn("缺图时指出缺失并停止", state)
         self.assertIn("只有用户明确要求草案", state)
-        self.assertIn("不生成基准状态或前后对比", state)
+        self.assertIn("画面只呈现一个目标状态", state)
 
     def test_visual_evidence_owner_sources_and_json_boundaries(self) -> None:
         skill = self.read("wally-visual-style-extractor/SKILL.md")
