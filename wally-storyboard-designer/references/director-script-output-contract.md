@@ -5,7 +5,16 @@ Principle: 一切为了讲故事，内容是优先级最高的评判标准。Eve
 Core principle: 如果你不确定，就写得更少，而不是更多。
 
 思路：先找关键画面——单纯的画面，对故事最重要的画面，不是符合传统分镜的画面。每个关键画面当成一个镜头写，这就是主镜。找到之后，再去想怎么衔接，第二遍把分镜设计完。
-Approach: first find the key pictures — pure pictures, the ones that matter most to the story, not pictures shaped by storyboard convention. Write each key picture as a shot; these are the main shots (主镜). Then work out how they connect and complete the shot design in the second pass.
+## 先听用户讲述，再判断主镜
+
+用户先讲述这场戏最想拍的画面。Agent 理解用户的讲述，判断并提炼哪些画面是主镜，再设计衔接。
+
+1. 新设计一场戏时，先问用户：**“这场戏，你最想拍的画面是什么？”** 按场交流，先听用户描述具体画面。
+2. 用户已明确讲过这一场最想拍的画面时，直接依据已有讲述继续。剧本中的动作节点和 Agent 先前生成的主镜标记，不自动替代用户讲述。
+3. 用户尚未讲述时，停在这个问题，等待回答；不单凭剧本先选主镜、先列候选替用户作答或先写完整分镜。
+4. 用户的描述若影响取景而仍不清楚，只追问必要的可见内容；不要求用户先提供景别、机位或专业术语。
+5. Agent 从用户讲述中识别其最想呈现的画面与重点，据此判断哪些画面承担主镜作用。主镜不要求与用户的每句话一一对应，也不将每个动作节点都标成主镜。
+6. 将提炼出的主镜按下方格式写成镜头，再围绕它们补充必要的衔接，保持用户讲述的意图与原剧本事实。
 
 The 分镜脚本 (processed director script) is read by the user and by the image model that draws the test boards; write for those two readers.
 
@@ -28,7 +37,7 @@ Preserve the fields and format of an existing draft during revision. For a new s
 任务：一句——该镜头向观众传达什么信息？
 ```
 
-- `镜头类型`: write `主镜` for every key-picture shot from the first pass; connecting shots leave it empty or name a type only when known (道具空镜、状态空镜、插入). Add `｜时长：约Ns` only when the user gives a duration budget.
+- `镜头类型`: write `主镜` for the key pictures the Agent identifies from the user's account of what they most want to shoot in this scene; connecting shots leave it empty or name a type only when known (道具空镜、状态空镜、插入). Add `｜时长：约Ns` only when the user gives a duration budget.
 - `景别`: shot size (全景 / 中景 / 近景 / 特写) plus its positive visible boundary.
 - `机位`: where the camera is — position, side or angle, height, distance; an off-frame height reference becomes a height.
 - `焦段 / 光学效果`: only when it materially controls the image.
