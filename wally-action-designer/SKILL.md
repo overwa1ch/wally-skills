@@ -7,9 +7,9 @@ description: Use only when explicitly requested by name. 按场景设计或修�
 
 根据当前材料完成用户指定范围的表演设计。一个场景是一场完整的戏；镜头数量服务于该场设计。
 
-交付沿用 `Style:`、`Reference:`、`Camera:`、`Action:` 等英文标签和 `Shot` 正文写法，字段按需选用。动作与表演一起描述；有时间段或多镜头时写入对应时间段或 `Shot`，避免重复，具体组织见交付约定。
+交付使用 `REFERENCE:`、`STYLE PREFIX:`、`STYLE:`、`COMPOSITION:`、`THE SHOT:`、`SPOKEN LINE:`、`CHARACTER ACTING:` 等英文标签，字段按需选用。THE SHOT 内保留 `SHOT` 编号，需要精确节拍时用 timestamp 分段，主要控制动作先后、反应和状态变化时用连续段落，按镜头需要或用户指定选择。总体字段写宏观控制，THE SHOT 写具体执行，二者保持一致并避免重复总体描述，见[总体控制与时间段](references/contract.md#总体控制与时间段)。动作与表演一起描述；有时间段或多镜头时写入对应时间段或 `SHOT`。
 
-Version: `wally-action-designer@2026-10-10-v3.29-unified-action`
+Version: `wally-action-designer@2026-10-18-v3.51-no-sweat-descriptions`
 
 ## 按任务读取
 

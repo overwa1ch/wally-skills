@@ -18,7 +18,8 @@ SKILLS = {
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-09-14-v3.20-selected-versions",
     "wally-static-asset-designer": "wally-static-asset-designer@2026-10-15-v2.19-asset-templates",
-    "wally-action-designer": "wally-action-designer@2026-10-10-v3.29-unified-action",
+    "wally-action-designer": "wally-action-designer@2026-10-18-v3.51-no-sweat-descriptions",
+    "wally-action-designer-v329": "wally-action-designer@2026-10-10-v3.29-unified-action",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
 
@@ -28,11 +29,18 @@ README_VERSIONS = {
     "wally-screenplay-writer": "V2.2",
     "wally-storyboard-designer": "V3.20",
     "wally-static-asset-designer": "V2.19",
-    "wally-action-designer": "V3.29",
+    "wally-action-designer": "V3.51",
+    "wally-action-designer-v329": "V3.29",
     "wally-visual-style-extractor": "V1.7",
 }
 
 FROZEN_HASHES = {
+    "wally-action-designer-v329/references/v3.29/SKILL.original.md": "9bd5d826261ebfb6c14883c30f9338fa399bbedd0bf69153dbf4bf526cb4ea22",
+    "wally-action-designer-v329/references/v3.29/agents/openai.yaml": "d67e65bab61987c722eb09616e2c0c22b600003c9811d707fdc10e07d8f81822",
+    "wally-action-designer-v329/references/v3.29/references/contract.md": "ee1bbd9e1f1990aac0ded0457afdc4912a93843c2233017b3bbb5115450cbfbe",
+    "wally-action-designer-v329/references/v3.29/references/craft.md": "83ebf288114ac6d0bbca36a9f4a96aeac895889081a44bbdb220c09bfdf699ec",
+    "wally-action-designer-v329/references/v3.29/references/review.md": "482b6716b7d9ec37222e5077a6c716eb8ef1507187b2ffe6967480fb84bbe577",
+
     "wally-storyboard-designer/templates/storyboard-prompt-template.md": "de663576ce7998da223187aa9c182f8a4eaabd41312e1f92f2d1395da8b4efbc",
     "wally-storyboard-designer/templates/shot-table-prompt-template.md": "4c1c0c0cbf2df85ff016f30665f2df2b69ab1e752bbe1dcbd71ac376b50126ea",
     "wally-static-asset-designer/templates/preview-prompt.md": "1fdc2c88e72aa29a1203c23499ddedc5a8ee5e0fb3bebc2466019a1d596adc74",
