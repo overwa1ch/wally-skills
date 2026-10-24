@@ -1,7 +1,7 @@
 interface:
   display_name: "Wally Storyboard Designer"
-  short_description: "Design shots and test with images or whitebox video"
-  default_prompt: "Use $wally-storyboard-designer to design or revise shots, or help me validate them with storyboard images, shot tables or whitebox video."
+  short_description: "Design shots and create shot tables or whitebox videos"
+  default_prompt: "Use $wally-storyboard-designer to design or revise shots, then create my chosen storyboard, shot table or whitebox video for review."
 
 policy:
   allow_implicit_invocation: false

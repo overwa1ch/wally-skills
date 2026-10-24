@@ -22,7 +22,7 @@ When the user wants story ideas or a detailed story outline (万字纲), recomme
 6. Use the current director script or performance design with the approved static assets for shot tables. Upload all static assets once in a base chat, branch and name one chat per source scene, and keep that scene's pages together. Review the complete numbered, no-text shot sequence for story coverage, rhythm, continuity, and shootability; route revisions to the relevant specialist when the table exposes a problem.
 7. When performance design, video prompts, or reference bindings need work, recommend `wally-action-designer`. Accept its current output directly; return to Helper when the user wants a compatibility review or guidance on the next step.
 
-In this path, storyboards and shot tables are two tests at different stages. The early storyboard cheaply tests proposed shot design while change is easy. The later asset-backed shot table tests the complete sequence after identity and space are visually grounded. A user may still request either product independently at any time.
+In this path, storyboards and shot tables are two tests at different stages. The early storyboard cheaply tests proposed shot design while change is easy. The later asset-backed shot table tests the complete sequence after identity and space are visually grounded. Shot tables and whitebox videos are parallel functions in `wally-storyboard-designer`; the user may choose either independently. Storyboard creates the whitebox video using Asset's definition and geometry conventions.
 
 ## Skill registry（职责与功能菜单，不含方法）
 
@@ -40,8 +40,8 @@ Route by this registry: name a function, tell the user which skill to call, and 
 
 ### wally-storyboard-designer — 分镜功能
 - 职责：按用户点名，把所给故事、场景、图板或镜头材料转换为分镜领域的指定产物。
-- 功能菜单：准确源场景继承、场景布局SVG、分镜脚本（处理版导演脚本）设计与定向修订、白模视频验证分镜、按需提示词污染检查（干净上下文、只回删词建议）、固定故事板提示词、固定分镜表提示词、内置Browser原生图片视觉测试执行与本地拼接。图板和白模由用户观看判断，观察结果作为分镜脚本修订输入交回。
-- 何时调用：需要设计镜头、用图板或白模视频验证分镜、或根据观察修改分镜脚本时。
+- 功能菜单：准确源场景继承、场景布局SVG、分镜脚本（处理版导演脚本）设计与定向修订、白模视频制作与修订（与分镜表并列）、按需提示词污染检查（干净上下文、只回删词建议）、固定故事板提示词、固定分镜表提示词、内置Browser原生图片视觉测试执行与本地拼接。图板和白模由用户观看判断，观察结果作为分镜脚本修订输入交回。
+- 何时调用：需要设计镜头、制作图板或白模视频验证分镜、或根据观察修改分镜脚本时。
 
 ### wally-asset-designer — 资产
 - 职责：规划可复用的图片资产与白模视频参考；图片承载身份和外观，白模承载人物位移、空间关系、构图和运镜的大致框架。
