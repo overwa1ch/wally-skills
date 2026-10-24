@@ -5,9 +5,9 @@ description: Use only when the user explicitly requests wally-asset-designer or 
 
 # Wally Asset Designer
 
-规划可复用的图片资产与白模视频参考。图片资产通过 Preview 选择全局视觉效果，再生成各项候选；白模视频用简单几何体表达已有的人物位移、空间关系、分镜构图与运镜意图。按用户请求交付定义、提示词或资产。
+规划可复用的图片资产与白模视频参考，按用户请求交付定义、提示词或资产。
 
-Version: `wally-asset-designer@2026-10-24-v3.0-image-and-whitebox-assets`
+Version: `wally-asset-designer@2026-10-24-v3.1-concise-whitebox-reference`
 
 ## 共用边界
 
@@ -16,12 +16,12 @@ Version: `wally-asset-designer@2026-10-24-v3.0-image-and-whitebox-assets`
 - Agent 根据文字材料、用户说明和已选关系准备输入，直接绑定所需参考图，不查看或评判图像内容。图片用途不清楚且影响输入时，只补问必要的用途说明。具体生产依赖由所选类型文件维护。
 - 图像内容、整体观感、风格差异和资产可用性统一由人审查。Agent 只核对提交回执、任务状态、文件关联及尺寸等元数据；类型清单用于起草提示词和供人审查，不作为 Agent 审图任务。
 - 只交付用户点名的产品。完整流程仅在用户要求建立整套资产系统或完成全流程时运行；已有选定的 Preview 或基础资产直接继承。
-- 沿用用户已有的剧本、分镜、表演与时序；白模将其中指定的空间、位移、构图和运镜意图转成参考素材。不新增剧情、镜头设计、具体表演、对白或声音，不编写最终视频生成提示词。
+- 沿用用户已有的剧本、分镜、表演与时序，不新增剧情、镜头设计、具体表演、对白或声音，不编写最终视频生成提示词。
 - 不再规划或生成场景角色状态资产页。角色的霜冻、污渍、伤口等外观状态留给后期制作。
 
 ## 图片资产的候选版本与选择
 
-本节统一维护图片候选包的最低数量，适用于图片提示词准备与对应图像生成。白模视频按请求范围交付，不套用 Preview 风格探索或图片候选数量：
+本节的候选数量与选择流程只适用于图片提示词准备与对应图像生成：
 
 | 产品 | 不同完整生成输入（正文与所需参考） | 独立图像版本 | 变化范围 |
 | --- | --- | --- | --- |
@@ -36,15 +36,15 @@ Version: `wally-asset-designer@2026-10-24-v3.0-image-and-whitebox-assets`
 
 ## 按任务读取
 
-只读当前任务对应入口，按表中触发条件读取其引用；历史版本留在 Changelog，不默认加载。用户只要定义或提示词时交付文本；要图时默认内部准备输入，通过内置 Browser 操作 ChatGPT Web 提交、收集完整候选包并交人审图。白模视频任务直接进入对应类型，不加载图片生成流程。
+只读当前任务对应入口，按表中触发条件读取其引用；历史版本留在 Changelog，不默认加载。用户只要定义或提示词时交付文本；要图时默认内部准备输入，通过内置 Browser 操作 ChatGPT Web 提交、收集完整候选包并交人审图。
 
 **图片定稿执行**：核对范围、候选数和已选参考依赖，逐字沿用完整输入，加载浏览器流程与生成记录；定稿或记录不足以确认所需已选参考依赖时，只按需读取对应类型的依赖要求。交付时再加载人工审查流程；需起草、补充或修改输入时，转入对应起草入口读取 Preview、写作合同或类型细则。
 
 | 当前任务 | 读取入口与交付范围 |
 | --- | --- |
-| 白模视频定义、规划、制作或修订 | [whitebox-video.md](types/whitebox-video.md)；按已有意图表达大致框架，说明几何体与人物颜色的对应关系。 |
+| 白模视频定义、规划、制作或修订 | [whitebox-video.md](types/whitebox-video.md)。 |
 | 图片生成、收集或恢复 | [browser-execution.md](references/browser-execution.md) 与 [候选生成记录](templates/generation-record.md)；执行完整的项目与聊天命名、独立聊天、异步提交核验、原图归档及恢复流程。 |
-| 资产规划与类型选择 | [planning.md](references/planning.md)；图片视觉规划按需读取 [regional-anchor.md](references/regional-anchor.md)、[style-aesthetic.md](references/style-aesthetic.md) 与 [方案模板](templates/visual-direction-proposal.md)。白模直接读取对应类型定义。 |
+| 资产规划与类型选择 | [planning.md](references/planning.md)；图片视觉规划按需读取 [regional-anchor.md](references/regional-anchor.md)、[style-aesthetic.md](references/style-aesthetic.md) 与 [方案模板](templates/visual-direction-proposal.md)。 |
 | 起草或修改 Preview / 自然效果图 | [preview.md](references/preview.md)、[craft.md](references/craft.md) 与 [Preview 模板](templates/preview-prompt.md)；按它们引用的风格规则写作，无风格参考图的单帧写法见[纪实摄影示例](examples/preview-documentary.md)。 |
 | 起草或修改单项正式图片资产 | [contracts.md](references/contracts.md) 与所选 `types/<asset>.md`；类型对应关系见 planning，字段、几何和呈现按类型合同保留。 |
 | 起草或修改九宫格 / 四宫格 | 默认使用 [multi-angle.md](types/multi-angle.md)；用户直接要求或选择 fallback 时使用 [multi-angle-2x2.md](types/multi-angle-2x2.md)。基础地点须已选定；审查九宫格时不擅自追加或执行四宫格。 |
