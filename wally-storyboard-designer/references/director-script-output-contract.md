@@ -1,6 +1,6 @@
 # Director Script Output Contract
 
-Principle: 一切为了讲故事，内容是优先级最高的评判标准。Every shot in a 分镜脚本 exists to tell the source scene's story; when judging any shot or any generated board, content is the first criterion and every other criterion ranks below it. Choose shots by this alone: a shot exists only for a story job the audience needs at that moment.
+Principle: 一切为了讲故事，内容是优先级最高的评判标准。Every shot in a 分镜脚本 exists to tell the source scene's story; when judging any shot or whitebox video, content is the first criterion and every other criterion ranks below it. Choose shots by this alone: a shot exists only for a story job the audience needs at that moment.
 
 Core principle: 如果你不确定，就写得更少，而不是更多。
 
@@ -16,7 +16,7 @@ Core principle: 如果你不确定，就写得更少，而不是更多。
 5. Agent 从用户讲述中识别其最想呈现的画面与重点，据此判断哪些画面承担主镜作用。主镜不要求与用户的每句话一一对应，也不将每个动作节点都标成主镜。
 6. 将提炼出的主镜按下方格式写成镜头，再围绕它们补充必要的衔接，保持用户讲述的意图与原剧本事实。
 
-The 分镜脚本 (processed director script) is read by the user and by the image model that draws the test boards; write for those two readers.
+分镜脚本供用户阅读，并作为白模视频制作与后续表演设计的依据。
 
 ## Inherit the work definition
 
@@ -70,5 +70,5 @@ Preserve the fields and format of an existing draft during revision. For a new s
 
 ## Targeted Revision
 
-- When the user reports what they saw in the boards or names shots to change, revise only the named shots and keep the rest verbatim.
+- When the user reports what they saw in the whitebox video or names shots to change, revise only the named shots and keep the rest verbatim.
 - Write the change into the shot text; keep reasons in chat or a separate record. The document shows the current target state only.

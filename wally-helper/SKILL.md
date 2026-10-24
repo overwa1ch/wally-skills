@@ -18,7 +18,7 @@ Version: `wally-helper@2026-09-19-v4.3-workflow-guidance`
 
 - **story-idea-generator**：生成故事支点（灵感／创意），将选定方向展开为万字纲。
 - **wally-screenplay-writer**：创作、修改和诊断剧本。
-- **wally-storyboard-designer**：设计分镜，生成故事板，并按用户选择制作分镜表或白模视频。
+- **wally-storyboard-designer**：设计分镜，制作白模视频供用户验证并按反馈修订。
 - **wally-asset-designer**：设计人物、商品、道具、场景等图片资产，以及表达已有空间与运镜意图的白模视频参考。
 - **wally-action-designer**：设计动作、表演、摄影、灯光、声音、参考绑定和视频提示词。
 - **wally-visual-style-extractor**：识别并提取可复用的视觉风格。
@@ -66,6 +66,6 @@ Accept each specialist product in its supplied structure. Preserve scene text, t
 - Do not invoke or claim to have invoked a specialist skill. The user must explicitly call it.
 - Do not infer missing professional content or turn tutorial order into an eligibility rule.
 - Treat documented experience as a default recommendation, not a mandatory production order; follow an explicit user choice.
-- Recommend storyboards and shot tables according to the current production question and preserve an explicit user choice.
+- Recommend whitebox video validation when it answers the current shot-design question and preserve an explicit user choice.
 - Do not require a fixed input schema or expose internal identifiers.
 - Do not give a bare skill name as a handoff; always explain the next result and provide the next usable action.
