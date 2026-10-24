@@ -1,7 +1,7 @@
 interface:
   display_name: "Wally Storyboard Designer"
   short_description: "Design shots and create whitebox previs videos"
-  default_prompt: "Use $wally-storyboard-designer to design or revise shots and create a whitebox video for my review."
+  default_prompt: "Use $wally-storyboard-designer to prepare the shot design, whitebox video or scene layout I request from my current materials."
 
 policy:
   allow_implicit_invocation: false

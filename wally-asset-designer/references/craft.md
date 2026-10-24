@@ -4,12 +4,12 @@
 
 ## 整体风格＋构图描述
 
-Preview 与自然效果图的正文只组织为以下两部分，每条信息只写在其所属部分：
+用户要求单幅效果图时，正文组织为以下两部分，每条信息只写在其所属部分：
 
 1. **整体风格**：保留图片类型与文化锚点。正文先定义图片类型，再自然写入地域、时代和必要物质文化；有视觉风格参考图时，只写“视觉风格参照[图片标识]”，没有参考图时才写有依据的关键视觉定义。用户指定真实剧照时，开头写“一张真实电影剧照”，文化信息不冠以“文化锚点为”等标签。视觉风格的引用与验证见 [style-aesthetic.md](style-aesthetic.md)，文化取舍见 [regional-anchor.md](regional-anchor.md)。
 2. **构图描述**：将选定的剧情瞬间写成一张独立剧照，简洁交代前景、主体、背景。前景写近处物体与遮挡；主体写可见外观、位置、正在发生的动作及必要持物；背景写环境与必要空间关系。按需补充画幅、景别、观察角度和确需看清的对象。具体窗、灯等光源的位置，以及剧情或用户明确要求的时段、局部照明关系可以保留；整体光质、反差、色调、颗粒、锐度和景深倾向归入整体风格。不要给所有候选额外固定同一种午后光、全画面清晰度或背景虚化。
 
-Preview 的写作重点是整体风格；选帧按 [preview.md](preview.md) 的表现目标覆盖规则执行。每帧构图写到前景、主体、背景及其关系清楚即可，同轮各风格复用这组构图。
+沿用用户指定的画面内容与视觉要求，构图写到前景、主体、背景及其关系清楚即可。
 
 整体风格规定画面中已有材质与状态的呈现方式；具体人物、物件及伤情由该帧构图决定。回图是否额外引入了本帧没有的内容，由人审查后指出。
 
@@ -40,4 +40,4 @@ Preview 的写作重点是整体风格；选帧按 [preview.md](preview.md) 的�
 
 Model choice, text-rendering ability, weighting behavior, and punctuation interpretation change over time. Treat them as current platform guidance, not permanent design rules. State a model recommendation only when the user names the available platform or asks for routing.
 
-Production asset boards may need technical structure that is longer than a natural Preview prompt. Keep that structure purposeful: the design specification and generation instruction still belong in one copy-ready prompt.
+Asset boards may need more technical structure than a single-image prompt. Keep that structure purposeful: the design specification and generation instruction still belong in one copy-ready prompt.

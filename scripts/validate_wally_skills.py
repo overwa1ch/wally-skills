@@ -14,10 +14,10 @@ import xml.etree.ElementTree as ET
 
 SKILLS = {
     "story-idea-generator": "story-idea-generator@2026-09-19-v1.2-four-act-ten-sequences",
-    "wally-helper": "wally-helper@2026-09-19-v4.3-workflow-guidance",
+    "wally-helper": "wally-helper@2026-10-24-v4.4-on-demand-tools",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
-    "wally-storyboard-designer": "wally-storyboard-designer@2026-10-24-v4.0-whitebox-previs",
-    "wally-asset-designer": "wally-asset-designer@2026-10-24-v3.1-concise-whitebox-reference",
+    "wally-storyboard-designer": "wally-storyboard-designer@2026-10-24-v4.1-on-demand-tools",
+    "wally-asset-designer": "wally-asset-designer@2026-10-24-v3.2-on-demand-assets",
     "wally-action-designer": "wally-action-designer@2026-10-24-v3.53-whole-action-expression",
     "wally-action-designer-v329": "wally-action-designer@2026-10-10-v3.29-unified-action",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
@@ -25,10 +25,10 @@ SKILLS = {
 
 README_VERSIONS = {
     "story-idea-generator": "V1.2",
-    "wally-helper": "V4.3",
+    "wally-helper": "V4.4",
     "wally-screenplay-writer": "V2.2",
-    "wally-storyboard-designer": "V4.0",
-    "wally-asset-designer": "V3.1",
+    "wally-storyboard-designer": "V4.1",
+    "wally-asset-designer": "V3.2",
     "wally-action-designer": "V3.53",
     "wally-action-designer-v329": "V3.29",
     "wally-visual-style-extractor": "V1.7",
@@ -41,8 +41,6 @@ FROZEN_HASHES = {
     "wally-action-designer-v329/references/v3.29/references/craft.md": "83ebf288114ac6d0bbca36a9f4a96aeac895889081a44bbdb220c09bfdf699ec",
     "wally-action-designer-v329/references/v3.29/references/review.md": "482b6716b7d9ec37222e5077a6c716eb8ef1507187b2ffe6967480fb84bbe577",
 
-    "wally-asset-designer/templates/preview-prompt.md": "1fdc2c88e72aa29a1203c23499ddedc5a8ee5e0fb3bebc2466019a1d596adc74",
-    "wally-asset-designer/templates/visual-direction-proposal.md": "eb2b8e7b2a82d29954787a79b646cd7e16245f748a4f512faecb908e6efa7365",
     "wally-asset-designer/types/multi-angle.md": "afbec47b9d7f7151aafb18ab48816a3de9fc075119d85efde3009eac5e244f0e",
 }
 
@@ -544,11 +542,13 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
     for phrase in ("visual-optimization-rules.md", "storyboard-design.md", "storyboard-review.md", "main-shot-adjudication.md", "continuity-validation-rules.md", "ai-video-composition-rules.md", "storyboard-style-contract.md"):
         if phrase in storyboard_tree:
             fail(errors, f"Storyboard still references retired guide {phrase}")
-    for phrase in (
-        "This skill is the test layer",
+    for retired in (
+        "references/preview.md",
+        "templates/preview-prompt.md",
+        "examples/preview-documentary.md",
     ):
-        if phrase not in storyboard:
-            fail(errors, f"Storyboard test-layer contract is missing: {phrase}")
+        if (skills / "wally-asset-designer" / retired).exists():
+            fail(errors, f"Asset retains retired resource {retired}")
 
     four_grid = skills / "wally-asset-designer/types/multi-angle-2x2.md"
     prop_state = skills / "wally-asset-designer/types/pxx-state.md"
@@ -651,8 +651,6 @@ def check_repository_metadata(root: Path, errors: list[str]) -> None:
         fail(errors, "CHANGELOG lacks the 2026-08-03 Wally project-scope cutover entry")
     if "Helper 升级为 V4.0" not in changelog or "Storyboard 升级为 V2.1" not in changelog:
         fail(errors, "CHANGELOG lacks the 2026-08-18 source-scene migration entry")
-    if "Storyboard 升级为 V3.0" not in changelog or "测试层" not in changelog:
-        fail(errors, "CHANGELOG lacks the 2026-08-18 Storyboard V3.0 test-layer entry")
     if "Storyboard 升级为 V3.9" not in changelog or "四条规则" not in changelog:
         fail(errors, "CHANGELOG lacks the 2026-08-19 Storyboard V3.9 four-rule layout entry")
     if "Screenplay 升级为 V2.0" not in changelog or "正式收敛为四种格式" not in changelog:

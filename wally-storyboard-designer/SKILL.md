@@ -1,14 +1,14 @@
 ---
 name: wally-storyboard-designer
-description: Use only when explicitly requested by name. 设计或修订分镜脚本，按分镜制作白模视频供用户验证，并根据反馈修订；按需处理场景布局与提示词污染检查。
+description: Use only when explicitly requested by name. 按需设计或修订分镜脚本、制作或修订白模视频、绘制场景布局及检查提示词污染；直接使用当前材料，只交付用户指定的产物。
 ---
 
 # Wally Storyboard Designer
 
 Provide on-demand storyboard-domain functions for the user's supplied story, scene, or shot material.
-This skill is the test layer of the Wally pipeline；设计分镜，以白模视频表达和验证，按用户反馈修订。
+分镜脚本、白模视频、场景布局与提示词检查可分别取用；只交付本次指定产物，不自动接续其他功能。
 
-Current version: `wally-storyboard-designer@2026-10-24-v4.0-whitebox-previs`
+Current version: `wally-storyboard-designer@2026-10-24-v4.1-on-demand-tools`
 
 ## 共用规则
 
@@ -32,6 +32,6 @@ Current version: `wally-storyboard-designer@2026-10-24-v4.0-whitebox-previs`
 
 ## 白模视频
 
-- 按当前分镜制作白模视频，表达大致的人物位移、空间关系、构图和运镜，交付用户验证。
+- 按用户指定的分镜或已有镜头材料制作白模视频，表达大致的人物位移、空间关系、构图和运镜，交付用户观看。
 - 白模定义与造型约定沿用 `wally-asset-designer`；具体表演由视频模型在该框架内补全。
 - 已有白模可直接使用；用户观看后，按反馈修订对应分镜或白模。

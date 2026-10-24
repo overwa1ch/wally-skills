@@ -2,22 +2,24 @@
 
 Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wally”后，`wally-helper` 会加载 Wally 助手身份，记录和应用跨模块制作经验，整理材料、判断下一步并检查专业产物之间是否衔接。它知道每个专业 skill 的用途，但不能替用户调用；专业工作必须由用户明确调用对应 skill。
 
+专业 skills 是可独立、随时取用的工具，直接承接当前材料并交付指定产物。Helper 根据具体问题提供流程与测试建议，用户可直接调用任何工具。
+
 ## 当前模块
 
 | Skill | 当前版本 | 职责 |
 | --- | --- | --- |
 | `story-idea-generator` | V1.2 | 生成故事支点（灵感／创意），再以事件数轴与八要素展开万字纲；两阶段方法、案例和矩阵按需读取。 |
-| `wally-helper` | V4.3 | 整理材料、记录制作经验、建议下一步、检查跨产物兼容性，并提供专业 skill 的可复制调用请求；按需返回固定 BGM 制作请求。 |
+| `wally-helper` | V4.4 | 整理材料、记录制作经验、判断流程与测试需要、检查跨产物兼容性，并提供专业工具的可复制调用请求；按需返回固定 BGM 制作请求。 |
 | `wally-screenplay-writer` | V2.2 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少，分步开发细则按需读取。 |
-| `wally-storyboard-designer` | V4.0 | 先听用户讲述最想拍的画面，再提炼主镜与衔接；按分镜制作白模视频，表达大致的人物位移、空间关系、构图和运镜，按用户反馈修订。 |
-| `wally-asset-designer` | V3.1 | 规划图片资产与白模视频参考；定义和提示词请求交付文本，需要图片时生成候选。按任务加载规则，定稿原文一次装载复用，网页只返回必要核验结果。人物页保留图片类型、人物设计与固定呈现要求；需要视觉风格的产物有图时省略风格词，保留文化锚点。Preview 按全片表现目标选代表画面，完整探索至少 8 个风格方向，各方向复用同一组画面；用户限定的测试按范围执行。各项正式图片资产至少 4 套不同输入与图像。每条完整输入独立聊天，持续提交后收集整轮结果，由人审图与选定。 |
+| `wally-storyboard-designer` | V4.1 | 按需设计或修订分镜、制作或修订白模视频、绘制场景布局及检查提示词污染。各功能分别取用；新分镜沿用先听用户讲述关键画面的设计方法。 |
+| `wally-asset-designer` | V3.2 | 按当前范围与数量提供图片定义、提示词、资产或白模视频参考；直接使用已有材料和指定参考。图片保留类型合同，逐条独立提交并归档，由人审查；不自动扩成候选包。 |
 | `wally-action-designer` | V3.53 | 当前研究版；以完整动作和表情设计表演，只展开有作用的阻力、反差与转折；字段按需选用，保留原镜号与已确认内容。 |
 | `wally-action-designer-v329` | V3.29 | 独立调用的原版对照；五份原文件完整冻结，与当前研究版分别使用。 |
 | `wally-visual-style-extractor` | V1.7 | 检索既有风格并提取有证据的 style layer；普通解释直接回答，结构化任务只读对应模板章节。 |
 
 ## 故事、剧本与脚本
 
-`story-idea-generator` 负责故事支点（灵感／创意）与万字纲两个阶段；万字纲用具体事件、行动和因果展开故事，随后由 `wally-screenplay-writer` 写成剧本，再由 `wally-storyboard-designer` 设计分镜脚本。各阶段都需用户明确调用；已有材料可直接进入对应阶段。
+`story-idea-generator` 提供故事支点（灵感／创意）与万字纲，`wally-screenplay-writer` 提供剧本创作、修订与诊断，`wally-storyboard-designer` 提供分镜等镜头产物。按当前需求明确调用，各自接受已有材料。
 
 ## 安装
 
@@ -31,6 +33,8 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 
 从旧版升级时，用 `wally-asset-designer/` 替换项目安装目录中的 `wally-static-asset-designer/`，调用名称同步改为 `$wally-asset-designer`；避免同时保留两个入口。
 
+升级已安装的 skill 时完整替换对应目录，清除新版已经移除的资源；项目自行修改过的副本先核对差异。
+
 全部八个 skill 都采用明确点名调用：只有用户点名对应 skill 并要求使用时才启用，普通故事、分镜、动作、资产或风格请求按常规任务处理。八份入口 `agents/openai.yaml` 均设置 `policy.allow_implicit_invocation: false`，关闭 Codex 的隐式调用；使用 `$wally-screenplay-writer` 等完整名称可显式加载对应 skill。
 
 用户明确要求使用 `wally` / `wally-helper` 时加载 Helper；点名专业 skill 只启用被点名的 skill。Helper 可推荐专业 skill 并给出可复制的调用请求，由用户明确调用。
@@ -40,8 +44,8 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 - 专业产物保留所属 skill 的模板或输出合同结构。
 - `story-idea-generator` 按任务交付故事支点或万字纲。灵感默认十条；万字纲以四幕组织十个事件序列，把八要素填入十序列矩阵，用能勾勒画面的事件说明人物与主题；结局单列在四幕之外。
 - `wally-screenplay-writer` 按当前任务选择内容与方法；作品定义只写有依据且影响创作的项，缺项省略，整块无用时省略。四种格式按用户真实体量缩放，不强制改片长；已有稿整理和局部修改直接交付，只有用户选择分步开发或要求锁定时才使用审批菜单。原则：如果你不确定，就写得更少，而不是更多。
-- `wally-storyboard-designer` 继承已有作品定义、场景与镜号，设计分镜并制作白模视频；用户观看后反馈，Agent 定向修订。白模定义沿用 Asset，具体表演由视频模型补全。
-- `wally-asset-designer` 的 Preview 使用“整体风格＋构图描述”，保留图片类型、文化锚点与构图；有视觉风格参考图时直接引用图片，省略风格词，没有参考图时才写关键视觉定义。按剧本表现目标选择一组代表画面，每张简写前景、主体、背景；各风格复用同一组以比较全片适配。模型与参数在开测时核实，回图效果由人审查；[无风格参考图的单帧示例](wally-asset-designer/examples/preview-documentary.md)按需查看。
+- `wally-storyboard-designer` 继承已有作品定义、场景与镜号，按请求交付分镜脚本、白模视频或布局等指定产物；用户反馈后定向修订。白模定义沿用 Asset，具体表演由视频模型补全。
+- `wally-asset-designer` 的单幅效果图使用“整体风格＋构图描述”，保留当前图片所需的图片类型、文化信息、视觉要求与构图；风格参考按用户说明绑定，实际效果由人审查。
 - `wally-asset-designer` 根据文字材料、用户说明和已选记录绑定参考图；正式提示词保留字段名和相对顺序，不显示数字或字母序号，只补目标变化、布局、身份锚点与有依据的漂移风险。Agent 核对任务回执、文件关联与元数据，图像内容和效果由人判断。
 - `wally-asset-designer` 的 Cxx 使用16:9整页，左侧无头正面／背面、右侧面部特写，每个候选以完整提示词一次生成；Sxx 使用地点与空间、材质与环境细节、画面与取景、时间天气与光线、色彩与成像质感、负面提示词六字段。基础 Pxx 与 Pxx-state 均为16:9单一主视图，每个目标状态独立一图并使用已选基础道具参考。Cxx-Lxx 场景角色状态模板已弃用。场景覆盖默认九宫格，九格一致性不足或用户明确要求时可改用 `2×2` 四宫格。
 - `wally-asset-designer` 的白模定义与几何体约定见[白模视频参考](wally-asset-designer/types/whitebox-video.md)。
@@ -56,17 +60,9 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 
 直接说“wally”，然后描述想做的视频，或上传任意已有材料。Helper 会整理信息、判断下一步，并给出对应 skill 名称和可以直接复制的调用请求；用户复制请求并明确调用该 skill，再把产物带回 Wally。
 
-## 当前推荐经验
+## 流程与测试建议
 
-需要挑选故事支点，或把选定方向展开成万字纲时，明确调用 `story-idea-generator`；已有万字纲或剧本时从对应阶段继续。
-
-1. `wally-screenplay-writer` 完成可用的剧本初稿。
-2. `wally-storyboard-designer` 先听用户讲述最想拍的画面，再判断主镜与衔接，按分镜制作白模视频供用户验证，并根据反馈修订。
-3. `wally-asset-designer` 按需准备图片资产与参考；白模定义和造型约定也由它维护。
-4. `wally-action-designer` 设计具体表演、摄影、光影、声音及视频生成提示词。
-5. 需要复核材料衔接或判断下一步时，返回 `wally-helper`。
-
-`wally-helper` 从开始到结束持续陪同；上面的顺序是当前经验建议，不是专业 skill 的调用前提。`wally-visual-style-extractor` 可在任何需要锁定或复核视觉风格的阶段按需使用。实际顺序以当前材料和交付目标为准。
+制作顺序、视觉质感确认及其他测试判断统一维护在 [Helper 指南](wally-helper/references/workflow-guide.md)。专业工具保留各自的方法、真实素材依赖和交付范围；用户可随时取用，无需先完成其他工具的工作。
 
 ## 健康检查
 

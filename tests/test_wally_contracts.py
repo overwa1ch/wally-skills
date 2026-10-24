@@ -307,13 +307,12 @@ class SkillContractTests(unittest.TestCase):
             "storyboard-style-contract.md",
         ):
             self.assertNotIn(phrase, tree)
-        self.assertIn("This skill is the test layer", skill)
 
     def test_helper_routes_storyboard_revisions_to_the_storyboard_specialist(self) -> None:
         helper = self.read("wally-helper/SKILL.md")
         workflow = self.read("wally-helper/references/workflow-guide.md")
         self.assertIn(
-            "wally-helper@2026-09-19-v4.3-workflow-guidance",
+            "wally-helper@2026-10-24-v4.4-on-demand-tools",
             helper,
         )
         self.assertIn(

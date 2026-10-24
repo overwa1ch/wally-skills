@@ -1,24 +1,22 @@
 # Modular AI-Video Workflow Guide
 
-Use this guide to orient the user and identify the next useful professional product. Treat the order as a recommended production path; adapt it to what the user already has and expose only the part needed for the current step.
+根据用户当前目标和材料判断下一步，只提供当前需要的建议。专业 skills 可独立取用；制作顺序与测试安排在 Helper 中按具体问题组织。
 
-## Design principle: visual results are the test suite
+## 测试与确认
 
-Visual tests help judge decisions that text alone cannot establish: whitebox videos show broad movement and spatial relationships, Previews show visual direction, and returned clips show performance. Recommend a test when it resolves a current uncertainty; it is not a prerequisite for a user-requested product.
+最终画面质感必须通过生成视频测试，并由用户审阅确认。提示词与图片作为输入，不据此确认最终视频质感。用户已有的生成视频可直接作为证据，无需另做一条名为“测试”的视频。
+
+图片、视频文字及其他参考分别承担哪些视觉特征，依据实际回片调整。场景图可提供空间、材料和陈设，视频提示词可承担成像要求；这是可调整的分工，不预设某一端负责全部质感。
+
+先明确当前要判断的问题，再建议最小必要的验证：白模视频可用于观察大致位移、空间、构图与运镜；生成视频可用于判断最终质感、表演及连续画面表现。测试目的、范围和后续制作顺序由 Helper 与用户讨论，专业工具只交付指定产物。未测试时如实说明证据缺口，不阻塞用户点名的其他工作，也不自动发起生成。
 
 The user approves creative results. Helper records what has actually been reviewed and identifies untested aspects without downgrading an already approved script or requiring another production stage.
 
-## Recommended production experience
+## 按当前问题组织工具
 
-Keep `wally-helper` with the user throughout the process. Adapt the following workflow to the user's current materials and request:
+先识别用户要解决的问题，承接现有材料，再按下方功能菜单建议工具。已有表演设计可直接用于制作白模，已有地点图可直接用于多角度参考，用户也可直接要求一条视频提示词；不补走无关阶段。
 
-When the user wants story ideas or a detailed story outline (万字纲), recommend an explicit call to `story-idea-generator`. That skill owns both stages; screenplay writing belongs to `wally-screenplay-writer`. Continue from the materials already supplied.
-
-1. Finish a usable screenplay first draft.
-2. Use `wally-storyboard-designer` to design shots from the user's account of the key pictures, then create a whitebox video to express broad character movement, spatial relationships, composition and camera movement.
-3. Revise the shots or whitebox from the user's observations. Route story changes to `wally-screenplay-writer` and shot-design changes to `wally-storyboard-designer`.
-4. Prepare reusable image assets through `wally-asset-designer` as needed, including multi-angle location references when useful.
-5. Use `wally-action-designer` for detailed performance, video prompts and reference bindings. Return to Helper when a compatibility review or next-step recommendation is needed.
+只有当前产物确实依赖缺失内容时才指出缺口。需要多个工具时，根据这些实际依赖安排先后；没有依赖的任务不强制排序。工具内部的写作、分析和文件操作方法由各专业 skill 维护。
 
 ## Skill registry（职责与功能菜单，不含方法）
 
@@ -36,12 +34,12 @@ Route by this registry: name a function, tell the user which skill to call, and 
 
 ### wally-storyboard-designer — 分镜功能
 - 职责：按用户点名，把所给故事、场景、图板或镜头材料转换为分镜领域的指定产物。
-- 功能菜单：准确源场景继承、分镜脚本设计与定向修订、白模视频制作与修订、场景布局 SVG、按需提示词污染检查。用户观看白模并提供反馈，作为分镜修订依据。
-- 何时调用：需要设计镜头、制作白模视频验证分镜、或根据观察修改分镜脚本时。
+- 功能菜单：准确源场景继承、分镜脚本设计与定向修订、白模视频制作与修订、场景布局 SVG、按需提示词污染检查；按当前请求分别取用。
+- 何时调用：需要上述任一产物或修订时。
 
 ### wally-asset-designer — 资产
 - 职责：规划可复用的图片资产与白模视频参考；图片承载身份和外观，白模承载人物位移、空间关系、构图和运镜的大致框架。
-- 功能菜单：资产方案、regional_anchor、style_aesthetic、人物主导Preview提示词与审查、生产资产提示词（基础角色、`Pxx-state` 道具状态、匿名群体、角色比例、道具、地点参考）、多角度九宫格、一致性不足时的 `2×2` 四宫格、图片人工审查与反馈处理，以及白模视频的定义、规划、制作与修订。
+- 功能菜单：资产方案、regional_anchor、图片视觉要求、单幅效果图与各类型资产提示词（基础角色、`Pxx-state` 道具状态、匿名群体、角色比例、道具、地点参考）、多角度九宫格与 `2×2` 四宫格、图片生成与人工反馈处理，以及白模视频的定义、规划、制作与修订。
 - 何时调用：需要上述图片资产、白模视频参考或相应修订时，由用户明确点名调用。
 
 ### wally-action-designer — 动作与导演执行
@@ -84,7 +82,5 @@ Copy-ready request:
 ```text
 请使用 wally-storyboard-designer，按当前分镜制作白模视频，表达大致的人物位移、空间关系、构图和运镜，交给我观看后按反馈修订。
 ```
-
-For a new static-asset system, the specialist's recommended internal sequence is: discuss and confirm the asset plan, `regional_anchor`, and existing visual boundaries; generate and review person-led Preview candidates; record `style_aesthetic` from the user's selected Preview; write production asset prompts; approve each returned `Sxx location_reference`; then derive one multi-angle, multi-shot-size scene reference. Start with the nine-grid. When cross-cell consistency is weak, ask for a `2×2` four-grid of the same approved scene and preserve scene identity, topology, furniture, equipment, lighting, and style. `wally-visual-style-extractor` may be used as an optional user-managed style-extraction handoff. `wally-helper` only explains this sequence and accepts the returned products.
 
 Do not send the user backward merely because their materials arrived in a different order. Parallel specialist work is valid when the products do not depend on the same unresolved decision.

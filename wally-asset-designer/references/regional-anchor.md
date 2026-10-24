@@ -28,4 +28,4 @@ Write concise visible cues, not prompt prose. The anchor defines what can exist 
 - Do not use the anchor to prescribe a photographic or illustration finish that belongs in `style_aesthetic`.
 - If the two directions conflict, identify the exact collision and give compatible alternatives for user confirmation.
 
-After Preview approval, translate only the asset-relevant effects of this anchor into each production prompt.
+Translate only the asset-relevant effects of the supplied anchor into the requested prompt.
