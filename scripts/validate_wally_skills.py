@@ -17,7 +17,7 @@ SKILLS = {
     "wally-helper": "wally-helper@2026-09-19-v4.3-workflow-guidance",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-10-18-v3.21-user-led-main-shots",
-    "wally-static-asset-designer": "wally-static-asset-designer@2026-10-15-v2.19-asset-templates",
+    "wally-asset-designer": "wally-asset-designer@2026-10-24-v3.0-image-and-whitebox-assets",
     "wally-action-designer": "wally-action-designer@2026-10-23-v3.52-whitebox-reference-framework",
     "wally-action-designer-v329": "wally-action-designer@2026-10-10-v3.29-unified-action",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
@@ -28,7 +28,7 @@ README_VERSIONS = {
     "wally-helper": "V4.3",
     "wally-screenplay-writer": "V2.2",
     "wally-storyboard-designer": "V3.21",
-    "wally-static-asset-designer": "V2.19",
+    "wally-asset-designer": "V3.0",
     "wally-action-designer": "V3.52",
     "wally-action-designer-v329": "V3.29",
     "wally-visual-style-extractor": "V1.7",
@@ -43,9 +43,9 @@ FROZEN_HASHES = {
 
     "wally-storyboard-designer/templates/storyboard-prompt-template.md": "de663576ce7998da223187aa9c182f8a4eaabd41312e1f92f2d1395da8b4efbc",
     "wally-storyboard-designer/templates/shot-table-prompt-template.md": "4c1c0c0cbf2df85ff016f30665f2df2b69ab1e752bbe1dcbd71ac376b50126ea",
-    "wally-static-asset-designer/templates/preview-prompt.md": "1fdc2c88e72aa29a1203c23499ddedc5a8ee5e0fb3bebc2466019a1d596adc74",
-    "wally-static-asset-designer/templates/visual-direction-proposal.md": "eb2b8e7b2a82d29954787a79b646cd7e16245f748a4f512faecb908e6efa7365",
-    "wally-static-asset-designer/types/multi-angle.md": "afbec47b9d7f7151aafb18ab48816a3de9fc075119d85efde3009eac5e244f0e",
+    "wally-asset-designer/templates/preview-prompt.md": "1fdc2c88e72aa29a1203c23499ddedc5a8ee5e0fb3bebc2466019a1d596adc74",
+    "wally-asset-designer/templates/visual-direction-proposal.md": "eb2b8e7b2a82d29954787a79b646cd7e16245f748a4f512faecb908e6efa7365",
+    "wally-asset-designer/types/multi-angle.md": "afbec47b9d7f7151aafb18ab48816a3de9fc075119d85efde3009eac5e244f0e",
 }
 
 CANONICAL_STYLE_HASH = "863d0b9b259dbb1a1c56788c29f0138c7d178d82bbb78a3669cf9a56a21294aa"
@@ -567,8 +567,8 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         if phrase not in storyboard:
             fail(errors, f"Storyboard fixed-prompt contract is missing: {phrase}")
 
-    four_grid = skills / "wally-static-asset-designer/types/multi-angle-2x2.md"
-    prop_state = skills / "wally-static-asset-designer/types/pxx-state.md"
+    four_grid = skills / "wally-asset-designer/types/multi-angle-2x2.md"
+    prop_state = skills / "wally-asset-designer/types/pxx-state.md"
     if not four_grid.is_file():
         fail(errors, "Static 2x2 fixed prompt is missing")
     else:
@@ -580,7 +580,7 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         for phrase in ("九宫格", "用户可以直接点名", "无法保持场景身份", "用户选择后再执行"):
             if phrase not in four_text:
                 fail(errors, f"Static 2x2 routing/output contract is missing: {phrase}")
-    nine_text = (skills / "wally-static-asset-designer/types/multi-angle.md").read_text(encoding="utf-8")
+    nine_text = (skills / "wally-asset-designer/types/multi-angle.md").read_text(encoding="utf-8")
     if "九宫格是地点多角度参考的默认产物" not in nine_text:
         fail(errors, "Static nine-grid type must retain the default scene-reference route")
     if not prop_state.is_file():

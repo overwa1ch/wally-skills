@@ -22,5 +22,5 @@ Version: `wally-action-designer@2026-10-23-v3.52-whitebox-reference-framework`
 ## 内容边界
 
 - 保留故事、已确认台词及用户明确的执行决定，设计它们如何发生。
-- 原创或改写台词属于 `wally-screenplay-writer`；静态资产制作属于 `wally-static-asset-designer`。仅在当前工作确实依赖缺失内容时指出缺口，不自动扩展任务。
+- 原创或改写台词属于 `wally-screenplay-writer`；图片资产与白模视频参考制作属于 `wally-asset-designer`。仅在当前工作确实依赖缺失内容时指出缺口，不自动扩展任务。
 - 表演设计可直接作为分镜表生成的导演脚本依据。

@@ -14,6 +14,6 @@ Load only when the user requests a review of how supplied professional products 
 
 State whether the supplied products can support the requested next step. For each material conflict, identify the two conflicting passages or assets, explain the practical consequence, and give a copy-ready request for the responsible specialist. Ask for a missing fact only when it changes that decision.
 
-Story or dialogue revisions go to `wally-screenplay-writer`; shot-design revisions go to `wally-storyboard-designer`; reusable-asset revisions go to `wally-static-asset-designer`; performance, sound, video-prompt, and reference-binding revisions go to `wally-action-designer`.
+Story or dialogue revisions go to `wally-screenplay-writer`; shot-design revisions go to `wally-storyboard-designer`; reusable-asset revisions go to `wally-asset-designer`; performance, sound, video-prompt, and reference-binding revisions go to `wally-action-designer`.
 
 Keep findings separate from the original products. Helper does not reformat or assemble them, rename references, insert fields, or write missing professional content. The specialist's current output contract governs the deliverable.

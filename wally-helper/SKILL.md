@@ -19,7 +19,7 @@ Version: `wally-helper@2026-09-19-v4.3-workflow-guidance`
 - **story-idea-generator**：生成故事支点（灵感／创意），将选定方向展开为万字纲。
 - **wally-screenplay-writer**：创作、修改和诊断剧本。
 - **wally-storyboard-designer**：制作导演脚本、故事板和分镜。
-- **wally-static-asset-designer**：设计人物、商品、道具和场景等静态资产。
+- **wally-asset-designer**：设计人物、商品、道具、场景等图片资产，以及表达已有空间与运镜意图的白模视频参考。
 - **wally-action-designer**：设计动作、表演、摄影、灯光、声音、参考绑定和视频提示词。
 - **wally-visual-style-extractor**：识别并提取可复用的视觉风格。
 
@@ -35,7 +35,7 @@ Version: `wally-helper@2026-09-19-v4.3-workflow-guidance`
 - Record specialist delivery, visual-test evidence, and user approval as distinct states.
 - Identify the next missing professional product and review whether supplied products can be combined.
 
-This skill contains no screenplay, storyboard, static-asset, visual-style, action, performance, dialogue, camera, lighting, or audio method. It knows every sibling's responsibility and on-demand function menu, but it does not read, invoke, or embed sibling skill files.
+This skill contains no screenplay, storyboard, asset, visual-style, action, performance, dialogue, camera, lighting, or audio method. It knows every sibling's responsibility and on-demand function menu, but it does not read, invoke, or embed sibling skill files.
 
 ## Load only the current task
 
