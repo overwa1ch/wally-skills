@@ -15,10 +15,10 @@ import xml.etree.ElementTree as ET
 SKILLS = {
     "story-idea-generator": "story-idea-generator@2026-09-19-v1.2-four-act-ten-sequences",
     "wally-helper": "wally-helper@2026-10-24-v4.4-on-demand-tools",
-    "wally-screenplay-writer": "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
+    "wally-screenplay-writer": "wally-screenplay-writer@2026-10-27-v2.3-scene-diagnosis",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-10-24-v4.1-on-demand-tools",
-    "wally-asset-designer": "wally-asset-designer@2026-10-24-v3.2-on-demand-assets",
-    "wally-action-designer": "wally-action-designer@2026-10-24-v3.53-whole-action-expression",
+    "wally-asset-designer": "wally-asset-designer@2026-10-27-v3.4-targeted-image-revision",
+    "wally-action-designer": "wally-action-designer@2026-10-27-v3.54-interaction-camera-cases",
     "wally-action-designer-v329": "wally-action-designer@2026-10-10-v3.29-unified-action",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
@@ -26,10 +26,10 @@ SKILLS = {
 README_VERSIONS = {
     "story-idea-generator": "V1.2",
     "wally-helper": "V4.4",
-    "wally-screenplay-writer": "V2.2",
+    "wally-screenplay-writer": "V2.3",
     "wally-storyboard-designer": "V4.1",
-    "wally-asset-designer": "V3.2",
-    "wally-action-designer": "V3.53",
+    "wally-asset-designer": "V3.4",
+    "wally-action-designer": "V3.54",
     "wally-action-designer-v329": "V3.29",
     "wally-visual-style-extractor": "V1.7",
 }

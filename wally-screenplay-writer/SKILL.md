@@ -16,7 +16,7 @@ description: >
 
 > Designed by @山音
 
-Current version: `wally-screenplay-writer@2026-09-14-v2.2-progressive-development` — 按当前任务选择内容、字段与方法，省略无依据或无作用的补充。
+Current version: `wally-screenplay-writer@2026-10-27-v2.3-scene-diagnosis` — 按当前任务选择内容、字段与方法，省略无依据或无作用的补充。
 
 以视觉构建文本，以戏剧动作为基本单位，用潜台词替代直白表达。每一句台词、每一个场景都必须能被摄影机拍到或被麦克风收录。
 

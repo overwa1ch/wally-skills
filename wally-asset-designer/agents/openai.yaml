@@ -1,7 +1,7 @@
 interface:
   display_name: "Wally Asset Designer"
-  short_description: "Plan image assets and whitebox video references"
-  default_prompt: "Use $wally-asset-designer to prepare the image assets or whitebox video references needed for this scene, following the rules for each asset type."
+  short_description: "Prepare image assets and character or whitebox video references"
+  default_prompt: "Use $wally-asset-designer to prepare the requested image assets, character video references or whitebox video references from the current materials."
 
 policy:
   allow_implicit_invocation: false

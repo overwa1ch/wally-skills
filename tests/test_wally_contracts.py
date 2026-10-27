@@ -21,7 +21,7 @@ class SkillContractTests(unittest.TestCase):
         frontmatter = re.match(r"\A---\n(.*?)\n---\n", skill, re.DOTALL)
         self.assertIsNotNone(frontmatter)
         self.assertIn(
-            "wally-screenplay-writer@2026-09-14-v2.2-progressive-development",
+            "wally-screenplay-writer@2026-10-27-v2.3-scene-diagnosis",
             skill,
         )
         for phrase in ("原创对白", "台词写作", "对白改写", "对白诊断"):
