@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-asset-designer or 
 
 规划可复用的图片资产、动态角色参考与白模视频参考，按用户请求交付定义、提示词或资产。
 
-Version: `wally-asset-designer@2026-10-29-v3.5-full-head-10s-reference`
+Version: `wally-asset-designer@2026-10-29-v3.7-higgsfield-scene-template`
 
 ## 共用边界
 
@@ -40,6 +40,7 @@ Version: `wally-asset-designer@2026-10-29-v3.5-full-head-10s-reference`
 | 图片生成、收集或恢复 | [browser-execution.md](references/browser-execution.md) 与 [候选生成记录](templates/generation-record.md)；执行完整的项目与聊天命名、独立聊天、异步提交核验、原图归档及恢复流程。 |
 | 资产规划与类型选择 | [planning.md](references/planning.md)；图片视觉规划按需读取 [regional-anchor.md](references/regional-anchor.md)、[style-aesthetic.md](references/style-aesthetic.md) 与 [方案模板](templates/visual-direction-proposal.md)。 |
 | 起草或修改单幅效果图 | [craft.md](references/craft.md) 与 [style-aesthetic.md](references/style-aesthetic.md)。 |
+| 起草或修改地点参考 Sxx | [contracts.md](references/contracts.md) 与 [sxx.md](types/sxx.md)；场景正文后写 CAMERA、LIGHTING、COLOR、STYLE，文化信息融入正文，NEGATIVE 放在末尾。 |
 | 起草或修改单项正式图片资产 | [contracts.md](references/contracts.md) 与所选 `types/<asset>.md`；类型对应关系见 planning，字段、几何和呈现按类型合同保留。 |
 | 起草或修改九宫格 / 四宫格 | 默认使用 [multi-angle.md](types/multi-angle.md)；用户直接要求或选择 fallback 时使用 [multi-angle-2x2.md](types/multi-angle-2x2.md)。基础地点须已选定；审查九宫格时不擅自追加或执行四宫格。 |
 | 图片人工审查交付、反馈整理与修订 | [review-protocol.md](references/review-protocol.md)；供人查阅类型要点或按反馈修改输入时再读相关类型清单，Agent 不自行看图判断。 |
