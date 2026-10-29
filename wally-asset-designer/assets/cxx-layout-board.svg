@@ -1,30 +1,36 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
-  <!-- Cxx 基础角色资产页布局板：左两列=无头正面、无头背面,右=大幅面部特写。仅作构图参考,上传前转 PNG;平台操作见 references/browser-execution.md。 -->
+  <!-- Cxx 基础角色资产页布局板：左两列=完整全身正面、完整全身背面,右=大幅面部特写。全身均含完整头部;示意比例不替代已确认的角色头身比。仅作构图参考,上传前转 PNG;平台操作见 references/browser-execution.md。 -->
   <defs>
     <clipPath id="front-crop"><rect x="50" y="50" width="360" height="800"/></clipPath>
     <clipPath id="back-crop"><rect x="440" y="50" width="360" height="800"/></clipPath>
     <clipPath id="portrait-crop"><rect x="830" y="50" width="720" height="800"/></clipPath>
     <g id="body" fill="#bdbdbd">
+      <ellipse cx="0" cy="-26" rx="32" ry="48"/>
       <path d="M -30 20 L 30 20 L 30 65 L 78 85 L 66 390 L 53 440 L 56 745 L 80 780 L 80 810 L 6 810 L 6 470 L -6 470 L -6 810 L -80 810 L -80 780 L -56 745 L -53 440 L -66 390 L -78 85 L -30 65 Z"/>
       <path d="M -78 85 L -112 110 L -140 440 L -125 480 L -100 475 L -94 430 L -65 160 Z"/>
       <path d="M 78 85 L 112 110 L 140 440 L 125 480 L 100 475 L 94 430 L 65 160 Z"/>
     </g>
   </defs>
   <rect width="1600" height="900" fill="#d4d4d4"/>
-  <!-- 左:两个等大身体区;右:面部特写区 -->
+  <!-- 左:两个等大全身区;右:面部特写区 -->
   <g fill="#c7c7c7" stroke="#9a9a9a" stroke-width="4">
     <rect x="50" y="50" width="360" height="800"/>
     <rect x="440" y="50" width="360" height="800"/>
     <rect x="830" y="50" width="720" height="800"/>
   </g>
-  <!-- 身体在面板顶缘按颈部裁切,保留肩部和双脚 -->
+  <!-- 正背面全身包含完整头部,保留上下留白;两视图使用相同缩放 -->
   <g clip-path="url(#front-crop)">
-    <use href="#body" transform="translate(230,0)"/>
-    <path d="M 200 65 Q 230 95 260 65 M 230 95 L 230 390" fill="none" stroke="#aaa" stroke-width="3"/>
+    <g transform="translate(230,145) scale(0.82)">
+      <use href="#body"/>
+      <path d="M -30 65 Q 0 95 30 65 M 0 95 L 0 390" fill="none" stroke="#aaa" stroke-width="3"/>
+      <path d="M -16 -28 L -8 -28 M 8 -28 L 16 -28 M -8 -2 L 8 -2" fill="none" stroke="#aaa" stroke-width="3" stroke-linecap="round"/>
+    </g>
   </g>
   <g clip-path="url(#back-crop)">
-    <use href="#body" transform="translate(620,0)"/>
-    <path d="M 590 65 Q 620 75 650 65" fill="none" stroke="#aaa" stroke-width="3"/>
+    <g transform="translate(620,145) scale(0.82)">
+      <use href="#body"/>
+      <path d="M -30 65 Q 0 75 30 65" fill="none" stroke="#aaa" stroke-width="3"/>
+    </g>
   </g>
   <!-- 独立面部特写,完整头部占主要面积 -->
   <g clip-path="url(#portrait-crop)">
@@ -34,5 +40,5 @@
     <path d="M 1075 365 L 1145 365 M 1235 365 L 1305 365 M 1190 385 L 1170 475 L 1205 485 M 1115 555 L 1265 555" fill="none" stroke="#aaa" stroke-width="8" stroke-linecap="round"/>
   </g>
   <!-- 两个身体视图共享地线 -->
-  <line x1="50" y1="812" x2="800" y2="812" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="14 10"/>
+  <line x1="50" y1="809.2" x2="800" y2="809.2" stroke="#9a9a9a" stroke-width="3" stroke-dasharray="14 10"/>
 </svg>
