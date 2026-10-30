@@ -12,7 +12,7 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 | `wally-helper` | V4.4 | 整理材料、记录制作经验、判断流程与测试需要、检查跨产物兼容性，并提供专业工具的可复制调用请求；按需返回固定 BGM 制作请求。 |
 | `wally-screenplay-writer` | V2.3 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少，分步开发细则按需读取。 |
 | `wally-storyboard-designer` | V4.1 | 按需设计或修订分镜、制作或修订白模视频、绘制场景布局及检查提示词污染。各功能分别取用；新分镜沿用先听用户讲述关键画面的设计方法。 |
-| `wally-asset-designer` | V3.7 | 按当前范围与数量提供图片资产、动态角色参考或白模视频参考；动态角色参考保留整页 Cxx，结合剧本原句完成短表演。图片保留类型合同，逐条独立提交并归档，由人审查；不自动扩成候选包。 |
+| `wally-asset-designer` | V3.8 | 按当前范围与数量提供图片资产、动态角色参考或白模视频参考；动态参考以 Cxx 提供造型，左格展示动作与局部，右格展示表情与声音，可结合已有对白作简短表演。图片保留类型合同，逐条独立提交并归档，由人审查；不自动扩成候选包。 |
 | `wally-action-designer` | V3.54 | 当前研究版；以完整动作和表情设计表演，只展开有作用的阻力、反差与转折；字段按需选用，保留原镜号与已确认内容。 |
 | `wally-action-designer-v329` | V3.29 | 独立调用的原版对照；五份原文件完整冻结，与当前研究版分别使用。 |
 | `wally-visual-style-extractor` | V1.7 | 检索既有风格并提取有证据的 style layer；普通解释直接回答，结构化任务只读对应模板章节。 |
@@ -49,7 +49,7 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 - `wally-asset-designer` 根据文字材料、用户说明和已选记录绑定参考图；正式提示词保留字段名和相对顺序，不显示数字或字母序号，只补目标变化、布局、身份锚点与有依据的漂移风险。Agent 核对任务回执、文件关联与元数据，图像内容和效果由人判断。
 - `wally-asset-designer` 的 Cxx 使用16:9整页，左侧为包含完整头部的正背面全身视图，传达已确认的头身比；右侧为面部特写，每个候选以完整提示词一次生成；Cxx 按实际附件用途选择参考绑定，无参考图时依据文字设定创作；服装写具体可见形态，姿态与神态按角色需要填写。Sxx 采用 Higgsfield 场景提示词组织方式：场景正文＋CAMERA／LIGHTING／COLOR／STYLE，文化信息融入建筑、材料与陈设，NEGATIVE 放在末尾；不适用项省略。基础 Pxx 与 Pxx-state 均为16:9单一主视图，每个目标状态独立一图并使用已选基础道具参考。Cxx-Lxx 场景角色状态模板已弃用。场景覆盖默认九宫格，九格一致性不足或用户明确要求时可改用 `2×2` 四宫格。
 - `wally-asset-designer` 的白模定义与几何体约定见[白模视频参考](wally-asset-designer/types/whitebox-video.md)。
-- `wally-asset-designer` 的[动态角色参考](wally-asset-designer/types/dynamic-character-video.md)按需读取：默认10秒，整页 Cxx 左侧为包含完整头部的正背面全身，右侧承载声音与面部表演，台词从剧本选原句，表演依据对应情境与人物目的；[通用提示词](wally-asset-designer/templates/dynamic-character-reference-10s.txt)独立保存。
+- `wally-asset-designer` 的[动态角色参考](wally-asset-designer/types/dynamic-character-video.md)按需读取：默认10秒、左右双格。静态 Cxx 页提供人物造型，视频重新组织画面；左格开头约2–3秒展示动作及正背面，其余时间切换具体局部，右格以可自然转头、切近的正面近景展示表情、声音与同步口型。双格位置保持，格内景别和内容可变化，两格独立展示。沿用已有对白与实际声音素材；[通用提示词](wally-asset-designer/templates/dynamic-character-reference-10s.txt)独立保存。
 - `wally-action-designer` 按已有场景拆分，一个场景完整做一场戏；每场从 `0.0s` 起算，场内接续计时，原镜号保留。采用 `REFERENCE:`、`STYLE:`、`THE SHOT:`、`CHARACTER ACTING:` 等19个可选英文字段；总体字段写宏观控制，THE SHOT 写具体执行，可按用户要求或镜头需要选择 timestamp 分段或连续段落。以完整动作和表情为描述单位，目标、阻碍与应对方式用于设计，不强制填写；PHYSICS 和面部控制只补有独立作用的要求。STYLE、LIGHT 与 HYPER-REAL CAPTURE 各司其职，不写汗液、汗湿描写。表演设计可作为白模视频制作的镜头依据。
 - `wally-action-designer-v329` 单独保留 V3.29 原版方法；与当前研究版对照时分别加载和交付，不混用规则。当前研究修改尚未通过生成对照证明优于原版；文件与结构检查不代表生成效果验证。
 - Camera 和 Shot 只按任务需要选择 capture physics、光学、稳定性、运动动机、剪辑语法、视点、前景、焦点、空间层次与时长预算；这些控制不得覆盖已批准的镜头权威。

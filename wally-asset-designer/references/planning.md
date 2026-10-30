@@ -27,7 +27,7 @@
 | --- | --- |
 | [白模视频参考](../types/whitebox-video.md) | 人物位移、空间关系、构图与运镜的大致参考。 |
 | [Cxx 基础角色](../types/cxx.md) | 保存稳定身份、形体比例、基准妆造与生活痕迹。 |
-| [Cxx 动态角色参考](../types/dynamic-character-video.md) | 按需保留整页 Cxx，结合剧本原句展示身体、面部与声音的短表演参考。 |
+| [Cxx 动态角色参考](../types/dynamic-character-video.md) | 以 Cxx 提供造型，左右双格分别展示动作与局部、面部与声音，可结合已有对白作简短表演。 |
 | [Gxx 匿名群体](../types/gxx.md) | 保存连贯的社会、职业或群体功能对应的匿名人群池。 |
 | [CSxx 角色比例](../types/csxx.md) | 比较相关角色的相对尺度与身体比例。 |
 | [Pxx 基础道具](../types/pxx.md) | 保存复用、标志性或机制关键道具的结构、材质与基准状态。 |

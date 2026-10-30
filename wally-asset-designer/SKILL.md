@@ -1,13 +1,13 @@
 ---
 name: wally-asset-designer
-description: Use only when the user explicitly requests wally-asset-designer or $wally-asset-designer by name. Prepare reusable image assets, character video references or whitebox video references from current materials. For character video references, preserve the selected Cxx page and use existing screenplay dialogue and context for a brief performance. Generate requested images through ChatGPT Web for human review. Original screenplay, dialogue rewriting, scene shot design and final scene-video prompts remain with their specialists.
+description: Use only when the user explicitly requests wally-asset-designer or $wally-asset-designer by name. Prepare reusable image assets, character video references or whitebox video references from current materials. For character video references, use Cxx appearance information to create a two-panel display of movement, details, face and voice, with existing dialogue and context for a brief performance. Generate requested images through ChatGPT Web for human review. Original screenplay, dialogue rewriting, scene shot design and final scene-video prompts remain with their specialists.
 ---
 
 # Wally Asset Designer
 
 规划可复用的图片资产、动态角色参考与白模视频参考，按用户请求交付定义、提示词或资产。
 
-Version: `wally-asset-designer@2026-10-29-v3.7-higgsfield-scene-template`
+Version: `wally-asset-designer@2026-10-30-v3.8-two-panel-dynamic-reference`
 
 ## 共用边界
 
@@ -16,7 +16,7 @@ Version: `wally-asset-designer@2026-10-29-v3.7-higgsfield-scene-template`
 - Agent 根据文字材料、用户说明和已选关系准备输入，直接绑定所需参考图，不查看或评判图像内容。图片用途不清楚且影响输入时，只补问必要的用途说明。具体生产依赖由所选类型文件维护。
 - 图片和参考视频的内容、整体观感、风格差异和资产可用性统一由人审查。Agent 只核对提交回执、任务状态、文件关联及尺寸等元数据；类型清单用于起草提示词和供人审查，不作为 Agent 审图任务。
 - 只交付用户点名的定义、提示词或资产，直接使用已有材料；不要求先完成资产规划、风格选择或其他项目阶段。
-- 沿用用户已有的剧本、分镜、表演与时序。动态角色参考可选取剧本原句，并依据其情境编写角色参考页的短表演提示词；原创剧情、对白改写、剧情镜头的具体表演与声音设计，以及最终场景视频提示词继续由对应专业工具负责。
+- 沿用用户已有的剧本、分镜、表演与时序。动态角色参考可选取剧本原句，并依据其情境编写角色参考视频的短表演提示词；原创剧情、对白改写、剧情镜头的具体表演与声音设计，以及最终场景视频提示词继续由对应专业工具负责。
 - 不再规划或生成场景角色状态资产页。角色的霜冻、污渍、伤口等外观状态留给后期制作。
 
 ## 图片版本与交付
@@ -35,7 +35,7 @@ Version: `wally-asset-designer@2026-10-29-v3.7-higgsfield-scene-template`
 | 当前任务 | 读取入口与交付范围 |
 | --- | --- |
 | 已有图片的定向材质修整或重新布光 | [targeted-image-revision.md](references/targeted-image-revision.md)；按本次目标明确变化范围与保留内容，直接使用指定原图。 |
-| 动态角色参考定义、提示词或修订 | [dynamic-character-video.md](types/dynamic-character-video.md)；承接已选 Cxx 与剧本，按需制作整页短动态参考。 |
+| 动态角色参考定义、提示词或修订 | [dynamic-character-video.md](types/dynamic-character-video.md)；承接 Cxx 造型与已有对白，左格展示动作及细节，右格展示表情及声音。 |
 | 白模视频定义、规划、制作或修订 | [whitebox-video.md](types/whitebox-video.md)。 |
 | 图片生成、收集或恢复 | [browser-execution.md](references/browser-execution.md) 与 [候选生成记录](templates/generation-record.md)；执行完整的项目与聊天命名、独立聊天、异步提交核验、原图归档及恢复流程。 |
 | 资产规划与类型选择 | [planning.md](references/planning.md)；图片视觉规划按需读取 [regional-anchor.md](references/regional-anchor.md)、[style-aesthetic.md](references/style-aesthetic.md) 与 [方案模板](templates/visual-direction-proposal.md)。 |
