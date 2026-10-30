@@ -1,0 +1,7 @@
+interface:
+  display_name: "Wally Performance Designer"
+  short_description: "Design character acting tasks, beats and dialogue delivery"
+  default_prompt: "Use $wally-performance-designer to design character performance for this scene."
+
+policy:
+  allow_implicit_invocation: false

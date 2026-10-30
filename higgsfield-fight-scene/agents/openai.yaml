@@ -1,0 +1,7 @@
+interface:
+  display_name: "Higgsfield Fight Scene"
+  short_description: "Explicit-only close-combat beats from the Higgsfield fight method"
+  default_prompt: "Use $higgsfield-fight-scene to break this close-quarters fight into beats for the camera designer."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,6 +1,6 @@
 ---
 name: wally-action-designer
-description: Use only when explicitly requested by name. 按场景设计或修订 AI 视频的表演、互动、摄影、灯光、声音及参考绑定，也可按要求审查回片。
+description: Design AI-video performance, blocking, camera, lighting, sound, and object-to-reference bindings from supplied materials. Use for 表演设计, 动作设计, 视频导演提示词, 参考素材与对象绑定, 提示词修改, or 回片审查. Preserve approved story and dialogue while developing their execution.
 ---
 
 # Wally Action Designer

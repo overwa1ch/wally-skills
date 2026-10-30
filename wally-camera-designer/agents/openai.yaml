@@ -1,0 +1,7 @@
+interface:
+  display_name: "Wally Camera Designer"
+  short_description: "Design shots, imaging and sound, then assemble the video prompt"
+  default_prompt: "Use $wally-camera-designer to design the camera and assemble the video prompt for this scene."
+
+policy:
+  allow_implicit_invocation: false

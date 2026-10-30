@@ -21,7 +21,7 @@ class SkillContractTests(unittest.TestCase):
         frontmatter = re.match(r"\A---\n(.*?)\n---\n", skill, re.DOTALL)
         self.assertIsNotNone(frontmatter)
         self.assertIn(
-            "wally-screenplay-writer@2026-10-27-v2.3-scene-diagnosis",
+            "wally-screenplay-writer@2026-10-30-v2.4-performance-camera-handoff",
             skill,
         )
         for phrase in ("原创对白", "台词写作", "对白改写", "对白诊断"):
@@ -204,7 +204,8 @@ class SkillContractTests(unittest.TestCase):
             self.assertIn(field, skill)
         self.assertIn("题材类别自动当成视听定位", skill)
 
-        self.assertIn("wally-action-designer", skill)
+        self.assertIn("wally-performance-designer", skill)
+        self.assertIn("wally-camera-designer", skill)
         self.assertIn("已批准", skill)
 
         intermediate_menu = (
@@ -312,7 +313,7 @@ class SkillContractTests(unittest.TestCase):
         helper = self.read("wally-helper/SKILL.md")
         workflow = self.read("wally-helper/references/workflow-guide.md")
         self.assertIn(
-            "wally-helper@2026-10-24-v4.4-on-demand-tools",
+            "wally-helper@2026-10-30-v4.5-camera-performance-split",
             helper,
         )
         self.assertIn(

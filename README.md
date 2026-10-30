@@ -9,12 +9,15 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 | Skill | 当前版本 | 职责 |
 | --- | --- | --- |
 | `story-idea-generator` | V1.2 | 生成故事支点（灵感／创意），再以事件数轴与八要素展开万字纲；两阶段方法、案例和矩阵按需读取。 |
-| `wally-helper` | V4.4 | 整理材料、记录制作经验、判断流程与测试需要、检查跨产物兼容性，并提供专业工具的可复制调用请求；按需返回固定 BGM 制作请求。 |
-| `wally-screenplay-writer` | V2.3 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少，分步开发细则按需读取。 |
+| `wally-helper` | V4.5 | 整理材料、记录制作经验、判断流程与测试需要、检查跨产物兼容性，并提供专业工具的可复制调用请求；按需返回固定 BGM 制作请求。 |
+| `wally-screenplay-writer` | V2.4 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少，分步开发细则按需读取。 |
 | `wally-storyboard-designer` | V4.1 | 按需设计或修订分镜、制作或修订白模视频、绘制场景布局及检查提示词污染。各功能分别取用；新分镜沿用先听用户讲述关键画面的设计方法。 |
-| `wally-asset-designer` | V3.8 | 按当前范围与数量提供图片资产、动态角色参考或白模视频参考；动态参考以 Cxx 提供造型，左格展示动作与局部，右格展示表情与声音，可结合已有对白作简短表演。图片保留类型合同，逐条独立提交并归档，由人审查；不自动扩成候选包。 |
-| `wally-action-designer` | V3.54 | 当前研究版；以完整动作和表情设计表演，只展开有作用的阻力、反差与转折；字段按需选用，保留原镜号与已确认内容。 |
-| `wally-action-designer-v329` | V3.29 | 独立调用的原版对照；五份原文件完整冻结，与当前研究版分别使用。 |
+| `wally-asset-designer` | V3.10 | 按当前范围与数量提供图片资产、动态角色参考或白模视频参考；动态参考以 Cxx 提供造型，左格展示动作与局部，右格展示表情与声音，可结合已有对白作简短表演。图片保留类型合同，逐条独立提交并归档，由人审查；不自动扩成候选包。 |
+| `wally-camera-designer` | V1.5 | 设计镜头、时间线、参考绑定、摄影、灯光、成像和声音空间，组装十段完整视频提示词。 |
+| `wally-performance-designer` | V1.0 | 设计人物任务、策略、倾听、互动与逐拍表演；按复杂程度分简单、标准和完整三档。 |
+| `wally-action-designer-v354` | V3.54 | 拆分前完整版本的独立对照入口，七份源文件保持原字节。 |
+| `higgsfield-fight-scene` | V2.4 | 按需点名的近身打斗入口，保留原作者技能及知识库，分拍交给摄影与成像组装。 |
+| `wally-action-designer-v329` | V3.29 | 独立调用的原版对照；五份原文件完整冻结，与当前拆分版及 V3.54 分别使用。 |
 | `wally-visual-style-extractor` | V1.7 | 检索既有风格并提取有证据的 style layer；普通解释直接回答，结构化任务只读对应模板章节。 |
 
 ## 故事、剧本与脚本
@@ -26,16 +29,18 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 ```bash
 git clone https://github.com/overwa1ch/wally-skills.git
 mkdir -p /path/to/repository/.agents/skills
-cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository/.agents/skills/
+cp -R wally-skills/wally-* wally-skills/story-idea-generator wally-skills/higgsfield-fight-scene /path/to/repository/.agents/skills/
 ```
 
 在该 repository 内新建 Codex 任务，让 Codex 只在这个项目作用域发现这些 skills。Wally 不再推荐安装到全局 user skill 目录。
 
 从旧版升级时，用 `wally-asset-designer/` 替换项目安装目录中的 `wally-static-asset-designer/`，调用名称同步改为 `$wally-asset-designer`；避免同时保留两个入口。
 
+从 Action V3.54 升级到拆分版时，移除安装目录中的旧 `wally-action-designer/`，改用 `$wally-camera-designer` 与 `$wally-performance-designer`；旧方法保存在 `$wally-action-designer-v354`。V3.29 与 V3.54 各自独立调用。
+
 升级已安装的 skill 时完整替换对应目录，清除新版已经移除的资源；项目自行修改过的副本先核对差异。
 
-全部八个 skill 都采用明确点名调用：只有用户点名对应 skill 并要求使用时才启用，普通故事、分镜、动作、资产或风格请求按常规任务处理。八份入口 `agents/openai.yaml` 均设置 `policy.allow_implicit_invocation: false`，关闭 Codex 的隐式调用；使用 `$wally-screenplay-writer` 等完整名称可显式加载对应 skill。
+全部十一个入口都采用明确点名调用：只有用户点名对应 skill 并要求使用时才启用，普通故事、分镜、动作、资产或风格请求按常规任务处理。十一份入口 `agents/openai.yaml` 均设置 `policy.allow_implicit_invocation: false`，关闭 Codex 的隐式调用；使用 `$wally-screenplay-writer` 等完整名称可显式加载对应 skill。
 
 用户明确要求使用 `wally` / `wally-helper` 时加载 Helper；点名专业 skill 只启用被点名的 skill。Helper 可推荐专业 skill 并给出可复制的调用请求，由用户明确调用。
 
@@ -50,12 +55,15 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 - `wally-asset-designer` 的 Cxx 使用16:9整页，左侧为包含完整头部的正背面全身视图，传达已确认的头身比；右侧为面部特写，每个候选以完整提示词一次生成；Cxx 按实际附件用途选择参考绑定，无参考图时依据文字设定创作；服装写具体可见形态，姿态与神态按角色需要填写。Sxx 采用 Higgsfield 场景提示词组织方式：场景正文＋CAMERA／LIGHTING／COLOR／STYLE，文化信息融入建筑、材料与陈设，NEGATIVE 放在末尾；不适用项省略。基础 Pxx 与 Pxx-state 均为16:9单一主视图，每个目标状态独立一图并使用已选基础道具参考。Cxx-Lxx 场景角色状态模板已弃用。场景覆盖默认九宫格，九格一致性不足或用户明确要求时可改用 `2×2` 四宫格。
 - `wally-asset-designer` 的白模定义与几何体约定见[白模视频参考](wally-asset-designer/types/whitebox-video.md)。
 - `wally-asset-designer` 的[动态角色参考](wally-asset-designer/types/dynamic-character-video.md)按需读取：默认10秒、左右双格。静态 Cxx 页提供人物造型，视频重新组织画面；左格开头约2–3秒展示动作及正背面，其余时间切换具体局部，右格以可自然转头、切近的正面近景展示表情、声音与同步口型。双格位置保持，格内景别和内容可变化，两格独立展示。沿用已有对白与实际声音素材；[通用提示词](wally-asset-designer/templates/dynamic-character-reference-10s.txt)独立保存。
-- `wally-action-designer` 按已有场景拆分，一个场景完整做一场戏；每场从 `0.0s` 起算，场内接续计时，原镜号保留。采用 `REFERENCE:`、`STYLE:`、`THE SHOT:`、`CHARACTER ACTING:` 等19个可选英文字段；总体字段写宏观控制，THE SHOT 写具体执行，可按用户要求或镜头需要选择 timestamp 分段或连续段落。以完整动作和表情为描述单位，目标、阻碍与应对方式用于设计，不强制填写；PHYSICS 和面部控制只补有独立作用的要求。STYLE、LIGHT 与 HYPER-REAL CAPTURE 各司其职，不写汗液、汗湿描写。表演设计可作为白模视频制作的镜头依据。
-- `wally-action-designer-v329` 单独保留 V3.29 原版方法；与当前研究版对照时分别加载和交付，不混用规则。当前研究修改尚未通过生成对照证明优于原版；文件与结构检查不代表生成效果验证。
+- `wally-camera-designer` 采用 REFERENCE、FORMAT、STYLE、CAMERA、ACTING TASKS、THE SHOT、SPOKEN LINE、LIGHT、AUDIO、NEGATIVE 十段格式，不适用项省略。每场从 `0.0s` 起算，保留原镜号、机位、景别和朝向，具体动作与摄影执行进入 THE SHOT。场景参考决定空间、材质、陈设与光照特征，机位与构图以提示词为准；默认一个地点一张参考，另一面有戏时才增补。
+- `wally-performance-designer` 保留完整动作粒度，融合场景事件、动机、目标、阻碍、策略和反馈。简单、标准、完整三档按任务选择；完整档先交设计说明供用户确认。ACTING TASKS 写意图层，逐拍表演只写入 THE SHOT；台词原文、声音身份与已确认调度保持。
+- 未指定画幅与成像方向时，Camera 与 Asset 的 Sxx 使用 2.39:1 和变形宽银幕 35mm 胶片观感；平台没有该比例时选 21:9。用户指定、项目当前风格、风格参考和已确认稿件优先。视频画面有明亮实际光源时才写轻微横向光条，并明确光源；场景参考图默认不带光条。
+- `higgsfield-fight-scene` 只在用户点名时使用，提供近身接触动作及受击反应。截拳道／咏春套路仅在选定时采用；枪战、追逐和普通推搡由对应专业工具处理。第三方源文件及归属见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+- `wally-action-designer-v354` 与 `wally-action-designer-v329` 分别保留七份和五份冻结原文件；对照时独立加载，不混用方法。
 - Camera 和 Shot 只按任务需要选择 capture physics、光学、稳定性、运动动机、剪辑语法、视点、前景、焦点、空间层次与时长预算；这些控制不得覆盖已批准的镜头权威。
-- 原创或改写对白属于 `wally-screenplay-writer`；`wally-action-designer` 只保留已批准措辞并设计其表演、口型、停顿、声音与镜头内执行。
+- 原创或改写对白属于 `wally-screenplay-writer`；`wally-performance-designer` 设计已批准措辞的表演、口型与停顿，`wally-camera-designer` 负责时序、声音位置和声学执行。
 - `wally-visual-style-extractor` 普通解释直接回答；结构化请求按需选择 Style Lookup、Analysis Card、Three-Stage Brief、Reusable JSON Prompt 或 Transfer Validation。`subject`、`scene`、`camera` 只接受用户已有值或复用占位符。
-- `wally-helper` 接受各专业产物的现有格式，按需指出材料冲突、缺件和下一步；剧情镜头的视频提示词及参考绑定交给 `wally-action-designer`，动态角色参考由 `wally-asset-designer` 承接。
+- `wally-helper` 接受各专业产物的现有格式，按需指出材料冲突、缺件和下一步；剧情镜头的视频提示词及参考绑定交给 `wally-camera-designer`，人物表演由 `wally-performance-designer` 设计，动态角色参考由 `wally-asset-designer` 承接。
 
 ## 新手使用方式
 
@@ -67,7 +75,7 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator /path/to/repository
 
 ## 健康检查
 
-仓库的 `validate-wally-skills` GitHub Actions job 会检查八项 frontmatter、引用完整性、跨模块合同、公开安全和冻结提示词 hash。也可在本地运行：
+仓库的 `validate-wally-skills` GitHub Actions job 会检查十项 Wally 模块及近身打斗入口的 frontmatter、引用完整性、跨模块合同、公开安全和冻结提示词 hash。也可在本地运行：
 
 ```bash
 python scripts/validate_wally_skills.py --skills-root .
@@ -83,4 +91,4 @@ node --test wally-asset-designer/tests/test_cua_payload.cjs
 
 ## License
 
-[MIT](LICENSE)
+Wally 原创部分采用 [MIT](LICENSE)。第三方来源与适用范围见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)，第三方归档原文不纳入 Wally 的 MIT 授权。

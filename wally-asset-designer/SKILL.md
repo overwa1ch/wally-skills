@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-asset-designer or 
 
 规划可复用的图片资产、动态角色参考与白模视频参考，按用户请求交付定义、提示词或资产。
 
-Version: `wally-asset-designer@2026-10-30-v3.8-two-panel-dynamic-reference`
+Version: `wally-asset-designer@2026-10-30-v3.10-default-anamorphic-scene`
 
 ## 共用边界
 
@@ -18,6 +18,7 @@ Version: `wally-asset-designer@2026-10-30-v3.8-two-panel-dynamic-reference`
 - 只交付用户点名的定义、提示词或资产，直接使用已有材料；不要求先完成资产规划、风格选择或其他项目阶段。
 - 沿用用户已有的剧本、分镜、表演与时序。动态角色参考可选取剧本原句，并依据其情境编写角色参考视频的短表演提示词；原创剧情、对白改写、剧情镜头的具体表演与声音设计，以及最终场景视频提示词继续由对应专业工具负责。
 - 不再规划或生成场景角色状态资产页。角色的霜冻、污渍、伤口等外观状态留给后期制作。
+- 写图片或视频提示词时按[提示词写作规则](references/prompt-writing-rules.md)检查：写可见结果，只写当前视图能看到的内容，同一属性只给一个方向。
 
 ## 图片版本与交付
 

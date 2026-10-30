@@ -16,7 +16,7 @@ description: >
 
 > Designed by @山音
 
-Current version: `wally-screenplay-writer@2026-10-27-v2.3-scene-diagnosis` — 按当前任务选择内容、字段与方法，省略无依据或无作用的补充。
+Current version: `wally-screenplay-writer@2026-10-30-v2.4-performance-camera-handoff` — 按当前任务选择内容、字段与方法，省略无依据或无作用的补充。
 
 以视觉构建文本，以戏剧动作为基本单位，用潜台词替代直白表达。每一句台词、每一个场景都必须能被摄影机拍到或被麦克风收录。
 
@@ -34,7 +34,7 @@ Current version: `wally-screenplay-writer@2026-10-27-v2.3-scene-diagnosis` — �
 - 故事支点（灵感／创意）与万字纲由用户明确调用 `story-idea-generator` 生成；本技能接受万字纲或任意阶段的已有故事材料，继续写作、修改与诊断剧本。
 
 - 本技能负责故事开发、人物、结构、场景、完整剧本、剧本诊断，以及对白和旁白措辞的创作、改写、诊断与批准。
-- `wally-action-designer` 只执行用户已锁定或本技能已批准的对白/旁白措辞；它负责表演、口型、停顿、时序、声音位置和声学执行，不负责发明或改写措辞。
+- `wally-performance-designer` 与 `wally-camera-designer` 只执行用户已锁定或本技能已批准的对白/旁白措辞；前者负责表演、口型与停顿，后者负责时序、声音位置和声学执行，均不负责发明或改写措辞。
 - 导演脚本、分镜、静态资产和最终视频提示词交给对应技能，本技能不越界代做。
 
 ## 铁律

@@ -11,7 +11,7 @@ Source version: `wally-action-designer@2026-10-10-v3.29-unified-action`
 
 先读取[原始技能入口](references/v3.29/SKILL.original.md)，再按其任务路由读取相邻的 [交付约定](references/v3.29/references/contract.md)、[设计方法](references/v3.29/references/craft.md)或[回片审查](references/v3.29/references/review.md)。归档入口中的相对路径以该入口所在目录为基准。
 
-- 按归档 V3.29 的字段、写法和方法执行，不自动套用当前 `wally-action-designer` 的19字段、V3.30之后的修改或 ANERNEQ 规则。
+- 按归档 V3.29 的字段、写法和方法执行，不自动套用 V3.30 之后的修改（包括 V3.54 对照版与当前的摄影与成像、人物表演技能）或 ANERNEQ 规则。
 - 对照测试时各版分别加载、分别交付，并在提示词正文之外标明版本；不混合各版方法，也不因版本更新就判断效果更好。
 - `references/v3.29/` 保存五份原文件的完整原字节。原入口只改存储文件名为 `references/v3.29/SKILL.original.md`，以区分独立调用入口；归档中的原调用名称与 UI 元数据仅作源文件保存，不改变本入口调用名。
 - 未获用户明确授权，不修改冻结原文。归档中的调用策略仅作历史保存；本共享入口只在用户明确点名并要求使用时启用，不自动替换当前版。

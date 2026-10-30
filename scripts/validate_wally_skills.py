@@ -14,24 +14,40 @@ import xml.etree.ElementTree as ET
 
 SKILLS = {
     "story-idea-generator": "story-idea-generator@2026-09-19-v1.2-four-act-ten-sequences",
-    "wally-helper": "wally-helper@2026-10-24-v4.4-on-demand-tools",
-    "wally-screenplay-writer": "wally-screenplay-writer@2026-10-27-v2.3-scene-diagnosis",
+    "wally-helper": "wally-helper@2026-10-30-v4.5-camera-performance-split",
+    "wally-screenplay-writer": "wally-screenplay-writer@2026-10-30-v2.4-performance-camera-handoff",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-10-24-v4.1-on-demand-tools",
-    "wally-asset-designer": "wally-asset-designer@2026-10-30-v3.8-two-panel-dynamic-reference",
-    "wally-action-designer": "wally-action-designer@2026-10-27-v3.54-interaction-camera-cases",
+    "wally-asset-designer": "wally-asset-designer@2026-10-30-v3.10-default-anamorphic-scene",
+    "wally-camera-designer": "wally-camera-designer@2026-10-30-v1.5-conditional-flare",
+    "wally-performance-designer": "wally-performance-designer@2026-10-30-v1.0-higgs-acting-fusion",
+    "wally-action-designer-v354": "wally-action-designer@2026-10-27-v3.54-interaction-camera-cases",
     "wally-action-designer-v329": "wally-action-designer@2026-10-10-v3.29-unified-action",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
 
 README_VERSIONS = {
     "story-idea-generator": "V1.2",
-    "wally-helper": "V4.4",
-    "wally-screenplay-writer": "V2.3",
+    "wally-helper": "V4.5",
+    "wally-screenplay-writer": "V2.4",
     "wally-storyboard-designer": "V4.1",
-    "wally-asset-designer": "V3.8",
-    "wally-action-designer": "V3.54",
+    "wally-asset-designer": "V3.10",
+    "wally-camera-designer": "V1.5",
+    "wally-performance-designer": "V1.0",
+    "wally-action-designer-v354": "V3.54",
     "wally-action-designer-v329": "V3.29",
     "wally-visual-style-extractor": "V1.7",
+}
+
+# Byte-identical copies that let each skill work standalone.
+SYNCED_COPIES = {
+    "references/granularity.md": ("wally-camera-designer", "wally-performance-designer"),
+    "references/spoken-line.md": ("wally-camera-designer", "wally-performance-designer"),
+    "references/prompt-writing-rules.md": (
+        "wally-camera-designer",
+        "wally-performance-designer",
+        "wally-asset-designer",
+        "higgsfield-fight-scene",
+    ),
 }
 
 FROZEN_HASHES = {
@@ -40,6 +56,20 @@ FROZEN_HASHES = {
     "wally-action-designer-v329/references/v3.29/references/contract.md": "ee1bbd9e1f1990aac0ded0457afdc4912a93843c2233017b3bbb5115450cbfbe",
     "wally-action-designer-v329/references/v3.29/references/craft.md": "83ebf288114ac6d0bbca36a9f4a96aeac895889081a44bbdb220c09bfdf699ec",
     "wally-action-designer-v329/references/v3.29/references/review.md": "482b6716b7d9ec37222e5077a6c716eb8ef1507187b2ffe6967480fb84bbe577",
+    "wally-action-designer-v354/references/v3.54/SKILL.original.md": "185cfb4cf1fd7767096c131fdb34f40f0cd9b9a97cbc3fe817aca52f4c2721ad",
+    "wally-action-designer-v354/references/v3.54/agents/openai.yaml": "d67e65bab61987c722eb09616e2c0c22b600003c9811d707fdc10e07d8f81822",
+    "wally-action-designer-v354/references/v3.54/references/camera-troubleshooting.md": "e36f3edd8411a84cde5876b260b20d5368d9a082a795c54db9e09dba149b5535",
+    "wally-action-designer-v354/references/v3.54/references/contract.md": "8dca2d5867406129babd4e65b2b71bb5c33a98a8633dc9dec7333900907e33a1",
+    "wally-action-designer-v354/references/v3.54/references/craft.md": "d166e3f655cae176e9f1374ff5baafc75755b872f0a85d281d00c8d78b88f2de",
+    "wally-action-designer-v354/references/v3.54/references/interaction-examples.md": "e45813f167256fd59da4064c2482a471ca3e31a069d04b22b9be14a72d176272",
+    "wally-action-designer-v354/references/v3.54/references/review.md": "bd25a9ddacc44188c464beaeed083bb41d5c7937a93e1962c7bd70aba9d6e06c",
+    "higgsfield-fight-scene/references/source/SKILL.original.md": "411c0598aef0a6407d7a93bcff13ba35889b1233da988343a014d85a5a175a68",
+    "higgsfield-fight-scene/references/source/references/jkd-core.md": "5dcd8385ed6209764038c2fd397619bed12d95fd116b8c001112ad33f839385b",
+    "higgsfield-fight-scene/references/source/references/choreography-patterns.md": "691a49619c6f73263b18dbe3f79f7ed802cd8616574ee8ee26c846e47dd3c084",
+    "higgsfield-fight-scene/references/source/references/moves-catalog.md": "26e9448db75fa4a60802dc3383868c86dd68a7163a7089b44c1a2a3c83bc0075",
+    "higgsfield-fight-scene/references/source/references/techniques.md": "9aeb2b3520220ce5a06ba4b3af88b21b211cf055f4dc4ffcc4b84448d050afa4",
+    "higgsfield-fight-scene/references/source/references/styles/wing-chun.md": "e4b9924d72a20863592ea0b81fc35c5ac9be89e2d583cf03de6c05a4988e5e56",
+    "higgsfield-fight-scene/references/source/references/sources/INDEX.md": "a703fd6d608bbc0ff277cdba3dc3b2104e6793dd0f491a6c69039d2fd0c11b36",
 
     "wally-asset-designer/types/multi-angle.md": "afbec47b9d7f7151aafb18ab48816a3de9fc075119d85efde3009eac5e244f0e",
 }
@@ -74,6 +104,13 @@ TEXT_FILENAMES = {".gitignore", "LICENSE"}
 MARKDOWN_LINK = re.compile(r"\[[^\]]*\]\(([^)]+)\)")
 CODE_MD = re.compile(r"`([^`\n]+\.md(?:#[^`\n]+)?)`")
 
+# Original upstream notes retain an INGEST filename example and a retired source.
+# They are not live Wally dependencies; the wrapper disables INGEST explicitly.
+ARCHIVAL_NON_DEPENDENCIES = {
+    ("higgsfield-fight-scene/references/source/SKILL.original.md", "references/sources/NN-short-name.md"),
+    ("higgsfield-fight-scene/references/source/references/sources/INDEX.md", "10-combat-impact-director.md"),
+}
+
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -107,7 +144,7 @@ def iter_files(root: Path):
 
 def iter_skill_files(root: Path):
     """Yield only the managed skill trees from a collection or repo root."""
-    for name in SKILLS:
+    for name in (*SKILLS, "higgsfield-fight-scene"):
         yield from iter_files(root / name)
 
 
@@ -142,6 +179,8 @@ def check_links(skills: Path, errors: list[str]) -> None:
         candidates.extend(m.group(1) for m in CODE_MD.finditer(text))
         for raw in candidates:
             raw = raw.split("#", 1)[0].strip()
+            if (path.relative_to(skills).as_posix(), raw) in ARCHIVAL_NON_DEPENDENCIES:
+                continue
             if not raw or raw.startswith(("http://", "https://", "mailto:", "/")):
                 continue
             if any(token in raw for token in ("<", ">", "*", "[", "]")):
@@ -149,7 +188,7 @@ def check_links(skills: Path, errors: list[str]) -> None:
             relative = path.relative_to(skills)
             owner = (
                 skills / relative.parts[0]
-                if relative.parts[0] in SKILLS
+                if relative.parts[0] in (*SKILLS, "higgsfield-fight-scene")
                 else skills
             )
             possible = (
@@ -200,6 +239,10 @@ def check_retired_unit_absent(
             fail(errors, f"retired story-unit token remains in path: {relative}")
         if path.suffix.lower() not in TEXT_SUFFIXES and path.name not in TEXT_FILENAMES:
             continue
+        # Frozen third-party video notes use unrelated source-timing vocabulary.
+        # Keep their original bytes; public-safety and source hashes still apply.
+        if relative.startswith("higgsfield-fight-scene/references/source/"):
+            continue
         text = path.read_text(encoding="utf-8", errors="replace")
         if RETIRED_UNIT_FRAGMENT in text.casefold():
             fail(errors, f"retired story-unit token remains in file: {relative}")
@@ -212,6 +255,18 @@ def check_frozen(skills: Path, errors: list[str]) -> None:
             fail(errors, f"missing frozen surface {relative}")
         elif sha256(path) != expected:
             fail(errors, f"frozen surface changed: {relative}")
+    manifest_path = skills / "higgsfield-fight-scene/source-manifest.json"
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        expected = manifest["source_files_sha256"]
+    except (OSError, ValueError, KeyError) as exc:
+        fail(errors, f"Fight source manifest is missing or invalid: {exc}")
+        return
+    source_root = skills / "higgsfield-fight-scene/references/source"
+    actual = {path.relative_to(source_root).as_posix(): sha256(path)
+              for path in iter_files(source_root)}
+    if len(expected) != 56 or actual != expected:
+        fail(errors, "Fight source inventory or original bytes differ from the 56-file manifest")
 
 
 def check_module_contracts(skills: Path, errors: list[str]) -> None:
@@ -457,8 +512,11 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
     if "题材类别自动当成视听定位" not in screenplay:
         fail(errors, "Screenplay work definition permits unsupported visual-style inference")
 
-    if not all(token in screenplay for token in ("wally-action-designer", "已批准")):
-        fail(errors, "Screenplay dialogue ownership boundary with Action Designer is missing")
+    if not all(
+        token in screenplay
+        for token in ("wally-performance-designer", "wally-camera-designer", "已批准")
+    ):
+        fail(errors, "Screenplay dialogue ownership boundary with Performance and Camera is missing")
 
     clarification_contexts = [
         screenplay[max(0, match.start() - 100):match.end() + 320]
@@ -476,11 +534,78 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
 
     # Prose health is reviewed semantically. Retired output templates must not
     # be kept alive by checks for their exact field or timecode sentences.
-    action_root = skills / "wally-action-designer"
-    action_entry = (action_root / "SKILL.md").read_text(encoding="utf-8")
-    for reference in ("contract.md", "craft.md", "review.md"):
-        if f"references/{reference}" not in action_entry:
-            fail(errors, f"Action task reference is not discoverable: {reference}")
+    camera_root = skills / "wally-camera-designer"
+    camera_entry = (camera_root / "SKILL.md").read_text(encoding="utf-8")
+    for reference in (
+        "contract.md", "camera-craft.md", "optics-anamorphic.md",
+        "camera-troubleshooting.md", "review.md", "granularity.md",
+        "spoken-line.md", "prompt-writing-rules.md",
+    ):
+        if f"references/{reference}" not in camera_entry:
+            fail(errors, f"Camera task reference is not discoverable: {reference}")
+    camera_contract = (camera_root / "references/contract.md").read_text(encoding="utf-8")
+    sections = re.search(r"## 段落与顺序.*?```text\n(.*?)```", camera_contract, re.DOTALL)
+    expected_sections = (
+        "REFERENCE:", "FORMAT:", "STYLE:", "CAMERA:", "ACTING TASKS:",
+        "THE SHOT:", "SPOKEN LINE:", "LIGHT:", "AUDIO:", "NEGATIVE:",
+    )
+    if not sections or tuple(sections.group(1).split()) != tuple(
+        word for label in expected_sections for word in label.split()
+    ):
+        fail(errors, "Camera contract must declare the ten prompt sections in order")
+    for phrase in (
+        "白模视频只参考大致运镜、人物调度和分镜构图",
+        "逐拍表演只在 THE SHOT 出现一次",
+        "### 组装检查",
+        "分镜已给出的机位、景别与朝向写进对应 SHOT",
+        "**地点空间：**",
+        "绑定场景参考时",
+        "默认使用 2.39:1 变形宽银幕胶片观感",
+        "默认只用于没有方向的时候",
+        "画面里有明亮的实际光源时",
+    ):
+        if phrase not in camera_contract:
+            fail(errors, f"Camera contract is missing: {phrase}")
+
+    performance_root = skills / "wally-performance-designer"
+    performance_entry = (performance_root / "SKILL.md").read_text(encoding="utf-8")
+    for reference in (
+        "acting-method.md", "performance-fields.md", "granularity.md",
+        "interaction-examples.md", "spoken-line.md", "prompt-writing-rules.md",
+    ):
+        if f"references/{reference}" not in performance_entry:
+            fail(errors, f"Performance task reference is not discoverable: {reference}")
+    if "完整档先交付设计说明" not in performance_entry:
+        fail(errors, "Performance entry lacks the full-tier design-note confirmation")
+    performance_fields = (performance_root / "references/performance-fields.md").read_text(encoding="utf-8")
+    if "逐拍表演只出现在 THE SHOT 的时间段里" not in performance_fields:
+        fail(errors, "Performance delivery repeats beats outside THE SHOT")
+
+    fight_root = skills / "higgsfield-fight-scene"
+    fight_entry_path = fight_root / "SKILL.md"
+    if not fight_entry_path.is_file():
+        fail(errors, "higgsfield-fight-scene project entry is missing")
+    else:
+        fight_name, fight_frontmatter = parse_frontmatter(fight_entry_path, errors)
+        if fight_name != "higgsfield-fight-scene" or "Use only when explicitly requested" not in fight_frontmatter:
+            fail(errors, "higgsfield-fight-scene must be an explicit-only entry")
+        fight_policy = (fight_root / "agents/openai.yaml").read_text(encoding="utf-8")
+        if "allow_implicit_invocation: false" not in fight_policy:
+            fail(errors, "higgsfield-fight-scene must disable implicit invocation")
+    for retired in ("wally-action-designer",):
+        if (skills / retired).exists():
+            fail(errors, f"Retired skill directory remains active: {retired}")
+
+    for relative, owners in SYNCED_COPIES.items():
+        digests = {}
+        for owner in owners:
+            path = skills / owner / relative
+            if not path.is_file():
+                fail(errors, f"Synced copy is missing: {owner}/{relative}")
+            else:
+                digests[owner] = sha256(path)
+        if len(set(digests.values())) > 1:
+            fail(errors, f"Synced copies differ for {relative}: {sorted(digests)}")
 
     storyboard_root = skills / "wally-storyboard-designer"
     storyboard = (storyboard_root / "SKILL.md").read_text(encoding="utf-8")
@@ -691,6 +816,12 @@ def main() -> int:
             fail(errors, f"{directory}: frontmatter name is {name!r}")
         if version not in skill_file.read_text(encoding="utf-8"):
             fail(errors, f"{directory}: target version {version} not found")
+        policy = root / "agents/openai.yaml"
+        if not policy.is_file() or not re.search(
+            r"(?m)^\s+allow_implicit_invocation:\s*false\s*$",
+            policy.read_text(encoding="utf-8") if policy.is_file() else "",
+        ):
+            fail(errors, f"{directory}: shared entry must disable implicit invocation")
 
     check_links(skills, errors)
     if (supplied_root / "README.md").is_file():
