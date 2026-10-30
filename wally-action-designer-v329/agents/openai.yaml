@@ -1,7 +1,0 @@
-interface:
-  display_name: "Wally V3.29 原版对照"
-  short_description: "Use the frozen V3.29 baseline for version comparisons"
-  default_prompt: "Use $wally-action-designer-v329 to design or review this video scope with the frozen V3.29 method."
-
-policy:
-  allow_implicit_invocation: false

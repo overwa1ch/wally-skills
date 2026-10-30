@@ -20,8 +20,6 @@ SKILLS = {
     "wally-asset-designer": "wally-asset-designer@2026-10-30-v3.10-default-anamorphic-scene",
     "wally-camera-designer": "wally-camera-designer@2026-10-30-v1.5-conditional-flare",
     "wally-performance-designer": "wally-performance-designer@2026-10-30-v1.0-higgs-acting-fusion",
-    "wally-action-designer-v354": "wally-action-designer@2026-10-27-v3.54-interaction-camera-cases",
-    "wally-action-designer-v329": "wally-action-designer@2026-10-10-v3.29-unified-action",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
 }
 
@@ -33,8 +31,6 @@ README_VERSIONS = {
     "wally-asset-designer": "V3.10",
     "wally-camera-designer": "V1.5",
     "wally-performance-designer": "V1.0",
-    "wally-action-designer-v354": "V3.54",
-    "wally-action-designer-v329": "V3.29",
     "wally-visual-style-extractor": "V1.7",
 }
 
@@ -51,18 +47,6 @@ SYNCED_COPIES = {
 }
 
 FROZEN_HASHES = {
-    "wally-action-designer-v329/references/v3.29/SKILL.original.md": "9bd5d826261ebfb6c14883c30f9338fa399bbedd0bf69153dbf4bf526cb4ea22",
-    "wally-action-designer-v329/references/v3.29/agents/openai.yaml": "d67e65bab61987c722eb09616e2c0c22b600003c9811d707fdc10e07d8f81822",
-    "wally-action-designer-v329/references/v3.29/references/contract.md": "ee1bbd9e1f1990aac0ded0457afdc4912a93843c2233017b3bbb5115450cbfbe",
-    "wally-action-designer-v329/references/v3.29/references/craft.md": "83ebf288114ac6d0bbca36a9f4a96aeac895889081a44bbdb220c09bfdf699ec",
-    "wally-action-designer-v329/references/v3.29/references/review.md": "482b6716b7d9ec37222e5077a6c716eb8ef1507187b2ffe6967480fb84bbe577",
-    "wally-action-designer-v354/references/v3.54/SKILL.original.md": "185cfb4cf1fd7767096c131fdb34f40f0cd9b9a97cbc3fe817aca52f4c2721ad",
-    "wally-action-designer-v354/references/v3.54/agents/openai.yaml": "d67e65bab61987c722eb09616e2c0c22b600003c9811d707fdc10e07d8f81822",
-    "wally-action-designer-v354/references/v3.54/references/camera-troubleshooting.md": "e36f3edd8411a84cde5876b260b20d5368d9a082a795c54db9e09dba149b5535",
-    "wally-action-designer-v354/references/v3.54/references/contract.md": "8dca2d5867406129babd4e65b2b71bb5c33a98a8633dc9dec7333900907e33a1",
-    "wally-action-designer-v354/references/v3.54/references/craft.md": "d166e3f655cae176e9f1374ff5baafc75755b872f0a85d281d00c8d78b88f2de",
-    "wally-action-designer-v354/references/v3.54/references/interaction-examples.md": "e45813f167256fd59da4064c2482a471ca3e31a069d04b22b9be14a72d176272",
-    "wally-action-designer-v354/references/v3.54/references/review.md": "bd25a9ddacc44188c464beaeed083bb41d5c7937a93e1962c7bd70aba9d6e06c",
     "higgsfield-fight-scene/references/source/SKILL.original.md": "411c0598aef0a6407d7a93bcff13ba35889b1233da988343a014d85a5a175a68",
     "higgsfield-fight-scene/references/source/references/jkd-core.md": "5dcd8385ed6209764038c2fd397619bed12d95fd116b8c001112ad33f839385b",
     "higgsfield-fight-scene/references/source/references/choreography-patterns.md": "691a49619c6f73263b18dbe3f79f7ed802cd8616574ee8ee26c846e47dd3c084",
@@ -592,7 +576,7 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         fight_policy = (fight_root / "agents/openai.yaml").read_text(encoding="utf-8")
         if "allow_implicit_invocation: false" not in fight_policy:
             fail(errors, "higgsfield-fight-scene must disable implicit invocation")
-    for retired in ("wally-action-designer",):
+    for retired in ("wally-action-designer", "wally-action-designer-v329", "wally-action-designer-v354", "anerneq-action-designer"):
         if (skills / retired).exists():
             fail(errors, f"Retired skill directory remains active: {retired}")
 

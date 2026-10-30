@@ -1,7 +1,0 @@
-interface:
-  display_name: "Wally V3.54 对照"
-  short_description: "Use the frozen V3.54 all-in-one action method for comparisons"
-  default_prompt: "Use $wally-action-designer-v354 to design or review this video scope with the frozen V3.54 method."
-
-policy:
-  allow_implicit_invocation: false
