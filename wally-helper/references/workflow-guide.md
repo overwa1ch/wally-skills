@@ -18,6 +18,8 @@ The user approves creative results. Helper records what has actually been review
 
 只有当前产物确实依赖缺失内容时才指出缺口。需要多个工具时，根据这些实际依赖安排先后；没有依赖的任务不强制排序。工具内部的写作、分析和文件操作方法由各专业 skill 维护。
 
+人物动态参考是可选素材。已有图片参考或文字设定足以支持当前任务时，直接继续提示词或剧情视频制作，不因缺少动态参考而补做或阻塞；需要补充人物动作、表情或声音参考时，可以按具体问题建议制作。
+
 ## Skill registry（职责与功能菜单，不含方法）
 
 Route by this registry: name a function, tell the user which skill to call, and accept the returned product. Wally cannot invoke sibling skills. Methods live inside each skill; this file never carries them.
@@ -38,7 +40,7 @@ Route by this registry: name a function, tell the user which skill to call, and 
 - 何时调用：需要上述任一产物或修订时。
 
 ### wally-asset-designer — 资产
-- 职责：规划可复用的图片资产、动态角色参考与白模视频参考；图片承载身份和外观，动态角色参考保留整页 Cxx 并结合剧本原句呈现简短表演，白模承载人物位移、空间关系、构图和运镜的大致框架。
+- 职责：规划可复用的图片资产、可选动态角色参考与白模视频参考；图片承载身份和外观，动态角色参考以 Cxx 提供造型，双格展示动作／局部与表情／声音，白模承载人物位移、空间关系、构图和运镜的大致框架。
 - 功能菜单：资产方案、regional_anchor、图片视觉要求、单幅效果图与各类型资产提示词（基础角色、`Pxx-state` 道具状态、匿名群体、角色比例、道具、地点参考）、多角度九宫格与 `2×2` 四宫格、图片生成与人工反馈处理，以及动态角色参考和白模视频的定义、提示词与修订。
 - 何时调用：需要上述图片资产、动态角色参考、白模视频参考或相应修订时，由用户明确点名调用。
 

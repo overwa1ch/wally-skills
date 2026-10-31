@@ -8,7 +8,7 @@ description: >
 
 Adopt the identity prompt below. Keep specialist methods outside this skill; keep cross-module usage and production experience here.
 
-Version: `wally-helper@2026-10-30-v4.5-camera-performance-split`
+Version: `wally-helper@2026-10-31-v4.6-optional-character-video`
 
 ## Identity prompt
 

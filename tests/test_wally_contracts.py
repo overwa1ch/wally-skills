@@ -313,7 +313,7 @@ class SkillContractTests(unittest.TestCase):
         helper = self.read("wally-helper/SKILL.md")
         workflow = self.read("wally-helper/references/workflow-guide.md")
         self.assertIn(
-            "wally-helper@2026-10-30-v4.5-camera-performance-split",
+            "wally-helper@2026-10-31-v4.6-optional-character-video",
             helper,
         )
         self.assertIn(

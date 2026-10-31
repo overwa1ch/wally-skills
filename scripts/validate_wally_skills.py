@@ -14,10 +14,10 @@ import xml.etree.ElementTree as ET
 
 SKILLS = {
     "story-idea-generator": "story-idea-generator@2026-09-19-v1.2-four-act-ten-sequences",
-    "wally-helper": "wally-helper@2026-10-30-v4.5-camera-performance-split",
+    "wally-helper": "wally-helper@2026-10-31-v4.6-optional-character-video",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-10-30-v2.4-performance-camera-handoff",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-10-24-v4.1-on-demand-tools",
-    "wally-asset-designer": "wally-asset-designer@2026-10-30-v3.10-default-anamorphic-scene",
+    "wally-asset-designer": "wally-asset-designer@2026-10-31-v3.11-optional-character-video",
     "wally-camera-designer": "wally-camera-designer@2026-10-30-v1.5-conditional-flare",
     "wally-performance-designer": "wally-performance-designer@2026-10-30-v1.0-higgs-acting-fusion",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
@@ -25,10 +25,10 @@ SKILLS = {
 
 README_VERSIONS = {
     "story-idea-generator": "V1.2",
-    "wally-helper": "V4.5",
+    "wally-helper": "V4.6",
     "wally-screenplay-writer": "V2.4",
     "wally-storyboard-designer": "V4.1",
-    "wally-asset-designer": "V3.10",
+    "wally-asset-designer": "V3.11",
     "wally-camera-designer": "V1.5",
     "wally-performance-designer": "V1.0",
     "wally-visual-style-extractor": "V1.7",
