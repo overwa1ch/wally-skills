@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-asset-designer or 
 
 规划可复用的图片资产、动态角色参考与白模视频参考，按用户请求交付定义、提示词或资产。
 
-Version: `wally-asset-designer@2026-10-31-v3.11-optional-character-video`
+Version: `wally-asset-designer@2026-11-09-v3.12-headless-character-sheet`
 
 ## 共用边界
 
