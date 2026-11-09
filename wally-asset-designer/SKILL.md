@@ -1,19 +1,19 @@
 ---
 name: wally-asset-designer
-description: Use only when the user explicitly requests wally-asset-designer or $wally-asset-designer by name. Prepare reusable image assets, character video references or whitebox video references from current materials. For character video references, use Cxx appearance information to create a two-panel display of movement, details, face and voice, with existing dialogue and context for a brief performance. Generate requested images through ChatGPT Web for human review. Original screenplay, dialogue rewriting, scene shot design and final scene-video prompts remain with their specialists.
+description: Use only when the user explicitly requests wally-asset-designer or $wally-asset-designer by name. Prepare reusable image assets, character video references or whitebox video references from current materials. For character video references, use Cxx appearance information to create a two-panel display of movement, details, face and voice, with existing dialogue and context for a brief performance. Generate and edit requested images with Codex built-in image generation for human review. Original screenplay, dialogue rewriting, scene shot design and final scene-video prompts remain with their specialists.
 ---
 
 # Wally Asset Designer
 
 规划可复用的图片资产、动态角色参考与白模视频参考，按用户请求交付定义、提示词或资产。
 
-Version: `wally-asset-designer@2026-11-09-v3.12-headless-character-sheet`
+Version: `wally-asset-designer@2026-11-09-v3.13-codex-image-generation`
 
 ## 共用边界
 
 - 接受剧本、文字、表格、图像、故事板、参考板、已有资产、部分材料和混合输入。只处理会影响当前产物的缺失与矛盾，不要求用户从固定起点重做。
 - 保留剧本事实、整体调性与用户已确认的视觉约束。故事板只作为状态、构图、空间与道具的证据，不修改镜头序列。
-- Agent 根据文字材料、用户说明和已选关系准备输入，直接绑定所需参考图，不查看或评判图像内容。图片用途不清楚且影响输入时，只补问必要的用途说明。具体生产依赖由所选类型文件维护。
+- Agent 根据文字材料、用户说明和已选关系准备输入并绑定参考图；按内置生图工具要求读取编辑输入，确认修改与保留范围。图片用途不清楚且影响输入时，只补问必要的用途说明。具体生产依赖由所选类型文件维护。
 - 图片和参考视频的内容、整体观感、风格差异和资产可用性统一由人审查。Agent 只核对提交回执、任务状态、文件关联及尺寸等元数据；类型清单用于起草提示词和供人审查，不作为 Agent 审图任务。
 - 只交付用户点名的定义、提示词或资产，直接使用已有材料；不要求先完成资产规划、风格选择或其他项目阶段。
 - 人物动态参考是可选素材，不是角色资产交付或剧情视频制作的前置条件。已有图片参考或文字设定足以支持当前任务时直接继续；不因缺少动态参考而要求补做，也不在静态角色页交付后自动追加。
@@ -30,16 +30,16 @@ Version: `wally-asset-designer@2026-11-09-v3.12-headless-character-sheet`
 
 ## 按任务读取
 
-只读当前任务对应入口，按表中触发条件读取其引用；历史版本留在 Changelog，不默认加载。用户只要定义或提示词时交付文本；要图时默认内部准备输入，通过内置 Browser 操作 ChatGPT Web 提交、收集本次结果并交人审图。
+只读当前任务对应入口，按表中触发条件读取其引用；历史版本留在 Changelog，不默认加载。用户只要定义或提示词时交付文本；要图时默认内部准备输入，使用 Codex 内置生图工具生成或编辑，保存本次结果并交人审图。
 
-**图片定稿执行**：核对范围、数量和实际参考依赖，逐字沿用完整输入，加载浏览器操作与生成记录；依赖不明确时只读对应类型要求。交付时再加载人工审查说明；需起草、补充或修改输入时，按下表读取写作方法或类型细则。
+**图片定稿执行**：核对范围、数量和实际参考依赖，逐字沿用完整输入，加载 Codex 生图流程与生成记录；依赖不明确时只读对应类型要求。交付时再加载人工审查说明；需起草、补充或修改输入时，按下表读取写作方法或类型细则。
 
 | 当前任务 | 读取入口与交付范围 |
 | --- | --- |
 | 已有图片的定向材质修整或重新布光 | [targeted-image-revision.md](references/targeted-image-revision.md)；按本次目标明确变化范围与保留内容，直接使用指定原图。 |
 | 动态角色参考定义、提示词或修订（可选） | [dynamic-character-video.md](types/dynamic-character-video.md)；需要补充人物动作、表情或声音参考时使用，承接 Cxx 造型与已有对白。 |
 | 白模视频定义、规划、制作或修订 | [whitebox-video.md](types/whitebox-video.md)。 |
-| 图片生成、收集或恢复 | [browser-execution.md](references/browser-execution.md) 与 [候选生成记录](templates/generation-record.md)；执行完整的项目与聊天命名、独立聊天、异步提交核验、原图归档及恢复流程。 |
+| 图片生成、收集或恢复 | [codex-image-generation.md](references/codex-image-generation.md) 与 [生成记录](templates/generation-record.md)；执行内置生图调用、参考绑定、原图归档及恢复流程。 |
 | 资产规划与类型选择 | [planning.md](references/planning.md)；图片视觉规划按需读取 [regional-anchor.md](references/regional-anchor.md)、[style-aesthetic.md](references/style-aesthetic.md) 与 [方案模板](templates/visual-direction-proposal.md)。 |
 | 起草或修改单幅效果图 | [craft.md](references/craft.md) 与 [style-aesthetic.md](references/style-aesthetic.md)。 |
 | 起草或修改地点参考 Sxx | [contracts.md](references/contracts.md) 与 [sxx.md](types/sxx.md)；场景正文后写 CAMERA、LIGHTING、COLOR、STYLE，文化信息融入正文，NEGATIVE 放在末尾。 |

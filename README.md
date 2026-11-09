@@ -12,7 +12,7 @@ Wally 是一套面向 AI 视频生产的模块化 Codex skills。用户说“wal
 | `wally-helper` | V4.6 | 整理材料、记录制作经验、判断流程与测试需要、检查跨产物兼容性，并提供专业工具的可复制调用请求；按需返回固定 BGM 制作请求。 |
 | `wally-screenplay-writer` | V2.4 | 按任务需要选择作品定义和创作方法，负责故事、人物、结构、场景、对白和剧本诊断；有依据、有作用才写，不确定时写得更少，分步开发细则按需读取。 |
 | `wally-storyboard-designer` | V4.1 | 按需设计或修订分镜、制作或修订白模视频、绘制场景布局及检查提示词污染。各功能分别取用；新分镜沿用先听用户讲述关键画面的设计方法。 |
-| `wally-asset-designer` | V3.12 | 按当前范围与数量提供图片资产、可选人物动态参考或白模视频参考；动态参考以 Cxx 提供造型，左格展示动作与局部，右格展示表情与声音，可结合已有对白作简短表演。图片保留类型合同，逐条独立提交并归档，由人审查；不自动扩成候选包。 |
+| `wally-asset-designer` | V3.13 | 按当前范围与数量提供图片资产、可选人物动态参考或白模视频参考；动态参考以 Cxx 提供造型，左格展示动作与局部，右格展示表情与声音，可结合已有对白作简短表演。图片通过 Codex 内置生图生成与编辑，保留类型合同，按版本归档，由人审查；不自动扩成候选包。 |
 | `wally-camera-designer` | V1.5 | 设计镜头、时间线、参考绑定、摄影、灯光、成像和声音空间，组装十段完整视频提示词。 |
 | `wally-performance-designer` | V1.0 | 设计人物任务、策略、倾听、互动与逐拍表演；按复杂程度分简单、标准和完整三档。 |
 | `higgsfield-fight-scene` | V2.4 | 按需点名的近身打斗入口，保留原作者技能及知识库，分拍交给摄影与成像组装。 |
@@ -77,7 +77,6 @@ cp -R wally-skills/wally-* wally-skills/story-idea-generator wally-skills/higgsf
 ```bash
 python scripts/validate_wally_skills.py --skills-root .
 python -m unittest discover -s tests -p 'test_*.py' -v
-node --test wally-asset-designer/tests/test_cua_payload.cjs
 ```
 
 ## 仓库迁移

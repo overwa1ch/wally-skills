@@ -2,7 +2,7 @@
 
 仅在对应 `Sxx location_reference` 已由用户选定后使用。九宫格是地点多角度参考的默认产物。候选数量遵循 [SKILL.md](../SKILL.md)，变化与继承边界见 [contracts.md](../references/contracts.md) 的“正式资产的候选设计”。
 
-按 [browser-execution.md](../references/browser-execution.md) 在当前网页项目内为本地点九宫格的每个候选分别新建聊天，上传已选地点原图与全局风格参考，确认提交后继续发送下一候选，整轮结果交人审查。
+按 [Codex 生图流程](../references/codex-image-generation.md) 为本地点九宫格的每个候选分别调用内置生图工具，绑定已选地点原图与全局风格参考，保存全部结果并交人审查。
 
 ## 固定基础句（逐字，仅替换 XX）
 

@@ -19,15 +19,9 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Set up Node for Asset source payload tests
-        uses: actions/setup-node@v4
-        with:
-          node-version: "22"
-
       - name: Validate skill contracts and frozen surfaces
         run: python scripts/validate_wally_skills.py --skills-root .
 
-      - name: Run contract and asset regressions
+      - name: Run contract regressions
         run: |
           python -m unittest discover -s tests -p 'test_*.py' -v
-          node --test wally-asset-designer/tests/test_cua_payload.cjs

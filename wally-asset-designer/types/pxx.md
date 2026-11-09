@@ -2,7 +2,7 @@
 
 一份 `Pxx` 锁定一个复用、标志性或机制关键道具的基准设计与基准状态，使用一个主视图作为后续不同状态的基础参考，不含剧情摆拍。起草前读[共用生产提示词契约](../references/contracts.md)。
 
-布局需要图像辅助时，可用[道具布局板](../assets/pxx-layout-board.svg)；提交方式见[浏览器流程](../references/browser-execution.md#平台能力与布局参考)。
+布局需要图像辅助时，可用[道具布局板](../assets/pxx-layout-board.svg)；提交方式见[Codex 生图流程](../references/codex-image-generation.md#输入与参考绑定)。
 
 ## 输出模板（保留字段顺序，不加序号）
 

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
-  <!-- Cxx 基础角色资产页布局板：左两列=无头正面、无头背面,右=大幅面部特写。仅作构图参考,上传前转 PNG;平台操作见 references/browser-execution.md。 -->
+  <!-- Cxx 基础角色资产页布局板：左两列=无头正面、无头背面,右=大幅面部特写。仅作构图参考,作为参考前转 PNG;调用方式见 references/codex-image-generation.md。 -->
   <defs>
     <clipPath id="front-crop"><rect x="50" y="50" width="360" height="800"/></clipPath>
     <clipPath id="back-crop"><rect x="440" y="50" width="360" height="800"/></clipPath>

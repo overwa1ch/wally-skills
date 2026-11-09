@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900">
-  <!-- Pxx / Pxx-state 布局板：一个完整主视图,每张图只呈现一个状态。占位轮廓仅示意主体位置,不规定道具形状或观察角度。上传前转 PNG;平台操作见 references/browser-execution.md。 -->
+  <!-- Pxx / Pxx-state 布局板：一个完整主视图,每张图只呈现一个状态。占位轮廓仅示意主体位置,不规定道具形状或观察角度。作为参考前转 PNG;调用方式见 references/codex-image-generation.md。 -->
   <rect width="1600" height="900" fill="#d4d4d4"/>
   <rect x="50" y="50" width="1500" height="800" fill="#c7c7c7" stroke="#9a9a9a" stroke-width="4"/>
   <g transform="translate(800,450)">
