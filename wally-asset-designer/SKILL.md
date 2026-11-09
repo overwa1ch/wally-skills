@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-asset-designer or 
 
 规划可复用的图片资产、动态角色参考与白模视频参考，按用户请求交付定义、提示词或资产。
 
-Version: `wally-asset-designer@2026-11-09-v3.14-asset-contract-health`
+Version: `wally-asset-designer@2026-11-09-v3.15-single-scene-assets`
 
 ## 共用边界
 
@@ -44,7 +44,6 @@ Version: `wally-asset-designer@2026-11-09-v3.14-asset-contract-health`
 | 起草或修改单幅效果图 | [craft.md](references/craft.md) 与 [style-aesthetic.md](references/style-aesthetic.md)。 |
 | 起草或修改地点参考 Sxx | [contracts.md](references/contracts.md) 与 [sxx.md](types/sxx.md)；场景正文后写 CAMERA、LIGHTING、COLOR、STYLE，文化信息融入正文，NEGATIVE 放在末尾。 |
 | 起草或修改单项正式图片资产 | [contracts.md](references/contracts.md) 与所选 `types/<asset>.md`；类型对应关系见 planning，字段、几何和呈现按类型合同保留。 |
-| 起草或修改九宫格 / 四宫格 | 默认使用 [multi-angle.md](types/multi-angle.md)；用户直接要求或选择 fallback 时使用 [multi-angle-2x2.md](types/multi-angle-2x2.md)。基础地点须已选定；审查九宫格时不擅自追加或执行四宫格。 |
 | 图片人工审查交付、反馈整理与修订 | [review-protocol.md](references/review-protocol.md)；供人查阅类型要点或按反馈修改输入时再读相关类型清单，Agent 不自行看图判断。 |
 
 交付止于本次请求的产物，不自动安排后续制作阶段。

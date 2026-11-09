@@ -313,7 +313,7 @@ class SkillContractTests(unittest.TestCase):
         helper = self.read("wally-helper/SKILL.md")
         workflow = self.read("wally-helper/references/workflow-guide.md")
         self.assertIn(
-            "wally-helper@2026-10-31-v4.6-optional-character-video",
+            "wally-helper@2026-11-09-v4.7-single-scene-assets",
             helper,
         )
         self.assertIn(
@@ -330,24 +330,7 @@ class SkillContractTests(unittest.TestCase):
         )
         self.assertNotIn("integrate every named shot-design revision", workflow)
 
-    def test_static_four_grid_and_prop_state_contracts(self) -> None:
-        four = self.read("wally-asset-designer/types/multi-angle-2x2.md")
-        fixed_blocks = re.findall(r"```text\n(.*?)```", four, re.DOTALL)
-        self.assertEqual(
-            fixed_blocks[0].strip(),
-            "参考场景资产图，生成这个XX场景不同角度不同景别的2×2四宫格场景图。",
-        )
-        self.assertEqual(fixed_blocks[0].count("XX"), 1)
-        nine = self.read("wally-asset-designer/types/multi-angle.md")
-        nine_blocks = re.findall(r"```text\n(.*?)```", nine, re.DOTALL)
-        self.assertEqual(
-            nine_blocks[0].strip(),
-            "参考场景资产图，生成这个XX场景不同角度不同景别的九宫格场景图。",
-        )
-        self.assertEqual(nine_blocks[0].count("XX"), 1)
-        self.assertIn("九宫格是地点多角度参考的默认产物", nine)
-        self.assertIn("用户可以直接点名", four)
-        self.assertIn("用户选择后再执行", four)
+    def test_prop_state_contract(self) -> None:
         state = self.read("wally-asset-designer/types/pxx-state.md")
         labels = (
             "**基础道具参考**", "**目标状态**", "**状态变化**",

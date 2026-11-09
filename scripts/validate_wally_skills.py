@@ -14,10 +14,10 @@ import xml.etree.ElementTree as ET
 
 SKILLS = {
     "story-idea-generator": "story-idea-generator@2026-09-19-v1.2-four-act-ten-sequences",
-    "wally-helper": "wally-helper@2026-10-31-v4.6-optional-character-video",
+    "wally-helper": "wally-helper@2026-11-09-v4.7-single-scene-assets",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-10-30-v2.4-performance-camera-handoff",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-10-24-v4.1-on-demand-tools",
-    "wally-asset-designer": "wally-asset-designer@2026-11-09-v3.14-asset-contract-health",
+    "wally-asset-designer": "wally-asset-designer@2026-11-09-v3.15-single-scene-assets",
     "wally-camera-designer": "wally-camera-designer@2026-10-30-v1.5-conditional-flare",
     "wally-performance-designer": "wally-performance-designer@2026-10-30-v1.0-higgs-acting-fusion",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
@@ -25,10 +25,10 @@ SKILLS = {
 
 README_VERSIONS = {
     "story-idea-generator": "V1.2",
-    "wally-helper": "V4.6",
+    "wally-helper": "V4.7",
     "wally-screenplay-writer": "V2.4",
     "wally-storyboard-designer": "V4.1",
-    "wally-asset-designer": "V3.14",
+    "wally-asset-designer": "V3.15",
     "wally-camera-designer": "V1.5",
     "wally-performance-designer": "V1.0",
     "wally-visual-style-extractor": "V1.7",
@@ -55,7 +55,6 @@ FROZEN_HASHES = {
     "higgsfield-fight-scene/references/source/references/styles/wing-chun.md": "e4b9924d72a20863592ea0b81fc35c5ac9be89e2d583cf03de6c05a4988e5e56",
     "higgsfield-fight-scene/references/source/references/sources/INDEX.md": "a703fd6d608bbc0ff277cdba3dc3b2104e6793dd0f491a6c69039d2fd0c11b36",
 
-    "wally-asset-designer/types/multi-angle.md": "4a72e65e4b006269b8828b67d69626ecd70a0112ee1addcfab4852a58135bbcc",
 }
 
 IGNORED_NAMES = {".DS_Store", ".git", "__pycache__"}
@@ -655,26 +654,13 @@ def check_module_contracts(skills: Path, errors: list[str]) -> None:
         "references/preview.md",
         "templates/preview-prompt.md",
         "examples/preview-documentary.md",
+        "types/multi-angle.md",
+        "types/multi-angle-2x2.md",
     ):
         if (skills / "wally-asset-designer" / retired).exists():
             fail(errors, f"Asset retains retired resource {retired}")
 
-    four_grid = skills / "wally-asset-designer/types/multi-angle-2x2.md"
     prop_state = skills / "wally-asset-designer/types/pxx-state.md"
-    if not four_grid.is_file():
-        fail(errors, "Static 2x2 fixed prompt is missing")
-    else:
-        four_text = four_grid.read_text(encoding="utf-8")
-        blocks = re.findall(r"```text\n(.*?)```", four_text, re.DOTALL)
-        fixed = "参考场景资产图，生成这个XX场景不同角度不同景别的2×2四宫格场景图。"
-        if not blocks or blocks[0].strip() != fixed or blocks[0].count("XX") != 1:
-            fail(errors, "Static 2x2 fixed block must contain only the exact one-XX sentence")
-        for phrase in ("九宫格", "用户可以直接点名", "无法保持场景身份", "用户选择后再执行"):
-            if phrase not in four_text:
-                fail(errors, f"Static 2x2 routing/output contract is missing: {phrase}")
-    nine_text = (skills / "wally-asset-designer/types/multi-angle.md").read_text(encoding="utf-8")
-    if "九宫格是地点多角度参考的默认产物" not in nine_text:
-        fail(errors, "Static nine-grid type must retain the default scene-reference route")
     if not prop_state.is_file():
         fail(errors, "Static Pxx-state contract is missing")
     else:

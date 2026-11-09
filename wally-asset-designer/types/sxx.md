@@ -1,6 +1,6 @@
 # Sxx 地点参考（location_reference）
 
-一份 `Sxx location_reference` 呈现一个地点的可复用场景参考图。起草前读[共用生产提示词契约](../references/contracts.md)。版本数量与交付沿用 [SKILL.md](../SKILL.md#图片版本与交付)，多角度参考继续使用对应类型规则。
+一份 `Sxx location_reference` 呈现一个地点的可复用场景参考图。起草前读[共用生产提示词契约](../references/contracts.md)。版本数量与交付沿用 [SKILL.md](../SKILL.md#图片版本与交付)。
 
 以 Higgsfield 场景提示词的组织方式为主：场景正文后依次写 CAMERA、LIGHTING、COLOR、STYLE，末尾保留空场、画幅与 NEGATIVE。文化信息自然融入场景正文，不单列“文化锚点”字段。
 
