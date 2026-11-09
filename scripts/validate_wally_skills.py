@@ -17,7 +17,7 @@ SKILLS = {
     "wally-helper": "wally-helper@2026-10-31-v4.6-optional-character-video",
     "wally-screenplay-writer": "wally-screenplay-writer@2026-10-30-v2.4-performance-camera-handoff",
     "wally-storyboard-designer": "wally-storyboard-designer@2026-10-24-v4.1-on-demand-tools",
-    "wally-asset-designer": "wally-asset-designer@2026-11-09-v3.13-codex-image-generation",
+    "wally-asset-designer": "wally-asset-designer@2026-11-09-v3.14-asset-contract-health",
     "wally-camera-designer": "wally-camera-designer@2026-10-30-v1.5-conditional-flare",
     "wally-performance-designer": "wally-performance-designer@2026-10-30-v1.0-higgs-acting-fusion",
     "wally-visual-style-extractor": "wally-visual-style-extractor@2026-09-14-v1.7-optional-artifacts",
@@ -28,7 +28,7 @@ README_VERSIONS = {
     "wally-helper": "V4.6",
     "wally-screenplay-writer": "V2.4",
     "wally-storyboard-designer": "V4.1",
-    "wally-asset-designer": "V3.13",
+    "wally-asset-designer": "V3.14",
     "wally-camera-designer": "V1.5",
     "wally-performance-designer": "V1.0",
     "wally-visual-style-extractor": "V1.7",
@@ -55,7 +55,7 @@ FROZEN_HASHES = {
     "higgsfield-fight-scene/references/source/references/styles/wing-chun.md": "e4b9924d72a20863592ea0b81fc35c5ac9be89e2d583cf03de6c05a4988e5e56",
     "higgsfield-fight-scene/references/source/references/sources/INDEX.md": "a703fd6d608bbc0ff277cdba3dc3b2104e6793dd0f491a6c69039d2fd0c11b36",
 
-    "wally-asset-designer/types/multi-angle.md": "a55afbbb0409d5b8f2ad1b6310830f06a85479d724dc4830f730358b42d313d6",
+    "wally-asset-designer/types/multi-angle.md": "4a72e65e4b006269b8828b67d69626ecd70a0112ee1addcfab4852a58135bbcc",
 }
 
 IGNORED_NAMES = {".DS_Store", ".git", "__pycache__"}

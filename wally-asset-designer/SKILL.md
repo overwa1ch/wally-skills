@@ -7,7 +7,7 @@ description: Use only when the user explicitly requests wally-asset-designer or 
 
 规划可复用的图片资产、动态角色参考与白模视频参考，按用户请求交付定义、提示词或资产。
 
-Version: `wally-asset-designer@2026-11-09-v3.13-codex-image-generation`
+Version: `wally-asset-designer@2026-11-09-v3.14-asset-contract-health`
 
 ## 共用边界
 

@@ -2,7 +2,7 @@
 
 仅在对应 `Sxx location_reference` 已由用户选定后使用。用户可以直接点名本产物；返回九宫格无法保持场景身份、拓扑、家具、设备、光线或风格时，可建议四宫格，用户选择后再执行。候选数量遵循 [SKILL.md](../SKILL.md)，变化与继承边界见 [contracts.md](../references/contracts.md) 的“正式资产的候选设计”。
 
-按 [Codex 生图流程](../references/codex-image-generation.md) 为本地点2x2 四宫格的每个候选分别调用内置生图工具，绑定已选地点原图与全局风格参考，保存全部结果并交人审查。
+按 [Codex 生图流程](../references/codex-image-generation.md) 为本地点2x2 四宫格的每个候选分别调用内置生图工具，绑定已选地点原图；本次明确提供独立视觉风格参考时再绑定，否则继承地点原图的既有风格。保存全部结果并交人审查。
 
 ## 固定基础句（逐字，仅替换 XX）
 
